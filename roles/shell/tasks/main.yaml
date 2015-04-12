@@ -1,0 +1,8 @@
+- name: Checkout autojump
+  git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1
+
+- name: Install autojump using the installation script
+  shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=/home/iqbal/local_packages/bin/autojump
+
+- name: Enable autojump in zsh
+  shell: grep -q -F "{{ autojump.config }}" ~/.zshrc || printf "\n{{ autojump.config }}" >> ~/.zshrc
