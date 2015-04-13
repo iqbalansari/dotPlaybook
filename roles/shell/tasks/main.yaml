@@ -1,9 +1,3 @@
-- name: Create directory to hold uncompressed software sources
-  file: dest=~/software state=directory
-
-- name: Create directory to hold compressed software sources
-  file: dest=~/compressed state=directory
-
 - name: Download zsh sources
   get_url: url=http://sourceforge.net/projects/zsh/files/zsh/5.0.7/zsh-5.0.7.tar.gz/download dest=~/compressed/zsh-5.0.7.tar.gz sha256sum=43f0a4c179ef79bb8c9153575685f7f45f28a3615c8cf96345f503d5b9e7b919
 

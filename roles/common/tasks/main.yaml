@@ -1,0 +1,5 @@
+- name: Create directory to hold uncompressed software sources
+  file: dest=~/software state=directory
+
+- name: Create directory to hold compressed software sources
+  file: dest=~/compressed state=directory
