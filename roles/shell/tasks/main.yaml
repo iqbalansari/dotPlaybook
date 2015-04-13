@@ -16,7 +16,7 @@
   user: name=iqbal shell=/usr/local/bin/zsh
 
 - name: Checkout autojump
-  git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True
+  git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True update=no
 
 - name: Install autojump using the installation script
   shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=/home/iqbal/local_packages/bin/autojump
