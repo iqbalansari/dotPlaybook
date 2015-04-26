@@ -1,0 +1,11 @@
+- name: Install dconf-tools
+  apt: pkg=dconf-tools state=present
+  sudo: yes
+  
+- name: Checkout gnome-terminal-colors-solarized
+  git: repo=https://github.com/Anthony25/gnome-terminal-colors-solarized dest=~/software/gnome-terminal-colors-solarized depth=1 accept_hostkey=True update=yes
+  register: gnome_terminal_colors_solarized_update
+
+- name: Install color theme
+  command: ~/software/gnome-terminal-colors-solarized/set_dark.sh
+  when: gnome_terminal_colors_solarized_update|changed

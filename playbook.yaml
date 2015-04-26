@@ -4,3 +4,4 @@
   roles:
     - shell
     - emacs
+    - terminal
