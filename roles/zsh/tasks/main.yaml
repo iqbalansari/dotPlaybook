@@ -42,3 +42,6 @@
 - name: Install percol using pip
   pip: name=percol
   sudo: yes
+
+- name: Copy custom percol config
+  copy: src=percol_config.py dest=~/.percol.d/rc.py
