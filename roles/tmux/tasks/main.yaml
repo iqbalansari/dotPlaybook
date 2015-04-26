@@ -1,0 +1,15 @@
+- name: Install tmux dependencies
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800
+  with_items:
+    - libevent-dev
+    - libncurses5-dev
+  sudo: yes
+
+- name: Get sources for tmux 1.9a
+  get_url: url=http://downloads.sourceforge.net/tmux/tmux-1.9a.tar.gz dest=~/compressed/tmux-1.9a.tar.gz timeout=100000
+
+- name: Extract tmux sources
+  shell: tar xvf ~/compressed/tmux-1.9a.tar.gz -C ~/software/ creates=~/software/tmux-1.9a sha256sum=c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5
+
+- name: Install tmux
+  shell: cd ~/software/tmux-1.9a/ && --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/tmux
