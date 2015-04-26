@@ -22,7 +22,7 @@
   sudo: yes
 
 - name: Get sources for emacs 24.5
-  get_url: url=http://ftpmirror.gnu.org/emacs/emacs-24.5.tar.gz dest=~/compressed/emacs-24.5.tar.gz timeout=100000
+  get_url: url=http://ftpmirror.gnu.org/emacs/emacs-24.5.tar.gz dest=~/compressed/emacs-24.5.tar.gz timeout=100000 sha256sum=2737a6622fb2d9982e9c47fb6f2fb297bda42674e09db40fc9bcc0db4297c3b6
 
 - name: Extract emacs sources
   shell: tar xvf ~/compressed/emacs-24.5.tar.gz -C ~/software/ creates=~/software/emacs-24.5
