@@ -13,3 +13,10 @@
 
 - name: Install tmux
   shell: cd ~/software/tmux-1.9a/ && --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/tmux
+
+- name: Install TPM
+  git: repo=https://github.com/tmux-plugins/tpm.git depth=1 accept_hostkey=True update=yes dest=~/.tmux/plugins/tpm
+
+- name: Copy custom .tmux.conf
+  copy: src=.tmux.conf dest=~/.tmux.conf
+
