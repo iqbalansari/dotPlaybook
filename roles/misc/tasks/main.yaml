@@ -1,0 +1,18 @@
+- name: Get sources for cloc 1.62
+  get_url: url=http://sourceforge.net/projects/cloc/files/cloc/v1.62/cloc-1.62.tar.gz/download dest=~/compressed/cloc-1.62.tar.gz sha256sum=c4111ef5768b1c2844c0c826988df6f92fbb5aa7452a5005d3a031d68631acb3
+
+- name: Extract cloc sources
+  unarchive: src=~/compressed/cloc-1.62.tar.gz dest=~/software
+
+- name: Install cloc
+  shell: cd ~/software/cloc-1.62/ && make prefix={{ ansible_env["HOME"] }}/local_packages/ install creates={{ ansible_env["HOME"] }}/local_packages/bin/cloc
+
+- name: Install dependencies for building ag
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800
+  with_items:
+    - automake
+    - pkg-config
+    - libpcre3-dev
+    - zlib1g-dev
+    - liblzma-dev
+  sudo: yes
