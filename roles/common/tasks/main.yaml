@@ -3,3 +3,6 @@
 
 - name: Create directory to hold compressed software sources
   file: dest=~/compressed state=directory
+
+- name: Install make
+  apt: pkg=make
