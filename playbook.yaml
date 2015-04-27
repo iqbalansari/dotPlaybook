@@ -2,7 +2,8 @@
   remote_user: iqbal
 
   roles:
-    - tmux
     - zsh
     - emacs
+    - tmux
+    - git
     - terminal

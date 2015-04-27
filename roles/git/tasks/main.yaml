@@ -1,0 +1,11 @@
+- name: Add signing key for git PPA
+  apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xA1715D88E1DF1F24 state=present
+  sudo: yes
+
+- name: Add PPA for Git
+  apt_repository: repo='ppa:git-core/ppa' update_cache=yes state=present
+  sudo: yes
+
+- name: Install latest Git
+  apt: pkg=git state=latest
+  sudo: yes
