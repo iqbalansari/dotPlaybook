@@ -16,3 +16,12 @@
     - zlib1g-dev
     - liblzma-dev
   sudo: yes
+
+- name: Get sources for ag 0.29.1
+  get_url: url=https://github.com/ggreer/the_silver_searcher/archive/0.29.1.tar.gz dest=~/compressed/the_silver_searcher-0.29.1.tar.gz sha256sum=779eb781751fd3dc07bff3b88f4475ed78eea3fa7b21139d8230d17c31db072a
+
+- name: Extract ag sources
+  unarchive: src=~/compressed/the_silver_searcher-0.29.1.tar.gz dest=~/software
+
+- name: Install ag
+  shell: cd ~/software/the_silver_searcher-0.29.1/ && ./build.sh && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/ag
