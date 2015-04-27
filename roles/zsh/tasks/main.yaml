@@ -44,5 +44,8 @@
   pip: name=percol
   sudo: yes
 
+- name: Create directory for percol config
+  command: mkdir ~/.percol.d/ creates=~/.percol.d
+  
 - name: Copy custom percol config
   copy: src=percol_config.py dest=~/.percol.d/rc.py backup=yes
