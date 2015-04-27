@@ -25,7 +25,7 @@
   get_url: url=http://ftpmirror.gnu.org/emacs/emacs-24.5.tar.gz dest=~/compressed/emacs-24.5.tar.gz timeout=100000 sha256sum=2737a6622fb2d9982e9c47fb6f2fb297bda42674e09db40fc9bcc0db4297c3b6
 
 - name: Extract emacs sources
-  shell: tar xvf ~/compressed/emacs-24.5.tar.gz -C ~/software/ creates=~/software/emacs-24.5
+  unarchive: src=~/compressed/emacs-24.5.tar.gz dest=~/software/
 
 - name: Install emacs
   shell: cd ~/software/emacs-24.5 && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/emacs-24.5

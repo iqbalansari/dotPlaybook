@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: local
   remote_user: iqbal
 
   roles:

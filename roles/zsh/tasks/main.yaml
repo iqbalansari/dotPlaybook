@@ -2,7 +2,7 @@
   get_url: url=http://sourceforge.net/projects/zsh/files/zsh/5.0.7/zsh-5.0.7.tar.gz/download dest=~/compressed/zsh-5.0.7.tar.gz sha256sum=43f0a4c179ef79bb8c9153575685f7f45f28a3615c8cf96345f503d5b9e7b919
 
 - name: Extract zsh sources
-  shell: tar xvf ~/compressed/zsh-5.0.7.tar.gz -C ~/software/ creates=~/software/zsh-5.0.7
+  unarchive: src=~/compressed/zsh-5.0.7.tar.gz dest=~/software/
 
 - name: Install zsh
   shell: cd {{ ansible_env["HOME"] }}/software/zsh-5.0.7/ && ./configure --prefix=/usr/local && make && make install creates=/usr/local/bin/zsh
@@ -14,6 +14,7 @@
 
 - name: Set zsh as the user shell
   user: name=iqbal shell=/usr/local/bin/zsh
+  sudo: yes
   
 - name: Get antigen
   git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True update=yes dest=~/software/antigen
