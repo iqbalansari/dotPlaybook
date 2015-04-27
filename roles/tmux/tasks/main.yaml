@@ -18,5 +18,5 @@
   git: repo=https://github.com/tmux-plugins/tpm.git depth=1 accept_hostkey=True update=yes dest=~/.tmux/plugins/tpm
 
 - name: Copy custom .tmux.conf
-  copy: src=.tmux.conf dest=~/.tmux.conf
+  copy: src=.tmux.conf dest=~/.tmux.conf backup=yes
 

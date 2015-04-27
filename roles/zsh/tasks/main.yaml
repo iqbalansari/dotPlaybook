@@ -20,7 +20,7 @@
   git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True update=yes dest=~/software/antigen
 
 - name: Use custom .zshrc file
-  copy: src=.zshrc dest=~/.zshrc
+  copy: src=.zshrc dest=~/.zshrc backup=yes
   
 - name: Checkout autojump
   git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True update=yes
@@ -45,4 +45,4 @@
   sudo: yes
 
 - name: Copy custom percol config
-  copy: src=percol_config.py dest=~/.percol.d/rc.py
+  copy: src=percol_config.py dest=~/.percol.d/rc.py backup=yes
