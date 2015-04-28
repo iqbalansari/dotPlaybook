@@ -9,7 +9,7 @@
   get_url: url=http://downloads.sourceforge.net/tmux/tmux-1.9a.tar.gz dest=~/compressed/tmux-1.9a.tar.gz timeout=100000 sha256sum=c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5
 
 - name: Extract tmux sources
-  unarchive: src=~/compressed/tmux-1.9a.tar.gz dest=~/software/
+  unarchive: src=~/compressed/tmux-1.9a.tar.gz dest=~/software/ creates=~/software/tmux-1.9a
 
 - name: Install tmux
   shell: cd ~/software/tmux-1.9a/ && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/tmux

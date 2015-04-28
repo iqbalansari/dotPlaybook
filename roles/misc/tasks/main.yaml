@@ -2,7 +2,7 @@
   get_url: url=http://sourceforge.net/projects/cloc/files/cloc/v1.62/cloc-1.62.tar.gz/download dest=~/compressed/cloc-1.62.tar.gz sha256sum=c4111ef5768b1c2844c0c826988df6f92fbb5aa7452a5005d3a031d68631acb3
 
 - name: Extract cloc sources
-  unarchive: src=~/compressed/cloc-1.62.tar.gz dest=~/software
+  unarchive: src=~/compressed/cloc-1.62.tar.gz dest=~/software creates=~/software/cloc-1.62
 
 - name: Install cloc
   shell: cd ~/software/cloc-1.62/ && make prefix={{ ansible_env["HOME"] }}/local_packages/ install creates={{ ansible_env["HOME"] }}/local_packages/bin/cloc
@@ -21,7 +21,7 @@
   get_url: url=https://github.com/ggreer/the_silver_searcher/archive/0.29.1.tar.gz dest=~/compressed/the_silver_searcher-0.29.1.tar.gz sha256sum=779eb781751fd3dc07bff3b88f4475ed78eea3fa7b21139d8230d17c31db072a
 
 - name: Extract ag sources
-  unarchive: src=~/compressed/the_silver_searcher-0.29.1.tar.gz dest=~/software
+  unarchive: src=~/compressed/the_silver_searcher-0.29.1.tar.gz dest=~/software creates=~/software/the_silver_searcher-0.29.1
 
 - name: Install ag
   shell: cd ~/software/the_silver_searcher-0.29.1/ && ./build.sh && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/ag
