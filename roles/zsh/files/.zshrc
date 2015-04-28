@@ -41,3 +41,8 @@ fi
 
 GPG_TTY=$(tty)
 export GPG_TTY
+
+if [[ -f ~/.zshrc-private ]]
+then
+    source ~/.zshrc-private
+fi
