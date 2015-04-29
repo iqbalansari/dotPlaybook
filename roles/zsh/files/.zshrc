@@ -26,7 +26,7 @@ antigen theme ys
 antigen apply
 
 # Fancy history search
-if exists percol; then
+if exists percol && [ -z $INSIDE_EMACS ]; then
    function percol_select_history() {
             local tac
             exists gtac && tac="gtac" || { exists tac && tac="tac" || { tac="tail -r" } }
