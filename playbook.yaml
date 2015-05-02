@@ -1,6 +1,9 @@
 - hosts: local
   remote_user: iqbal
 
+  environment:
+    PATH: "{{ ansible_env.HOME }}/local_packages/bin:{{ ansible_env.PATH }}"
+
   roles:
     - zsh
     - emacs
