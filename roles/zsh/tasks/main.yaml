@@ -23,26 +23,17 @@
 - name: Get antigen
   git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True update=yes dest=~/software/antigen
 
-- name: Use custom .zshrc file
+- name: Copy custom zsh config
   copy: src=.zshrc dest=~/.zshrc backup=yes
   
 - name: Checkout autojump
   git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True update=yes
-  register: autojump_checkout
 
 - name: Install autojump using the installation script
   shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=/home/iqbal/local_packages/bin/autojump
-  when: autojump_checkout|changed
-
-- name: Enable autojump in zsh
-  shell: grep -q -F "{{ autojump.config }}" ~/.zshrc || printf "\n\n{{ autojump.config }}" >> ~/.zshrc
 
 - name: Checkout dircolors-solarized
   git: repo=https://github.com/seebi/dircolors-solarized dest=~/software/dircolors-solarized depth=1 accept_hostkey=True update=yes
-  register: dircolors_solarized_checkout
-
-- name: Install dircolors-solarized
-  shell: grep -q -F '{{ dircolors_solarized.config }}' ~/.zshrc || printf '\n\n{{ dircolors_solarized.config }}' >> ~/.zshrc
 
 - name: Install python-pip need to install percol
   apt: pkg=python-pip

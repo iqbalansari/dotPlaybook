@@ -41,6 +41,12 @@ if exists percol && [ -z $INSIDE_EMACS ]; then
    bindkey '^R' percol_select_history
 fi
 
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
+
+if [[ -f ~/software/dircolors-solarized/dircolors.ansi-dark ]]; then
+    eval `dircolors ~/software/dircolors-solarized/dircolors.ansi-dark`
+fi
+
 GPG_TTY=$(tty)
 export GPG_TTY
 
