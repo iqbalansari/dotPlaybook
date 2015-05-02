@@ -19,4 +19,13 @@
 
 - name: Copy custom .tmux.conf
   copy: src=.tmux.conf dest=~/.tmux.conf backup=yes
+  
+  # If we are already in tmux simply split the window and run the command
+- name: Install tmux plugins
+  shell: "tmux split-window '~/.tmux/plugins/tpm/scripts/install_plugins.sh'"
+  when: lookup('env', 'TMUX')
 
+  # Otherwise we need to start the server, create a session and then run the shell command
+- name: Install tmux plugins
+  shell: "tmux start-server \\; new-session -d \\; run-shell '~/.tmux/plugins/tpm/scripts/install_plugins.sh'"
+  when: not lookup('env', 'TMUX') 
