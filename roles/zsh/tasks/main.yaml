@@ -44,6 +44,10 @@
 - name: Install dircolors-solarized
   shell: grep -q -F '{{ dircolors_solarized.config }}' ~/.zshrc || printf '\n\n{{ dircolors_solarized.config }}' >> ~/.zshrc
 
+- name: Install python-pip need to install percol
+  apt: pkg=python-pip
+  sudo: yes
+
 - name: Install percol using pip
   pip: name=percol
   sudo: yes
