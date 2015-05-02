@@ -13,7 +13,7 @@
   sudo: yes
 
 - name: Enable installed zsh shell
-  shell: grep -q -F "/usr/local/bin/zsh" /etc/shells || printf "/usr/local/bin/zsh" >> /etc/shells
+  lineinfile: dest=/etc/shells line="/usr/local/bin/zsh" state=present
   sudo: yes
 
 - name: Set zsh as the user shell
