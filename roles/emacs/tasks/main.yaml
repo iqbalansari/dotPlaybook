@@ -30,5 +30,5 @@
 - name: Install emacs
   shell: cd ~/software/emacs-24.5 && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/emacs-24.5
 
-- name: Clone my emacs config
+- name: Clone personal emacs config
   git: repo=https://github.com/iqbalansari/dotEmacs accept_hostkey=True update=yes dest=~/.emacs.d

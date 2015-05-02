@@ -1,0 +1,20 @@
+- name: Install XMonad
+  apt: pkg=xmonad
+  sudo: yes
+
+- name: Install ghc libraries required for configuring XMonad
+  apt: pkg={{ item }}
+  with_items:
+    - libghc-xmonad-dev
+    - libghc-xmonad-contrib-dev
+  sudo: yes
+
+- name: Install gnome-panel
+  apt: pkg=gnome-panel
+  sudo: yes
+
+- name: Create directory to hold xmonad config
+  command: mkdir ~/.xmonad creates=~/.xmonad
+
+- name: Copy xmonad personal config
+  copy: src=xmonad.hs dest=~/.xmonad/xmonad.hs backup=yes

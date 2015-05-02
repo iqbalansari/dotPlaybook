@@ -1,10 +1,12 @@
-Ansible playbook to install the softwares I use on Ubuntu, right now it installs
+Ansible playbook to install the softwares I use on Ubuntu 12.04, right now it installs
 
 - tmux (v1.9a) [http://tmux.sourceforge.net/]
 
 - ZSH (v5.0.7) [http://zsh.sourceforge.net/]
 
 - GNU Emacs (v24.5) [https://www.gnu.org/software/emacs/]
+
+- xmonad 0.10 [http://xmonad.org/]
 
 - Solarized theme for gnome-terminal [https://github.com/Anthony25/gnome-terminal-colors-solarized]
 
