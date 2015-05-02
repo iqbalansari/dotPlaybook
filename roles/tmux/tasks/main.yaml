@@ -21,11 +21,16 @@
   copy: src=.tmux.conf dest=~/.tmux.conf backup=yes
   
   # If we are already in tmux simply split the window and run the command
+  # Supressed changed, since there is no way to detect if the plugins were
+  # installed or simply skipped other than checking directory's mod time
+  # which feels an overkill
 - name: Install tmux plugins (in a tmux session)
-  shell: "tmux split-window '~/.tmux/plugins/tpm/scripts/install_plugins.sh'"
+  shell: tmux split-window '~/.tmux/plugins/tpm/scripts/install_plugins.sh'
   when: lookup('env', 'TMUX')
+  changed_when: False
 
   # Otherwise we need to start the server, create a session and then run the shell command
 - name: Install tmux plugins (outside a tmux session)
-  shell: "tmux start-server \\; new-session -d \\; run-shell 'PATH=~/local_packages/bin:$PATH ~/.tmux/plugins/tpm/scripts/install_plugins.sh'"
+  shell: tmux start-server \; new-session -d \; run-shell 'PATH=~/local_packages/bin:$PATH ~/.tmux/plugins/tpm/scripts/install_plugins.sh'
   when: not lookup('env', 'TMUX') 
+  changed_when: False
