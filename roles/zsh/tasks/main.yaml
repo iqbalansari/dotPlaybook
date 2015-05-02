@@ -5,7 +5,7 @@
   unarchive: src=~/compressed/zsh-5.0.7.tar.gz dest=~/software/ creates=~/software/zsh-5.0.7
 
 - name: Install zsh
-  shell: cd ~/software/zsh-5.0.7/ && ./configure --prefix=/usr/local && make && make install creates=/usr/local/bin/zsh
+  shell: cd {{ ansible_env["HOME"] }}/software/zsh-5.0.7/ && ./configure --prefix=/usr/local && make && make install creates=/usr/local/bin/zsh
   sudo: yes
 
 - name: Enable installed zsh shell
