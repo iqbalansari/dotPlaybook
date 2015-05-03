@@ -18,6 +18,11 @@
 
 - name: Copy xmonad personal config
   copy: src=xmonad.hs dest=~/.xmonad/xmonad.hs backup=yes
+  register: xmonad_config
 
 - name: Copy xmonad startup hook
   copy: src=startup-hook dest=~/.xmonad/startup-hook backup=yes mode=755
+
+- name: Restart xmonad if config changed
+  shell: xmonad --restart
+  when: xmonad_config|changed
