@@ -1,3 +1,8 @@
+# Install vim, better for short edits
+- name: Install vim
+  apt: pkg=vim
+  sudo: yes
+
 - name: Get sources for cloc 1.62
   get_url: url=http://sourceforge.net/projects/cloc/files/cloc/v1.62/cloc-1.62.tar.gz/download dest=~/compressed/cloc-1.62.tar.gz sha256sum=c4111ef5768b1c2844c0c826988df6f92fbb5aa7452a5005d3a031d68631acb3
 
