@@ -1,0 +1,31 @@
+#!/bin/sh
+
+export PATH="$HOME/local_packages/bin:$PATH"
+
+running () {
+    ps ax | grep -v grep | grep "$1$" > /dev/null 
+}
+
+exists () {
+    which $1 > /dev/null
+}
+
+start_if_not_running () {
+    if running $1;
+    then
+        echo "$1 already running"
+    else
+        if exists $1;
+        then
+            $1 &
+            echo "$1 started"
+        else
+            echo "$1 not found"
+        fi
+    fi
+
+}
+
+start_if_not_running "emacs"
+start_if_not_running "gnome-terminal"
+start_if_not_running "firefox"

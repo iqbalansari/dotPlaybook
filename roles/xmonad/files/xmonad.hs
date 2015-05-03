@@ -82,9 +82,10 @@ myManagementHooks = composeAll [
   ]
 
 main = xmonad $ gnomeConfig {
-   modMask    = myModMask,
-   terminal   = "gnome-terminal",
-   workspaces = myWorkspaces,
-   layoutHook = myLayouts,
-   manageHook = myManagementHooks <+> manageHook gnomeConfig
+  modMask    = myModMask,
+  terminal   = "gnome-terminal",
+  workspaces = myWorkspaces,
+  layoutHook = myLayouts,
+  manageHook  = myManagementHooks <+> manageHook gnomeConfig,
+  startupHook = do spawn "~/.xmonad/startup-hook"
   } `additionalKeys` myKeys `additionalMouseBindings` myMouseBindings
