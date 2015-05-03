@@ -37,7 +37,9 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 
 myModMask = mod4Mask
 
-myWorkspaces = ["emacs", "shell", "web", "chat", "vm"] ++ map show [6..9]
+myTerminal = "gnome-terminal"
+
+myWorkspaces = ["shell", "emacs", "web", "chat", "vm"] ++ map show [6..9]
 
 myKeys = [
   -- Switching / moving windows to workspace
@@ -46,6 +48,9 @@ myKeys = [
   ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS),
   ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS),
   ((myModMask,               xK_z), toggleWS),
+
+  -- Use alt + ctrl + t to launch terminal
+  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal),
   
   -- Going to a window by title
   ((myModMask,              xK_s), windowPromptGoto defaultXPConfig { autoComplete = Just 500000 } )
@@ -82,10 +87,10 @@ myManagementHooks = composeAll [
   ]
 
 main = xmonad $ gnomeConfig {
-  modMask    = myModMask,
-  terminal   = "gnome-terminal",
-  workspaces = myWorkspaces,
-  layoutHook = myLayouts,
+  modMask     = myModMask,
+  terminal    = myTerminal,
+  workspaces  = myWorkspaces,
+  layoutHook  = myLayouts,
   manageHook  = myManagementHooks <+> manageHook gnomeConfig,
   startupHook = do spawn "~/.xmonad/startup-hook"
   } `additionalKeys` myKeys `additionalMouseBindings` myMouseBindings
