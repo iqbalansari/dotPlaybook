@@ -3,9 +3,9 @@
   register: base16_gnome_terminal
 
 - name: Install color theme
-  command: ~/software/base16-gnome-terminal/base16-solarized.dark.sh
+  command: ~/software/base16-gnome-terminal/base16-tomorrow.dark.sh
   changed_when: False
   
 - name: Set install theme as the default theme
-  command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-solarized-dark --type string
+  command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-tomorrow-dark --type string
   changed_when: False
