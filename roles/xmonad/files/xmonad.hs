@@ -81,7 +81,6 @@ myManagementHooks = composeAll [
    className =? "Emacs"                                --> doShift "emacs",
    className =? "Firefox"                              --> doShift "web",
    className =? "Google-chrome"                        --> doShift "web",
-   className =? "Gnome-terminal"                       --> doShift "shell",
    className =? "qemu-system-x86_64"                   --> doShift "vm",
    className =? "qemu-system-x86_64"                   --> doCenterFloat
   ]
