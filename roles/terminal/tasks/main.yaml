@@ -1,11 +1,11 @@
-- name: Install dconf-tools
-  apt: pkg=dconf-tools state=present
-  sudo: yes
-  
-- name: Checkout gnome-terminal-colors-solarized
-  git: repo=https://github.com/Anthony25/gnome-terminal-colors-solarized dest=~/software/gnome-terminal-colors-solarized depth=1 accept_hostkey=True update=yes
-  register: gnome_terminal_colors_solarized_update
+- name: Checkout base16-gnome-terminal project
+  git: repo=https://github.com/chriskempson/base16-gnome-terminal dest=~/software/base16-gnome-terminal depth=1 accept_hostkey=True update=yes
+  register: base16_gnome_terminal
 
 - name: Install color theme
-  command: ~/software/gnome-terminal-colors-solarized/set_dark.sh
-  when: gnome_terminal_colors_solarized_update|changed
+  command: ~/software/base16-gnome-terminal/base16-solarized.dark.sh
+  changed_when: False
+  
+- name: Set install theme as the default theme
+  command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-solarized-dark --type string
+  changed_when: False
