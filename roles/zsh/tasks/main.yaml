@@ -21,19 +21,19 @@
   sudo: yes
   
 - name: Get antigen
-  git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True update=yes dest=~/software/antigen
+  git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True dest=~/software/antigen
 
 - name: Copy custom zsh config
   copy: src=.zshrc dest=~/.zshrc backup=yes
   
 - name: Checkout autojump
-  git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True update=yes
+  git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True 
 
 - name: Install autojump using the installation script
   shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=~/local_packages/bin/autojump
 
 - name: Checkout dircolors-solarized
-  git: repo=https://github.com/seebi/dircolors-solarized dest=~/software/dircolors-solarized depth=1 accept_hostkey=True update=yes
+  git: repo=https://github.com/seebi/dircolors-solarized dest=~/software/dircolors-solarized depth=1 accept_hostkey=True 
 
 - name: Install python-pip need to install percol
   apt: pkg=python-pip update_cache=yes cache_valid_time=604800

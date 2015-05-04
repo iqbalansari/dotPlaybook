@@ -34,7 +34,7 @@
   command: mkdir ~/.emacs_configs/ creates=~/.emacs_configs/
   
 - name: Clone personal emacs config
-  git: repo=https://github.com/iqbalansari/dotEmacs accept_hostkey=True update=yes dest=~/.emacs_configs/iqbal
+  git: repo=https://github.com/iqbalansari/dotEmacs accept_hostkey=True dest=~/.emacs_configs/iqbal
 
 - name: Symlink personal config to .emacs.d
   file: src=~/.emacs_configs/iqbal dest=~/.emacs.d state=link
