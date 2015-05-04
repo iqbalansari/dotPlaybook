@@ -5,4 +5,4 @@
   file: dest=~/compressed state=directory
 
 - name: Install make
-  apt: pkg=make
+  apt: pkg=make update_cache=yes cache_valid_time=604800

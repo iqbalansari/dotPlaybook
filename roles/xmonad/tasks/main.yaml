@@ -1,16 +1,16 @@
 - name: Install XMonad
-  apt: pkg=xmonad
+  apt: pkg=xmonad update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Install ghc libraries required for configuring XMonad
-  apt: pkg={{ item }}
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
   with_items:
     - libghc-xmonad-dev
     - libghc-xmonad-contrib-dev
   sudo: yes
 
 - name: Install gnome-panel
-  apt: pkg=gnome-panel
+  apt: pkg=gnome-panel update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Create directory to hold xmonad config

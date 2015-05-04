@@ -1,6 +1,6 @@
 # Install vim, better for short edits
 - name: Install vim
-  apt: pkg=vim
+  apt: pkg=vim update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Get sources for cloc 1.62

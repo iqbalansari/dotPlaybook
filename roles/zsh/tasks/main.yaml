@@ -5,7 +5,7 @@
   unarchive: src=~/compressed/zsh-5.0.7.tar.gz dest=~/software/ creates=~/software/zsh-5.0.7
 
 - name: Install the prerequisites for zsh
-  apt: pkg=libncurses5-dev
+  apt: pkg=libncurses5-dev update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Install zsh
@@ -36,7 +36,7 @@
   git: repo=https://github.com/seebi/dircolors-solarized dest=~/software/dircolors-solarized depth=1 accept_hostkey=True update=yes
 
 - name: Install python-pip need to install percol
-  apt: pkg=python-pip
+  apt: pkg=python-pip update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Install percol using pip
