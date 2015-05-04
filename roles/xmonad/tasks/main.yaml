@@ -23,6 +23,10 @@
 - name: Copy xmonad startup hook
   copy: src=startup-hook dest=~/.xmonad/startup-hook backup=yes mode=755
 
-- name: Restart xmonad if config changed
+- name: Restart xmonad if config changed and xmonad is running
   shell: xmonad --restart
-  when: xmonad_config|changed
+  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
+
+- name: Recompile xmonad if config changed and xmonad is not running
+  shell: xmonad --recompile
+  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
