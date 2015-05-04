@@ -1,5 +1,5 @@
 - name: Download 64 bit firefox
-  get_url: url=https://download.mozilla.org/?product=firefox-37.0.2-SSL&os=linux64&lang=en-US dest=~/compressed/firefox-37.0.2.tar.bz2 sha256sum=caa8988dd36eb0907d43be6b7529b1a43ea5ab5e7c6d490efdd8633c77edf87e
+  get_url: url=https://download.mozilla.org/?product=firefox-37.0.2-SSL&os=linux64&lang=en-US dest=~/compressed/firefox-37.0.2.tar.bz2
   when: ansible_architecture == "x86_64"
 
 - name: Download 32 bit firefox
