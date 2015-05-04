@@ -30,7 +30,7 @@
   git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True update=yes
 
 - name: Install autojump using the installation script
-  shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=/home/iqbal/local_packages/bin/autojump
+  shell: cd ~/software/autojump && ./install.py -p ~/local_packages creates=~/local_packages/bin/autojump
 
 - name: Checkout dircolors-solarized
   git: repo=https://github.com/seebi/dircolors-solarized dest=~/software/dircolors-solarized depth=1 accept_hostkey=True update=yes

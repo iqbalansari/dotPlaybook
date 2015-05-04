@@ -7,9 +7,13 @@
   changed_when: False
   
 - name: Set installed theme as the default theme
-  command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-tomorrow-dark --type string
+  command: gconftool-2 -s "/apps/gnome-terminal/global/default_profile" -t string base-16-tomorrow-dark
+  changed_when: False
+
+- name: Do not use system font
+  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/use_system_font" -t bool false
   changed_when: False
 
 - name: Change font
-  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" "DejaVu Sans Mono 10" -t string
+  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" -t string "DejaVu Sans Mono 10"
   changed_when: False
