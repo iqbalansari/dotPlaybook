@@ -77,7 +77,10 @@ myLayouts = smartBorders(avoidStruts(
 myManagementHooks :: ManageHook
 myManagementHooks = composeAll [
    -- The google hangouts extension
-   className =? "crx_nckgahadagoaajjgafhacjanaoiihapd" --> doShift "chat",
+   resource =? "crx_nckgahadagoaajjgafhacjanaoiihapd"  --> doShift "chat",
+   resource =? "crx_nckgahadagoaajjgafhacjanaoiihapd"  --> doFloat,
+   resource =? "crx_knipolnnllmklapflnccelgolnpehhpl"  --> doShift "chat",
+   resource =? "crx_knipolnnllmklapflnccelgolnpehhpl"  --> doFloat,
    className =? "Emacs"                                --> doShift "emacs",
    className =? "Firefox"                              --> doShift "web",
    className =? "Google-chrome"                        --> doShift "web",
