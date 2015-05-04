@@ -6,6 +6,10 @@
   command: ~/software/base16-gnome-terminal/base16-tomorrow.dark.sh
   changed_when: False
   
-- name: Set install theme as the default theme
+- name: Set installed theme as the default theme
   command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-tomorrow-dark --type string
+  changed_when: False
+
+- name: Change font
+  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" "DejaVu Sans Mono 10" -t string
   changed_when: False
