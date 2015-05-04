@@ -22,6 +22,7 @@ antigen use oh-my-zsh
 antigen bundle robbyrussell/oh-my-zsh
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle Tarrasch/zsh-bd
+antigen bundle colored-man
 
 antigen theme ys
 

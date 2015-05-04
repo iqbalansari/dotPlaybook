@@ -30,3 +30,7 @@
 
 - name: Install ag
   shell: cd ~/software/the_silver_searcher-0.29.1/ && ./build.sh && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/ag
+
+- name: Install curl
+  apt: pkg=curl update_cache=yes cache_valid_time=604800
+  sudo: yes

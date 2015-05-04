@@ -19,6 +19,10 @@
 
 - name: Copy custom .tmux.conf
   copy: src=.tmux.conf dest=~/.tmux.conf backup=yes
+
+- name: Install curl
+  apt: pkg=curl update_cache=yes cache_valid_time=604800
+  sudo: yes
   
   # If we are already in tmux simply split the window and run the command
   # Supressed changed, since there is no way to detect if the plugins were
