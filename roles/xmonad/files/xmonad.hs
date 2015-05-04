@@ -95,11 +95,15 @@ myManagementHooks = composeAll [
    className =? "qemu-system-x86_64"                   --> doCenterFloat
   ]
 
-main = xmonad $ gnomeConfig {
-  modMask     = myModMask,
-  terminal    = myTerminal,
-  workspaces  = myWorkspaces,
-  layoutHook  = myLayouts,
-  manageHook  = myManagementHooks <+> manageHook gnomeConfig,
-  startupHook = do spawn "~/.xmonad/startup-hook"
-  } `additionalKeys` myKeys `additionalMouseBindings` myMouseBindings
+main = do
+  -- Earlier this was in executed in startup hook,
+  -- unfortunately that seems to break workspace icons
+  -- in gnome panel
+  spawn "~/.xmonad/startup-hook"
+  xmonad $ gnomeConfig {
+    modMask    = myModMask,
+    terminal   = myTerminal,
+    workspaces = myWorkspaces,
+    layoutHook = myLayouts,
+    manageHook = myManagementHooks <+> manageHook gnomeConfig <+> manageDocks
+    } `additionalKeys` myKeys `additionalMouseBindings` myMouseBindings
