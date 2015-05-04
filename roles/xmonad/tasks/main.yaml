@@ -13,20 +13,37 @@
   apt: pkg=gnome-panel update_cache=yes cache_valid_time=604800
   sudo: yes
 
-- name: Create directory to hold xmonad config
-  file: path=~/.xmonad state=directory
+- name: Install dependencies for Rofi
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
+  with_items:
+    - libxinerama-dev
+    - libxft-dev
+    - libpango1.0-dev
+    - libx11-dev
 
-- name: Copy xmonad personal config
+- name: Get Rofi release 0.15.4
+  get_url: url=https://github.com/DaveDavenport/rofi/releases/download/0.15.4/rofi-0.15.4.tar.gz dest=~/compressed/rofi-0.15.4.tar.gz
+
+- name: Extract Rofi source code
+  unarchive: src=~/compressed/rofi-0.15.4.tar.gz dest=~/software/ creates=~/software/rofi-0.15.4
+
+- name: Install Rofi
+  shell: cd ~/software/rofi-0.15.4 && ./configure --prefix=$HOME/local_packages/ --disable-i3support && make && make install creates=~/local_packages/bin/rofi
+
+- name: Create directory to hold XMonad config
+  command: mkdir ~/.xmonad creates=~/.xmonad
+
+- name: Copy XMonad personal config
   copy: src=xmonad.hs dest=~/.xmonad/xmonad.hs backup=yes
   register: xmonad_config
 
-- name: Copy xmonad startup hook
+- name: Copy XMonad startup hook
   copy: src=startup-hook dest=~/.xmonad/startup-hook backup=yes mode=755
 
-- name: Restart xmonad if config changed and xmonad is running
+- name: Restart XMonad if config changed and XMonad is running
   shell: xmonad --restart
   when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
 
-- name: Recompile xmonad if config changed and xmonad is not running
+- name: Recompile XMonad if config changed and xmonad is not running
   shell: xmonad --recompile
   when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
