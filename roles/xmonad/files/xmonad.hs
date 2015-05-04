@@ -15,6 +15,7 @@ import XMonad.Prompt
 import XMonad.Prompt.Window
 
 -- The layouts
+import XMonad.Layout
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Grid
 
@@ -66,13 +67,19 @@ myMouseBindings = [
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
+myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
+  where
+    -- default tiling algorithm partitions the screen into two panes
+    tiled   = ResizableTall nmaster delta ratio []
 
-myLayouts = smartBorders(avoidStruts(
-                            ResizableTall 1 (3/100) (1/2) []
-                            ||| Mirror (ResizableTall 1 (3/100) (1/2) [])
-                            ||| Grid
-                            )
-                        )
+    -- The default number of windows in the master pane
+    nmaster = 1
+
+    -- Default proportion of screen occupied by master pane
+    ratio   = 1/2
+
+    -- Percent of screen to increment by when resizing panes
+    delta   = 3/100
 
 myManagementHooks :: ManageHook
 myManagementHooks = composeAll [
