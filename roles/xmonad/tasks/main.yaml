@@ -14,7 +14,7 @@
   sudo: yes
 
 - name: Create directory to hold xmonad config
-  command: mkdir ~/.xmonad creates=~/.xmonad
+  file: path=~/.xmonad state=directory
 
 - name: Copy xmonad personal config
   copy: src=xmonad.hs dest=~/.xmonad/xmonad.hs backup=yes

@@ -82,18 +82,17 @@ myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
     delta   = 3/100
 
 myManagementHooks :: ManageHook
-myManagementHooks = composeAll [
-   -- The google hangouts extension
-   resource =? "crx_nckgahadagoaajjgafhacjanaoiihapd"  --> doShift "chat",
-   resource =? "crx_nckgahadagoaajjgafhacjanaoiihapd"  --> doFloat,
-   resource =? "crx_knipolnnllmklapflnccelgolnpehhpl"  --> doShift "chat",
-   resource =? "crx_knipolnnllmklapflnccelgolnpehhpl"  --> doFloat,
-   className =? "Emacs"                                --> doShift "emacs",
-   className =? "Firefox"                              --> doShift "web",
-   className =? "Google-chrome"                        --> doShift "web",
-   className =? "qemu-system-x86_64"                   --> doShift "vm",
-   className =? "qemu-system-x86_64"                   --> doCenterFloat
-  ]
+myManagementHooks = composeOne [
+  stringProperty "WM_NAME" =? "Hangouts"        -?> doShift "chat",
+  resource                 =? "file_properties" -?> doCenterFloat,
+  resource                 =? "Dialog"          -?> doFloat,
+  className                =? "Emacs"           -?> doShift "emacs",
+  className                =? "Firefox"         -?> doShift "web",
+  className                =? "Google-chrome"   -?> doShift "web"
+   ] <+> composeAll [
+    className =? "qemu-system-x86_64" --> doShift "vm",
+    className =? "qemu-system-x86_64" --> doCenterFloat
+   ]
 
 main = do
   -- Earlier this was in executed in startup hook,
