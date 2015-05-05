@@ -21,14 +21,13 @@
     - libpango1.0-dev
     - libx11-dev
 
-- name: Get Rofi release 0.15.4
-  get_url: url=https://github.com/DaveDavenport/rofi/releases/download/0.15.4/rofi-0.15.4.tar.gz dest=~/compressed/rofi-0.15.4.tar.gz
-
-- name: Extract Rofi source code
-  unarchive: src=~/compressed/rofi-0.15.4.tar.gz dest=~/software/ creates=~/software/rofi-0.15.4
+- name: Get Rofi source code
+  git: repo=https://github.com/DaveDavenport/rofi.git depth=1 accept_hostkey=True dest=~/software/rofi
+  register: rofi_checkout
 
 - name: Install Rofi
-  shell: cd ~/software/rofi-0.15.4 && ./configure --prefix=$HOME/local_packages/ --disable-i3support && make && make install creates=~/local_packages/bin/rofi
+  shell: cd ~/software/rofi && autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/local_packages/ --disable-i3support && make && make install
+  when: rofi_checkout|changed
 
 - name: Create directory to hold XMonad config
   command: mkdir ~/.xmonad creates=~/.xmonad
