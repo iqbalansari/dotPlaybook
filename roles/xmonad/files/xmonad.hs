@@ -51,10 +51,7 @@ myKeys = [
   ((myModMask,               xK_z), toggleWS),
 
   -- Use alt + ctrl + t to launch terminal
-  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal),
-  
-  -- Going to a window by title
-  ((myModMask,              xK_s), windowPromptGoto defaultXPConfig { autoComplete = Just 500000 } )
+  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal)  
   ]
   ++
   -- Use windows + shift + alt + number shift window to workspace numberth workspace and
