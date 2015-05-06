@@ -26,6 +26,12 @@ start_if_not_running () {
 
 }
 
+# Merge Xresources file, need to this since LightDM merges
+# Xresources using -nocpp option [https://bugs.launchpad.net/lightdm/+bug/1084885]
+# thus any preprocessor statements are ignored
+
+xrdb -merge ~/.Xresources
+
 # uxterm is shell script wrapper around xterm which basically just execs xterm,
 # so we cannot check whether uxterm is running, using the current function and
 # should check the state of xterm instead
