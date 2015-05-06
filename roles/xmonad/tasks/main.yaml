@@ -29,15 +29,15 @@
   shell: cd ~/software/rofi && autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/local_packages/ --disable-i3support && make && make install
   when: rofi_checkout|changed
 
-- name: Create .Xresources.d if it does not exist
-  shell: mkdir ~/.Xresources.d creates=~/.Xresources.d
+- name: Create Xresources.d if it does not exist
+  shell: mkdir ~/Xresources.d creates=~/Xresources.d
 
 - name: Copy Rofi config
-  copy: src=rofi dest=~/.Xresources.d/rofi
+  copy: src=rofi dest=~/Xresources.d/rofi
   register: rofi_config
 
 - name: Include rofi config in ~/.Xresources
-  lineinfile: dest=~/.Xresources line='#include "~/.Xresources.d/rofi"' create=yes state=present
+  lineinfile: dest=~/.Xresources line='#include "Xresources.d/rofi"' create=yes state=present
 
 - name: Restart rofi if config changed
   shell: kill $(pgrep rofi) ; rofi -key-run mod4+s &
