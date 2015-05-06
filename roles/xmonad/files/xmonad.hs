@@ -38,7 +38,7 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 
 myModMask = mod4Mask
 
-myTerminal = "gnome-terminal"
+myTerminal = "uxterm"
 
 myWorkspaces = ["shell", "emacs", "web", "chat", "vm"] ++ map show [6..9]
 
