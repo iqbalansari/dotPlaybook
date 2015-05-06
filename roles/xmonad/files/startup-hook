@@ -29,4 +29,4 @@ start_if_not_running () {
 start_if_not_running emacs
 start_if_not_running gnome-terminal
 start_if_not_running firefox
-start_if_not_running rofi -modi "window,run,ssh" -key-window mod4+s -sidebar-mode
+start_if_not_running rofi -key-window mod4+s
