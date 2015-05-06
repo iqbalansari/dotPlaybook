@@ -37,7 +37,7 @@
   register: rofi_config
 
 - name: Include rofi config in ~/.Xresources
-  lineinfile: dest=~/.Xresources line='#include "~/.Xresources.d/rofi"\n' create=yes state=present
+  lineinfile: dest=~/.Xresources line='#include "~/.Xresources.d/rofi"' create=yes state=present
 
 - name: Restart rofi if config changed
   shell: kill $(pgrep rofi) ; rofi -key-run mod4+s &
