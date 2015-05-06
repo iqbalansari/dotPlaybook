@@ -29,9 +29,17 @@
   shell: cd ~/software/rofi && autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/local_packages/ --disable-i3support && make && make install
   when: rofi_checkout|changed
 
-- name: Set custom keybindings for Rofi
-  lineinfile: "dest=~/.Xresources line='rofi.kb-mode-next:mod4+Right,Control+Tab,mod4+s\nrofi.kb-mode-previous:mod4+Left,Control+Shift+Tab,mod4+Shift+s' create=yes"
-  
+- name: Create .Xresources.d if it does not exist
+  shell: mkdir ~/.Xresources.d creates=~/.Xresources.d
+
+- name: Copy Rofi config
+  copy: src=rofi dest=~/.Xresources.d/rofi
+  register: rofi_config
+
+- name: Include rofi config in ~/.Xresources
+  lineinfile: dest=~/.Xresources line='#include "~/.Xresources.d/rofi"\n' create=yes state=present
+
+
 - name: Create directory to hold XMonad config
   command: mkdir ~/.xmonad creates=~/.xmonad
 
