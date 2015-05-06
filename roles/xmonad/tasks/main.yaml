@@ -39,6 +39,9 @@
 - name: Include rofi config in ~/.Xresources
   lineinfile: dest=~/.Xresources line='#include "~/.Xresources.d/rofi"\n' create=yes state=present
 
+- name: Restart rofi if config changed
+  shell: kill $(pgrep rofi) ; rofi -key-run mod4+s &
+  when: rofi_config|changed
 
 - name: Create directory to hold XMonad config
   command: mkdir ~/.xmonad creates=~/.xmonad
