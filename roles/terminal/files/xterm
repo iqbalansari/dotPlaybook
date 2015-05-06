@@ -1,12 +1,34 @@
-XTerm*faceName: Bitstream Vera Serif Mono
-xterm*faceSize: 11
-xterm*vt100*geometry: 80x60
-xterm*saveLines: 16384
-xterm*loginShell: true
-xterm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
-xterm*termName: xterm-color
-xterm*eightBitInput: true
+! Better font
+XTerm*faceName          : DejaVu Sans Mono
+XTerm*faceSize          : 11
 
+! More scrollback, useful if we are not in tmux session
+XTerm*saveLines         : 16384
+
+! Runs shells as login shells
+XTerm*loginShell        : true
+
+! Sets of characters that should be treated the same when doing cut and paste
+XTerm*charClass         : 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+
+! The terminal type
+XTerm*termName          : xterm-color256
+
+! Run in utf8 mode
+XTerm*utf8              : true
+
+! Use system clipboard
+XTerm*selectToClipboard : true
+
+! Use Ctrl + Shift + C to copy and Ctrl + Shift + V to paste
+XTerm*vt100*translations:   #override \n\
+                                       Shift Ctrl <Key> C: select-end(CLIPBOARD) \n\
+                                       Shift Ctrl <Key> V: insert-selection(CLIPBOARD)
+
+! Meta sends escape
+XTerm*metaSendsEscape: true
+
+! Zenburn theme, credits: https://wiki.mpich.org/mpich/index.php/Configure_xterm_Fonts_and_Colors_for_Your_Eyeball
 !BLK Cursor
 #define _color0        #000d18
 #define _color8        #000d18
@@ -39,28 +61,7 @@ xterm*eightBitInput: true
 #define _foreground    #dcdccc
 #define _background    #1f1f1f
 #define _cursorColor   #8faf9f
-URxvt*color0         : _color0
-URxvt*color1         : _color1
-URxvt*color2         : _color2
-URxvt*color3         : _color3
-URxvt*color4         : _color4
-URxvt*color5         : _color5
-URxvt*color6         : _color6
-URxvt*color7         : _color7
-URxvt*color8         : _color8
-URxvt*color9         : _color9
-URxvt*color10        : _color10
-URxvt*color11        : _color11
-URxvt*color12        : _color12
-URxvt*color13        : _color13
-URxvt*color14        : _color14
-URxvt*color15        : _color15
-URxvt*colorBD        : _colorBD
-URxvt*colorIT        : _colorIT
-URxvt*colorUL        : _colorUL
-URxvt*foreground     : _foreground
-URxvt*background     : _background
-URxvt*cursorColor    : _cursorColor
+
 XTerm*color0         : _color0
 XTerm*color1         : _color1
 XTerm*color2         : _color2
@@ -83,9 +84,3 @@ XTerm*colorUL        : _colorUL
 XTerm*foreground     : _foreground
 XTerm*background     : _background
 XTerm*cursorColor    : _cursorColor
-
-XTerm*selectToClipboard: true
-
-XTerm*vt100*translations:   #override \n\
-    Shift Ctrl <Key> C: select-end(CLIPBOARD) \n\
-    Shift Ctrl <Key> V: insert-selection(CLIPBOARD)
