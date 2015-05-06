@@ -1,19 +1,13 @@
-- name: Checkout base16-gnome-terminal project
-  git: repo=https://github.com/chriskempson/base16-gnome-terminal dest=~/software/base16-gnome-terminal depth=1 accept_hostkey=True
-  register: base16_gnome_terminal
+- name: Create Xresources.d if it does not exist
+  shell: mkdir ~/Xresources.d creates=~/Xresources.d
 
-- name: Install color theme
-  command: ~/software/base16-gnome-terminal/base16-tomorrow.dark.sh
-  changed_when: False
-  
-- name: Set installed theme as the default theme
-  command: gconftool-2 -s "/apps/gnome-terminal/global/default_profile" -t string base-16-tomorrow-dark
-  changed_when: False
+- name: Copy UXTerm config
+  copy: src=uxterm dest=~/Xresources.d/uxterm
+  register: uxterm_config
 
-- name: Do not use system font
-  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/use_system_font" -t bool false
-  changed_when: False
+- name: Include UXTerm config in ~/.Xresources
+  lineinfile: dest=~/.Xresources line='#include "Xresources.d/uxterm"' create=yes state=present
 
-- name: Change font
-  command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" -t string "DejaVu Sans Mono 10"
-  changed_when: False
+- name: Reload Xresources if UXTerm config changed
+  shell: xrdb -merge ~/.Xresources
+  when: uxterm_config|changed
