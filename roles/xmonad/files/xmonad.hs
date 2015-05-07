@@ -46,6 +46,13 @@ myTerminal = "uxterm"
 
 myWorkspaces = ["shell", "emacs", "web", "chat", "vm"] ++ map show [6..9]
 
+numPadKeys =
+  [
+    xK_KP_End, xK_KP_Down, xK_KP_Page_Down,
+    xK_KP_Left, xK_KP_Begin,xK_KP_Right,
+    xK_KP_Home, xK_KP_Up, xK_KP_Page_Up
+  ]
+
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,               xK_Right), nextWS),
@@ -59,11 +66,23 @@ myKeys = [
   ((mod1Mask .|. controlMask, xK_t), spawn myTerminal)  
   ]
   ++
-  -- Use windows + shift + alt + number shift window to workspace numberth workspace and
-  -- switch to workspace, similar to windows + shift + right/left
-  [((myModMask .|. shiftMask .|. mod1Mask, k), (windows $ W.shift i) >> (windows $ W.greedyView i))
-   | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]]
-
+  [
+    -- Bind windows + shift + alt + number shift window to workspace numberth workspace and
+    -- switch to workspace, similar to windows + shift + right/left
+    ((myModMask .|. shiftMask .|. mod1Mask, k), (windows $ W.shift i) >> (windows $ W.greedyView i)) | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
+  ]
+  ++
+  [
+    -- Bind windows + numpad keys to move to a workspace, windows + shift + numpad keys to shift
+    -- windows to workspace
+    ((myModMask .|. m, k), windows $ f i) | (i, k) <- zip myWorkspaces numPadKeys, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
+  ]
+  ++
+  [
+  -- Bind windows + shift + alt + numpad keys to move window to a workspace and switch to it
+    ((myModMask .|. shiftMask .|. mod1Mask, k), (windows $ W.shift i) >> (windows $ W.greedyView i)) | (i, k) <- zip myWorkspaces numPadKeys
+  ]
+  
 myMouseBindings = [
   -- Resize a window using any of the corners
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
