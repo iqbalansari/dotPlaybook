@@ -1,6 +1,6 @@
 Ansible playbook to install the softwares I use on Ubuntu 12.04, right now it installs
 
-- tmux (v1.9a) [http://tmux.sourceforge.net/]
+- tmux (v2.0) [http://tmux.sourceforge.net/]
 
 - ZSH (v5.0.7) [http://zsh.sourceforge.net/]
 

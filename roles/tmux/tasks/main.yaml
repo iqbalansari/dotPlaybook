@@ -5,14 +5,16 @@
     - libncurses5-dev
   sudo: yes
 
-- name: Get sources for tmux 1.9a
-  get_url: url=http://downloads.sourceforge.net/tmux/tmux-1.9a.tar.gz dest=~/compressed/tmux-1.9a.tar.gz timeout=100000 sha256sum=c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5
+- name: Get sources for tmux 2.0
+  get_url: url=http://downloads.sourceforge.net/tmux/tmux-2.0.tar.gz dest=~/compressed/tmux-2.0.tar.gz timeout=100000 sha256sum=795f4b4446b0ea968b9201c25e8c1ef8a6ade710ebca4657dd879c35916ad362
 
 - name: Extract tmux sources
-  unarchive: src=~/compressed/tmux-1.9a.tar.gz dest=~/software/ creates=~/software/tmux-1.9a
+  unarchive: src=~/compressed/tmux-2.0.tar.gz dest=~/software/ creates=~/software/tmux-2.0/
+  register: tmux_source
 
 - name: Install tmux
-  shell: cd ~/software/tmux-1.9a/ && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/tmux
+  shell: cd ~/software/tmux-2.0/ && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install
+  when: tmux_source|changed
 
 - name: Install TPM
   git: repo=https://github.com/tmux-plugins/tpm.git depth=1 accept_hostkey=True dest=~/.tmux/plugins/tpm
