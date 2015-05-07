@@ -44,8 +44,8 @@ fi
 
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
-if [[ -f ~/software/dircolors-solarized/dircolors.ansi-dark ]]; then
-    eval `dircolors ~/software/dircolors-solarized/dircolors.ansi-dark`
+if [[ -f ~/software/dircolors-zenburn/dircolors ]]; then
+    eval `dircolors ~/software/dircolors-zenburn/dircolors`
 fi
 
 GPG_TTY=$(tty)
