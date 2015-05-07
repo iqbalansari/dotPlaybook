@@ -28,6 +28,9 @@ UXTerm*vt100*translations:   #override \n\
 ! Meta sends escape
 UXTerm*metaSendsEscape: true
 
+! Set WM_URGENT on bell
+UXTerm*bellIsUrgent   : true
+
 ! Zenburn theme, credits: https://wiki.mpich.org/mpich/index.php/Configure_xterm_Fonts_and_Colors_for_Your_Eyeball
 !BLK Cursor
 #define _color0        #000d18

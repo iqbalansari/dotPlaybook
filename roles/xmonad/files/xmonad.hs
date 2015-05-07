@@ -36,6 +36,10 @@ import qualified Data.Map as M
 
 import qualified XMonad.Actions.FlexibleResize as Flex
 
+import XMonad.Hooks.UrgencyHook
+import XMonad.Util.NamedWindows
+import XMonad.Util.Run
+
 myModMask = mod4Mask
 
 myTerminal = "uxterm"
@@ -93,12 +97,23 @@ myManagementHooks = composeOne [
     className =? "qemu-system-x86_64" --> doCenterFloat
    ]
 
+-- Notify about activity in a window (basically ) using notify send
+ -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name     <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+
+        safeSpawn "notify-send" [show name, "workspace " ++ idx]
+
 main = do
   -- Earlier this was in executed in startup hook,
   -- unfortunately that seems to break workspace icons
   -- in gnome panel
   spawn "~/.xmonad/startup-hook"
-  xmonad $ gnomeConfig {
+  xmonad $ withUrgencyHook LibNotifyUrgencyHook $ gnomeConfig {
     modMask    = myModMask,
     terminal   = myTerminal,
     workspaces = myWorkspaces,
