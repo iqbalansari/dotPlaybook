@@ -49,6 +49,7 @@ myKeys = [
   ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS),
   ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS),
   ((myModMask,               xK_z), toggleWS),
+  ((myModMask,               xK_c), spawn "~/.xmonad/org-capture"),
 
   -- Use alt + ctrl + t to launch terminal
   ((mod1Mask .|. controlMask, xK_t), spawn myTerminal)  
@@ -81,6 +82,7 @@ myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
   stringProperty "WM_NAME" =? "Hangouts"        -?> doShift "chat",
+  stringProperty "WM_NAME" =? "*Org Capture*"   -?> doCenterFloat,
   resource                 =? "file_properties" -?> doCenterFloat,
   resource                 =? "Dialog"          -?> doFloat,
   className                =? "Emacs"           -?> doShift "emacs",

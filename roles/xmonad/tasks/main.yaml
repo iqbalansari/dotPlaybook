@@ -53,6 +53,9 @@
 - name: Copy XMonad startup hook
   copy: src=startup-hook dest=~/.xmonad/startup-hook backup=yes mode=755
 
+- name: Copy script to invoke org-capture
+  copy: src=org-capture dest=~/.xmonad/org-capture backup=yes mode=755
+
 - name: Restart XMonad if config changed and XMonad is running
   shell: xmonad --restart
   when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
