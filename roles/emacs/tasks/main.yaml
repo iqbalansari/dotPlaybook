@@ -26,9 +26,11 @@
 
 - name: Extract emacs sources
   unarchive: src=~/compressed/emacs-24.5.tar.gz dest=~/software/ creates=~/software/emacs-24.5
+  register: emacs_source
 
 - name: Install emacs
-  shell: cd ~/software/emacs-24.5 && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/emacs-24.5
+  shell: cd ~/software/emacs-24.5 && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install
+  when: emacs_source|changed
 
 - name: Create directory to hold emacs configs
   command: mkdir ~/.emacs_configs/ creates=~/.emacs_configs/

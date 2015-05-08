@@ -6,12 +6,8 @@ function exists { which $1 &> /dev/null }
 
 if exists tmux; then
     if [[ -z $TMUX && -z $INSIDE_EMACS && -n $TERM && "$TERM" != "dumb" ]]; then
-        if tmux list-sessions > /dev/null 2>&1; then
-            tmux attach
-            exit
-        else
-            exec tmux
-        fi
+        # Always spawn a new session
+        exec tmux
     fi
 fi
 
