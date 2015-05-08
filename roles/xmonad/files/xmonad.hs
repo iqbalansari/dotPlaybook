@@ -104,13 +104,14 @@ myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
 
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
-  stringProperty "WM_NAME" =? "Hangouts"        -?> doShift "chat",
-  stringProperty "WM_NAME" =? "*Org Capture*"   -?> doCenterFloat,
-  resource                 =? "file_properties" -?> doCenterFloat,
-  resource                 =? "Dialog"          -?> doFloat,
-  className                =? "Emacs"           -?> doShift "emacs",
-  className                =? "Firefox"         -?> doShift "web",
-  className                =? "Google-chrome"   -?> doShift "web"
+  stringProperty "WM_NAME" =? "Hangouts"          -?> doShift "chat",
+  stringProperty "WM_NAME" =? "*Org Capture*"     -?> doCenterFloat,
+  resource                 =? "file_properties"   -?> doCenterFloat,
+  className                =? "gnome-font-viewer" -?> doCenterFloat,
+  resource                 =? "Dialog"            -?> doFloat,
+  className                =? "Emacs"             -?> doShift "emacs",
+  className                =? "Firefox"           -?> doShift "web",
+  className                =? "Google-chrome"     -?> doShift "web"
    ] <+> composeAll [
     className =? "qemu-system-x86_64" --> doShift "vm",
     className =? "qemu-system-x86_64" --> doCenterFloat

@@ -10,4 +10,4 @@
 
 - name: Reload Xresources if UXTerm config changed
   shell: xrdb -merge ~/.Xresources
-  when: uxterm_config|changed
+  when: uxterm_config|changed and lookup('env', 'DISPLAY')
