@@ -16,11 +16,13 @@
 - name: Install dependencies for Rofi
   apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
   with_items:
+    - autoconf
     - libxinerama-dev
     - libxft-dev
     - libpango1.0-dev
     - libx11-dev
-
+  sudo: yes
+    
 - name: Get Rofi source code
   git: repo=https://github.com/DaveDavenport/rofi.git depth=1 accept_hostkey=True dest=~/software/rofi
   register: rofi_checkout
