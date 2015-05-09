@@ -35,7 +35,7 @@
   shell: mkdir ~/Xresources.d creates=~/Xresources.d
 
 - name: Copy Rofi config
-  copy: src=rofi dest=~/Xresources.d/rofi
+  file: src={{ role_path }}/files/rofi dest=~/Xresources.d/rofi state=link
   register: rofi_config
 
 - name: Include rofi config in ~/.Xresources
@@ -48,15 +48,15 @@
 - name: Create directory to hold XMonad config
   command: mkdir ~/.xmonad creates=~/.xmonad
 
-- name: Copy XMonad personal config
-  copy: src=xmonad.hs dest=~/.xmonad/xmonad.hs backup=yes
+- name: Symlink XMonad personal config
+  file: src={{ role_path }}/files/xmonad.hs dest=~/.xmonad/xmonad.hs state=link
   register: xmonad_config
 
-- name: Copy XMonad startup hook
-  copy: src=startup-hook dest=~/.xmonad/startup-hook backup=yes mode=755
+- name: Symlink XMonad startup hook
+  file: src={{ role_path }}/files/startup-hook dest=~/.xmonad/startup-hook state=link
 
-- name: Copy script to invoke org-capture
-  copy: src=org-capture dest=~/.xmonad/org-capture backup=yes mode=755
+- name: Symlink script to invoke org-capture
+  file: src={{ role_path }}/files/org-capture dest=~/.xmonad/org-capture state=link
 
 - name: Restart XMonad if config changed and XMonad is running
   shell: xmonad --restart

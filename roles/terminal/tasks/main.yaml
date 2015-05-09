@@ -1,10 +1,10 @@
 - name: Create Xresources.d if it does not exist
   shell: mkdir ~/Xresources.d creates=~/Xresources.d
 
-- name: Copy UXTerm config
-  copy: src=uxterm dest=~/Xresources.d/uxterm
+- name: Symlink UXTerm config
+  file: src={{ role_path }}/files/uxterm dest=~/Xresources.d/uxterm state=link
   register: uxterm_config
-
+  
 - name: Include UXTerm config in ~/.Xresources
   lineinfile: dest=~/.Xresources line='#include "Xresources.d/uxterm"' create=yes state=present
 

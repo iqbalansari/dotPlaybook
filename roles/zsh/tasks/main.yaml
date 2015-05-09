@@ -23,8 +23,8 @@
 - name: Get antigen
   git: repo=https://github.com/zsh-users/antigen.git depth=1 accept_hostkey=True dest=~/software/antigen
 
-- name: Copy custom zsh config
-  copy: src=.zshrc dest=~/.zshrc backup=yes
+- name: Symlink zsh config
+  file: src={{ role_path }}/files/.zshrc dest=~/.zshrc state=link
   
 - name: Checkout autojump
   git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump depth=1 accept_hostkey=True 
@@ -46,5 +46,5 @@
 - name: Create directory for percol config
   command: mkdir ~/.percol.d/ creates=~/.percol.d
   
-- name: Copy custom percol config
-  copy: src=percol_config.py dest=~/.percol.d/rc.py backup=yes
+- name: Symlink percol config
+  file: src={{ role_path }}/files/percol_config.py dest=~/.percol.d/rc.py state=link
