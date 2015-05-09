@@ -34,8 +34,10 @@ import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
 
+-- Allows resizing from any corner of the window
 import qualified XMonad.Actions.FlexibleResize as Flex
 
+-- Hooks to run when window sets WM_URGENT
 import XMonad.Hooks.UrgencyHook
 import XMonad.Util.NamedWindows
 import XMonad.Util.Run
@@ -63,7 +65,10 @@ myKeys = [
   ((myModMask,               xK_c), spawn "~/.xmonad/org-capture"),
 
   -- Use alt + ctrl + t to launch terminal
-  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal)  
+  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal),
+
+  -- Display a message using notify-send after reloading XMonad
+  ((myModMask,                 xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
   ]
   ++
   [
@@ -117,8 +122,8 @@ myManagementHooks = composeOne [
     className =? "qemu-system-x86_64" --> doCenterFloat
    ]
 
--- Notify about activity in a window (basically ) using notify send
- -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
+-- Notify about activity in a window using notify send
+-- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
 data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 
 instance UrgencyHook LibNotifyUrgencyHook where

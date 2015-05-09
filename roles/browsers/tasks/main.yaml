@@ -1,15 +1,18 @@
-- name: Download 64 bit firefox
+- name: Download 64 bit Firefox
   get_url: url=https://download.mozilla.org/?product=firefox-37.0.2-SSL&os=linux64&lang=en-US dest=~/compressed/firefox-37.0.2.tar.bz2
   when: ansible_architecture == "x86_64"
+  register: firefox_download
 
-- name: Download 32 bit firefox
+- name: Download 32 bit Firefox
   get_url: url=https://download.mozilla.org/?product=firefox-37.0.2-SSL&os=linux&lang=en-US dest=~/compressed/firefox-37.0.2.tar.bz2
   when: not ansible_architecture == "x86_64"
+  register: firefox_download
 
-- name: Extract firefox
-  unarchive: src=~/compressed/firefox-37.0.2.tar.bz2 dest=~/software/ creates=~/software/firefox
+- name: Extract Firefox
+  unarchive: src=~/compressed/firefox-37.0.2.tar.bz2 dest=~/software/
+  when: firefox_download|changed
 
-- name: Symlink firefox binary to local_packages/bin/
+- name: Symlink Firefox binary to local_packages/bin/
   file: src=~/software/firefox/firefox dest=~/local_packages/bin/firefox state=link
 
 - name: Install w3m
