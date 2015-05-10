@@ -113,6 +113,7 @@ myManagementHooks = composeOne [
   stringProperty "WM_NAME" =? "*Org Capture*"     -?> doCenterFloat,
   resource                 =? "file_properties"   -?> doCenterFloat,
   className                =? "gnome-font-viewer" -?> doCenterFloat,
+  className                =? "File-roller"       -?> doCenterFloat,
   resource                 =? "Dialog"            -?> doFloat,
   className                =? "Emacs"             -?> doShift "emacs",
   className                =? "Firefox"           -?> doShift "web",
