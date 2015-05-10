@@ -87,8 +87,7 @@ pull_playbook () {
         echo "Pulling the playbook ... "
         if [ -d $repo_dir ]
         then
-            echo "Found '$repo_dir', is it the a previously cloned copy of the playbook [y/n]?"
-            read answer
+            read -p "Found '$repo_dir', is it the a previously cloned copy of the playbook [y/n]?" answer < /dev/tty
             if echo "$answer" | grep -iq "^y"
             then
                 echo "Run the script from the cloned repo, to avoid this check"
