@@ -8,16 +8,20 @@ Ansible playbook to install the softwares I use on Ubuntu 12.04, right now it in
 
 - xmonad 0.10 [http://xmonad.org/]
 
-- Solarized theme for gnome-terminal [https://github.com/Anthony25/gnome-terminal-colors-solarized]
+- git [http://git-scm.com/] (latest version from PPA)
+
+- rofi [https://davedavenport.github.io/rofi/]
 
 - Percol [https://github.com/mooz/percol]
 
-- oh-my-zsh [https://github.com/robbyrussell/oh-my-zsh/]
-
 - Plus some extra plugins for zsh and tmux
 
-This was written with ansible version 1.9.0.1 in mind
+This was written with ansible version 1.9.1 in mind. Use the installation script in the repo
+to install the dependencies (git, ansible) and run the playbook.
 
 ```
-ansible-playbook playbook.yaml -i inventory --ask-sudo-pass
+curl https://raw.githubusercontent.com/iqbalansari/pc-config/master/run.sh | sh
 ```
+
+`sudo` password is needed by the ansible playbook to install packages using apt. You might
+need to re-login for some of the configuration to take effect.
