@@ -76,7 +76,11 @@ pull_playbook () {
     then
         # If we are already in a cloned repo pull the latest changes
         echo "Getting latest changes ... "
-        git pull
+        if ! (git pull) 
+        then
+            echo "There were some errors while pulling, please fix them, aborting"
+            exit
+        fi
     else
         # Otherwise we need to clone repo, before pulling check
         # if the repo already exists
@@ -90,7 +94,11 @@ pull_playbook () {
                 echo "Run the script from the cloned repo, to avoid this check"
                 echo "Getting latest changes ... "
                 cd $repo_dir
-                git pull
+                if ! (git pull) 
+                then
+                    echo "There were some errors while pulling, please fix them, aborting"
+                    exit
+                fi
             else
                 echo "Cannot clone repo since '$repo_dir' already exists"
                 echo "You can specify the directory to install dotfiles with -d"
