@@ -1,8 +1,10 @@
-- hosts: local
-  remote_user: iqbal
+- hosts: localhost
 
   environment:
     PATH: "{{ ansible_env.HOME }}/local_packages/bin:{{ ansible_env.PATH }}"
+
+  vars:
+    emacs_config_repo: https://github.com/iqbalansari/dotEmacs
 
   roles:
     - zsh
