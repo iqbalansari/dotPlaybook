@@ -58,6 +58,15 @@
 - name: Symlink script to invoke org-capture
   file: src={{ role_path }}/files/org-capture dest=~/.xmonad/org-capture state=link
 
+- name: Symlink GTK 2 config
+  file: src={{ role_path }}/files/.gtkrc-2.0 dest=~/.gtkrc-2.0 state=link
+
+- name: Create directory to hold GTK 3 config
+  command: mkdir -p ~/.config/gtk-3.0 creates=~/.config/gtk-3.0
+
+- name: Symlink GTK 3 config
+  file: src={{ role_path }}/files/gtk-3.0-settings.ini dest=~/.config/gtk-3.0/settings.ini state=link
+
 - name: Restart XMonad if config changed and XMonad is running
   shell: xmonad --restart
   when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
