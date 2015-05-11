@@ -34,3 +34,21 @@
 - name: Install curl
   apt: pkg=curl update_cache=yes cache_valid_time=604800
   sudo: yes
+
+- name: Add Artha's ppa's signing key
+  apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x1BC55156F1E9376F
+  sudo: yes
+
+- name: Add PPA for Artha
+  apt_repository: repo='ppa:legends2k/artha' update_cache=yes state=present
+  sudo: yes
+
+- name: Install Artha
+  apt: pkg=artha update_cache=yes cache_valid_time=604800
+  sudo: yes
+
+- name: Create ~/.config if does not yet exist
+  command: mkdir ~/.config creates=~/.config
+
+- name: Symlink artha config file
+  file: src={{ role_path }}/files/artha.conf dest=~/.config/artha.conf state=link

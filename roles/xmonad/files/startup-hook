@@ -43,3 +43,4 @@ fi
 start_if_not_running emacs
 start_if_not_running firefox
 start_if_not_running rofi -key-window mod4+s
+start_if_not_running artha
