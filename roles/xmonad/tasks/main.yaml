@@ -74,3 +74,11 @@
 - name: Recompile XMonad if config changed and xmonad is not running
   shell: xmonad --recompile
   when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
+
+- name: Add xmonad icons for unity greeter
+  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
+  sudo: yes
+
+- name: Add xmonad icons for unity greeter
+  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
+  sudo: yes
