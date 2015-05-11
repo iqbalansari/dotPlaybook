@@ -111,10 +111,13 @@ myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
   stringProperty "WM_NAME" =? "Hangouts"          -?> doShift "chat",
   stringProperty "WM_NAME" =? "*Org Capture*"     -?> doCenterFloat,
+  stringProperty "WM_NAME" =? "Open Files"        -?> doCenterFloat,
   resource                 =? "file_properties"   -?> doCenterFloat,
+  resource                 =? "Dialog"            -?> doFloat,
   className                =? "gnome-font-viewer" -?> doCenterFloat,
   className                =? "File-roller"       -?> doCenterFloat,
-  resource                 =? "Dialog"            -?> doFloat,
+  className                =? "Display"           -?> doCenterFloat,
+  className                =? "Artha"             -?> doCenterFloat,
   className                =? "Emacs"             -?> doShift "emacs",
   className                =? "Firefox"           -?> doShift "web",
   className                =? "Google-chrome"     -?> doShift "web"
