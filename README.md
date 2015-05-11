@@ -21,7 +21,7 @@ to install the dependencies (git, ansible) and run the playbook. Below is a one-
 get things up and running
 
 ```
-curl https://raw.githubusercontent.com/iqbalansari/pc-config/master/run.sh | sh
+curl https://raw.githubusercontent.com/iqbalansari/dotPlaybook/master/run.sh | sh
 ```
 
 To setup dotfiles in a directory other than the default `~/dotfiles` directory pass the path
@@ -29,7 +29,7 @@ to the desired directory as `-d` argument, this won't work if the script is run 
 To pass the the argument to above one liner use
 
 ```
-curl https://raw.githubusercontent.com/iqbalansari/pc-config/master/run.sh | sh -s -- -d /desired/path
+curl https://raw.githubusercontent.com/iqbalansari/dotPlaybook/master/run.sh | sh -s -- -d /desired/path
 ```
 
 `sudo` password is needed by the ansible playbook to install packages using apt. You might
