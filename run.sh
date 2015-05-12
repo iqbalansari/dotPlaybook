@@ -1,7 +1,7 @@
 #!/bin/sh
 
 repo_url=https://github.com/iqbalansari/pc-config.git
-repo_dir=~/dotfiles
+repo_dir=~/dotPlaybook
 
 installed () {
     local retval=1
