@@ -122,7 +122,8 @@ myManagementHooks = composeOne [
   className                =? "Artha"             -?> doCenterFloat,
   className                =? "Emacs"             -?> doShift "emacs",
   className                =? "Firefox"           -?> doShift "web",
-  className                =? "Google-chrome"     -?> doShift "web"
+  className                =? "Google-chrome"     -?> doShift "web",
+  className                =? "Eog"               -?> doCenterFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
