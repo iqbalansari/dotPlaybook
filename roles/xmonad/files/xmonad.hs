@@ -107,11 +107,13 @@ myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
 
+
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
   stringProperty "WM_NAME" =? "Hangouts"          -?> doShift "chat",
   stringProperty "WM_NAME" =? "*Org Capture*"     -?> doCenterFloat,
   stringProperty "WM_NAME" =? "Open Files"        -?> doCenterFloat,
+  (className =? "Google-chrome" <&&> stringProperty "WM_WINDOW_ROLE" =? "pop-up") -?> doCenterFloat,
   resource                 =? "file_properties"   -?> doCenterFloat,
   resource                 =? "Dialog"            -?> doFloat,
   className                =? "gnome-font-viewer" -?> doCenterFloat,
@@ -121,10 +123,10 @@ myManagementHooks = composeOne [
   className                =? "Emacs"             -?> doShift "emacs",
   className                =? "Firefox"           -?> doShift "web",
   className                =? "Google-chrome"     -?> doShift "web"
-   ] <+> composeAll [
-    className =? "qemu-system-x86_64" --> doShift "vm",
-    className =? "qemu-system-x86_64" --> doCenterFloat
-   ]
+  ] <+> composeAll [
+  className =? "qemu-system-x86_64" --> doShift "vm",
+  className =? "qemu-system-x86_64" --> doCenterFloat
+  ]
 
 -- Notify about activity in a window using notify send
 -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
