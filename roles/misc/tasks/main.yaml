@@ -51,4 +51,4 @@
   command: mkdir ~/.config creates=~/.config
 
 - name: Symlink artha config file
-  file: src={{ role_path }}/files/artha.conf dest=~/.config/artha.conf state=link
+  file: src={{ role_path }}/files/artha.conf dest=~/.config/artha.conf state=link force=yes
