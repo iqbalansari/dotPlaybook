@@ -1,3 +1,11 @@
+- name: Add signing key for Joonas Javanainen XMonad backports PPA
+  apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x62F9B6120B20AE72 state=present
+  sudo: yes
+
+- name: Add PPA for Joonas Javanainen XMonad backports
+  apt_repository: repo='ppa:gekkio/xmonad' update_cache=yes state=present
+  sudo: yes
+
 - name: Install XMonad
   apt: pkg=xmonad update_cache=yes cache_valid_time=604800
   sudo: yes

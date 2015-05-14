@@ -6,7 +6,7 @@ Ansible playbook to install the softwares I use on Ubuntu 12.04, right now it in
 
 - GNU Emacs (v24.5) [https://www.gnu.org/software/emacs/]
 
-- xmonad 0.10 [http://xmonad.org/]
+- xmonad 0.11 [http://xmonad.org/] from [https://launchpad.net/~gekkio/+archive/ubuntu/xmonad]
 
 - git [http://git-scm.com/] (latest version from PPA)
 
