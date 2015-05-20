@@ -1,6 +1,6 @@
 #!/bin/sh
 
-repo_url=https://github.com/iqbalansari/pc-config.git
+repo_url=https://github.com/iqbalansari/dotPlaybook.git
 repo_dir=~/dotPlaybook
 
 installed () {
