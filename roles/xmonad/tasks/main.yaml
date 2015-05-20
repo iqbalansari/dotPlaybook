@@ -10,15 +10,18 @@
   apt: pkg=xmonad update_cache=yes cache_valid_time=604800 state=latest
   sudo: yes
 
+- name: Install gnome-session-xmonad and gnome-panel
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
+  with_items:
+    - gnome-panel
+    - gnome-session-xmonad
+  sudo: yes
+
 - name: Install ghc libraries required for configuring XMonad
   apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 state=latest
   with_items:
     - libghc-xmonad-dev
     - libghc-xmonad-contrib-dev
-  sudo: yes
-
-- name: Install gnome-panel
-  apt: pkg=gnome-panel update_cache=yes cache_valid_time=604800
   sudo: yes
 
 - name: Install dependencies for Rofi
@@ -30,7 +33,36 @@
     - libpango1.0-dev
     - libx11-dev
   sudo: yes
-    
+
+- name: Add xmonad icons for unity greeter
+  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
+  sudo: yes
+
+- name: Add xmonad icons for unity greeter
+  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
+  sudo: yes
+
+- name: Create directory to hold XMonad config
+  command: mkdir ~/.xmonad creates=~/.xmonad
+
+- name: Symlink XMonad personal config
+  file: src={{ role_path }}/files/xmonad.hs dest=~/.xmonad/xmonad.hs state=link
+  register: xmonad_config
+
+- name: Symlink XMonad startup hook
+  file: src={{ role_path }}/files/startup-hook dest=~/.xmonad/startup-hook state=link
+
+- name: Symlink script to invoke org-capture
+  file: src={{ role_path }}/files/org-capture dest=~/.xmonad/org-capture state=link
+
+- name: Restart XMonad if config changed and XMonad is running
+  shell: xmonad --restart
+  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
+
+- name: Recompile XMonad if config changed and xmonad is not running
+  shell: xmonad --recompile
+  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
+
 - name: Get Rofi source code
   git: repo=https://github.com/DaveDavenport/rofi.git depth=1 accept_hostkey=True dest=~/software/rofi
   register: rofi_checkout
@@ -52,20 +84,7 @@
 - name: Restart rofi if config changed
   shell: kill $(pgrep rofi) ; rofi -key-window mod4+s &
   when: rofi_config|changed
-
-- name: Create directory to hold XMonad config
-  command: mkdir ~/.xmonad creates=~/.xmonad
-
-- name: Symlink XMonad personal config
-  file: src={{ role_path }}/files/xmonad.hs dest=~/.xmonad/xmonad.hs state=link
-  register: xmonad_config
-
-- name: Symlink XMonad startup hook
-  file: src={{ role_path }}/files/startup-hook dest=~/.xmonad/startup-hook state=link
-
-- name: Symlink script to invoke org-capture
-  file: src={{ role_path }}/files/org-capture dest=~/.xmonad/org-capture state=link
-
+  
 - name: Symlink GTK 2 config
   file: src={{ role_path }}/files/.gtkrc-2.0 dest=~/.gtkrc-2.0 state=link
 
@@ -74,19 +93,3 @@
 
 - name: Symlink GTK 3 config
   file: src={{ role_path }}/files/gtk-3.0-settings.ini dest=~/.config/gtk-3.0/settings.ini state=link
-
-- name: Restart XMonad if config changed and XMonad is running
-  shell: xmonad --restart
-  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
-
-- name: Recompile XMonad if config changed and xmonad is not running
-  shell: xmonad --recompile
-  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
-
-- name: Add xmonad icons for unity greeter
-  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
-  sudo: yes
-
-- name: Add xmonad icons for unity greeter
-  copy: src=xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
-  sudo: yes

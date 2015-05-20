@@ -87,7 +87,7 @@ pull_playbook () {
         echo "Pulling the playbook ... "
         if [ -d $repo_dir ]
         then
-            read -p "Found '$repo_dir', is it the a previously cloned copy of the playbook [y/n]? " answer < /dev/tty
+            read -p "Found '$repo_dir', is it a previously cloned copy of the playbook [y/n]? " answer < /dev/tty
             if echo "$answer" | grep -iq "^y"
             then
                 echo "Run the script from the cloned repo, to avoid this check"
@@ -113,6 +113,7 @@ pull_playbook () {
 }
 
 run_ansible () {
+    echo "Running the playbook ... "
     ansible-playbook playbook.yaml --ask-sudo-pass
 }
 
