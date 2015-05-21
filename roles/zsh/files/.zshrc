@@ -1,6 +1,8 @@
 #!/bin/zsh
 
 export PATH="$HOME/local_packages/bin:$HOME/local_packages/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/bin:$PATH"
+export PKG_CONFIG_PATH=$HOME/local_packages/lib/pkgconfig
+export MANPATH=$HOME/local_packages/share/man
 
 function exists { which $1 &> /dev/null }
 
