@@ -116,6 +116,7 @@ myManagementHooks = composeOne [
   (className =? "Google-chrome" <&&> stringProperty "WM_WINDOW_ROLE" =? "pop-up") -?> doCenterFloat,
   resource                 =? "file_properties"   -?> doCenterFloat,
   resource                 =? "Dialog"            -?> doFloat,
+  resource                 =? "update-manager"    -?> doFloat,
   className                =? "gnome-font-viewer" -?> doCenterFloat,
   className                =? "File-roller"       -?> doCenterFloat,
   className                =? "Display"           -?> doCenterFloat,
