@@ -110,21 +110,22 @@ myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
 
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
-  stringProperty "WM_NAME" =? "Hangouts"          -?> doShift "chat",
-  stringProperty "WM_NAME" =? "*Org Capture*"     -?> doCenterFloat,
-  stringProperty "WM_NAME" =? "Open Files"        -?> doCenterFloat,
+  stringProperty "WM_NAME" =? "Hangouts"                                          -?> doShift "chat",
+  stringProperty "WM_NAME" =? "*Org Capture*"                                     -?> doCenterFloat,
+  stringProperty "WM_NAME" =? "Open Files"                                        -?> doCenterFloat,
   (className =? "Google-chrome" <&&> stringProperty "WM_WINDOW_ROLE" =? "pop-up") -?> doCenterFloat,
-  resource                 =? "file_properties"   -?> doCenterFloat,
-  resource                 =? "Dialog"            -?> doFloat,
-  resource                 =? "update-manager"    -?> doFloat,
-  className                =? "gnome-font-viewer" -?> doCenterFloat,
-  className                =? "File-roller"       -?> doCenterFloat,
-  className                =? "Display"           -?> doCenterFloat,
-  className                =? "Artha"             -?> doCenterFloat,
-  className                =? "Emacs"             -?> doShift "emacs",
-  className                =? "Firefox"           -?> doShift "web",
-  className                =? "Google-chrome"     -?> doShift "web",
-  className                =? "Eog"               -?> doCenterFloat
+  resource                 =? "file_properties"                                   -?> doCenterFloat,
+  resource                 =? "Dialog"                                            -?> doFloat,
+  resource                 =? "update-manager"                                    -?> doFloat,
+  className                =? "gnome-font-viewer"                                 -?> doCenterFloat,
+  className                =? "File-roller"                                       -?> doCenterFloat,
+  className                =? "Gnome-fallback-mount-helper"                       -?> doCenterFloat,
+  className                =? "Display"                                           -?> doCenterFloat,
+  className                =? "Artha"                                             -?> doCenterFloat,
+  className                =? "Emacs"                                             -?> doShift "emacs",
+  className                =? "Firefox"                                           -?> doShift "web",
+  className                =? "Google-chrome"                                     -?> doShift "web",
+  className                =? "Eog"                                               -?> doCenterFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
