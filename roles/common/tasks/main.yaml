@@ -6,3 +6,4 @@
 
 - name: Install make
   apt: pkg=make update_cache=yes cache_valid_time=604800
+  sudo: yes
