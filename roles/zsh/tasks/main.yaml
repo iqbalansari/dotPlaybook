@@ -35,10 +35,6 @@
 - name: Checkout dircolors-zenburn
   git: repo=https://github.com/ivoarch/dircolors-zenburn dest=~/software/dircolors-zenburn depth=1 accept_hostkey=True 
 
-- name: Install python-pip need to install percol
-  apt: pkg=python-pip update_cache=yes cache_valid_time=604800
-  sudo: yes
-
 - name: Install percol using pip
   pip: name=percol
   sudo: yes

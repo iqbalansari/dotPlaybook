@@ -7,3 +7,7 @@
 - name: Install make
   apt: pkg=make update_cache=yes cache_valid_time=604800
   sudo: yes
+
+- name: Install python-pip need to install some packages
+  apt: pkg=python-pip update_cache=yes cache_valid_time=604800
+  sudo: yes
