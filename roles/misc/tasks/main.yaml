@@ -1,3 +1,7 @@
+- name: Install httpie, a better tool for making HTTP requests from cmd
+  pip: name=httpie
+  sudo: yes
+
 # Install vim, better for short edits
 - name: Install vim
   apt: pkg=vim update_cache=yes cache_valid_time=604800
