@@ -2,6 +2,10 @@
   pip: name=httpie
   sudo: yes
 
+- name: Install rlwrap
+  apt: pkg=rlwrap update_cache=yes cache_valid_time=604800
+  sudo: yes
+
 # Install vim, better for short edits
 - name: Install vim
   apt: pkg=vim update_cache=yes cache_valid_time=604800
