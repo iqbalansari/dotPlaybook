@@ -59,3 +59,8 @@ if [[ -f ~/.zshrc-private ]]
 then
     source ~/.zshrc-private
 fi
+
+if [[ -o interactive ]] && exists rlwrap ;
+then
+    alias sh='rlwrap sh'
+fi
