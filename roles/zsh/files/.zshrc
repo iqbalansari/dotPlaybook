@@ -7,15 +7,15 @@ export MANPATH="$HOME/local_packages/share/man:"
 
 function exists { which $1 &> /dev/null }
 
-if exists tmux; then
-    if [[ -z $TMUX && -z $INSIDE_EMACS && -o interactive ]]; then
-        # Attach to existing session
-        if tmux list-sessions > /dev/null 2>&1; then
-            tmux attach
-            exit
-        else
-            exec tmux
-        fi
+if exists tmux && [[ -z $TMUX && -z $INSIDE_EMACS && -o interactive && "$TERM" != "dumb" ]] ;
+then
+    # Attach to existing session
+    if tmux list-sessions > /dev/null 2>&1;
+    then
+        tmux attach
+        exit
+    else
+        exec tmux
     fi
 fi
 
