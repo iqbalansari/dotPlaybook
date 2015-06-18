@@ -1,7 +1,14 @@
 #!/bin/sh
 
-repo_url=https://github.com/iqbalansari/dotPlaybook.git
-repo_dir=~/dotPlaybook
+repo=iqbalansari/dotPlaybook
+repo_url=https://github.com/$repo
+
+if [ -z "$PLAYBOOK_DIR" ] ;
+then
+    repo_dir=~/dotPlaybook
+else
+    repo_dir=$PLAYBOOK_DIR
+fi
 
 installed () {
     local retval=1
@@ -71,8 +78,9 @@ install_dependencies () {
 pull_playbook () {
     # Make sure we are in the directory containing the script
     cd `dirname $0`
-    
-    if [ -d .git ]
+    local origin=`git config --get remote.origin.url`
+
+    if [ -d .git ] && test ${origin#*$repo} != $origin
     then
         # If we are already in a cloned repo pull the latest changes
         echo "Getting latest changes ... "
