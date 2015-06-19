@@ -80,7 +80,7 @@ pull_playbook () {
     cd `dirname $0`
     local origin=`git config --get remote.origin.url`
 
-    if [ -d .git ] && test ${origin#*$repo} != $origin
+    if [ -d .git ] && test "${origin#*$repo}" != "$origin"
     then
         # If we are already in a cloned repo pull the latest changes
         echo "Getting latest changes ... "
