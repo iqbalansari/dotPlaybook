@@ -17,7 +17,9 @@ import XMonad.Prompt.Window
 -- The layouts
 import XMonad.Layout
 import XMonad.Layout.ResizableTile
-import XMonad.Layout.Grid
+import XMonad.Layout.Accordion
+import XMonad.Layout.StackTile
+import XMonad.Layout.Dishes
 
 -- Smarter borders
 import XMonad.Layout.NoBorders
@@ -93,7 +95,7 @@ myMouseBindings = [
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Grid ||| Full))
+myLayouts = smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| Dishes 2 (1/6) ||| Full))
   where
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
