@@ -70,7 +70,7 @@ parse_arguments () {
 }
 
 install_dependencies () {
-    apt_install software-properties-common
+    apt_install python-software-properties
     apt_install git
     apt_install ansible 1.9.1 ppa:ansible/ansible
 }
