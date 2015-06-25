@@ -30,6 +30,9 @@
 
 - name: Use firefox to launch conkeror instead of xulrunner
   copy: src=conkeror dest=~/local_packages/bin/conkeror force=yes mode=a+x
+
+- name: Symlink conkeror config
+  file: src={{ role_path }}/files/.conkerorrc dest=~/.conkerorrc state=link
   
 - name: Install w3m
   apt: pkg=w3m state=present update_cache=yes cache_valid_time=604800
