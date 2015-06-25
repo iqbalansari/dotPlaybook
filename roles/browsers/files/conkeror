@@ -1,0 +1,3 @@
+#!/bin/sh
+
+$HOME/local_packages/bin/firefox -app "$HOME/local_packages/share/conkeror"/application.ini "$@"

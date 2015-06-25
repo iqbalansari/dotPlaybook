@@ -2,6 +2,7 @@
   apt: pkg=bzip2 update_cache=yes cache_valid_time=604800
   sudo: yes
 
+  # So that there is a fallback if conkeror falls short of something
 - name: Download 64 bit Firefox
   get_url: url=https://download.mozilla.org/?product=firefox-37.0.2-SSL&os=linux64&lang=en-US dest=~/compressed/firefox-37.0.2.tar.bz2
   when: ansible_architecture == "x86_64"
@@ -19,6 +20,17 @@
 - name: Symlink Firefox binary to local_packages/bin/
   file: src=~/software/firefox/firefox dest=~/local_packages/bin/firefox state=link
 
+- name: Get latest conkeror source code
+  git: repo=git://repo.or.cz/conkeror.git dest=~/software/conkeror depth=1 accept_hostkey=True 
+  register: conkeror_source_code
+
+- name: Install conkeror
+  shell: cd ~/software/conkeror/ && make PREFIX={{ ansible_env["HOME"] }}/local_packages install
+  when: conkeror_source_code|changed  
+
+- name: Use firefox to launch conkeror instead of xulrunner
+  copy: src=conkeror dest=~/local_packages/bin/conkeror force=yes mode=a+x
+  
 - name: Install w3m
   apt: pkg=w3m state=present update_cache=yes cache_valid_time=604800
   sudo: yes
