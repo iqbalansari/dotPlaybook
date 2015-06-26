@@ -1,7 +1,9 @@
 #!/bin/zsh
 
+# Make the shell aware of locally installed packages
 export PATH="$HOME/local_packages/bin:$HOME/local_packages/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/bin:$PATH"
 export PKG_CONFIG_PATH="$HOME/local_packages/lib/pkgconfig"
+export LD_LIBRARY_PATH="$HOME/local_packages/lib:"
 export ACLOCAL_PATH="$HOME/local_packages/share/aclocal/"
 export MANPATH="$HOME/local_packages/share/man:"
 
