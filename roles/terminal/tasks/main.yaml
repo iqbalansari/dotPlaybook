@@ -17,11 +17,11 @@
   sudo: yes
   when: urxvt_source|changed
 
+- name: Create ~/.urxvt/ext to hold custom extensions
+  file: path=~/.urxvt/ext state=directory
+
 - name: Get urxvt-perls
   git: repo=https://github.com/muennich/urxvt-perls.git accept_hostkey=True dest=~/software/urxvt-perls
-
-- name: Create ~/.urxvt/ext to hold custom extensions
-  shell: mkdir ~/.urxvt/ext creates=~/.urxvt/ext
 
 - name: Symlink urxvt-perls 'clipboard' extension
   file: src=~/software/urxvt-perls/clipboard dest=~/.urxvt/ext/clipboard state=link
