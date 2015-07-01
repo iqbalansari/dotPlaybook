@@ -46,7 +46,7 @@ import XMonad.Util.Run
 
 myModMask = mod4Mask
 
-myTerminal = "uxterm"
+myTerminal = "urxvt"
 
 myWorkspaces = ["shell", "emacs", "web", "chat", "vm"] ++ map show [6..9]
 
