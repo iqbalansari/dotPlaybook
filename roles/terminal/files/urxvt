@@ -92,15 +92,6 @@ URxvt*scrollBar: false
 ! Compile frills: Associate string with keysym sym. The intervening resource name keysym. cannot be omitted.
 ! URxvt*keysym.sym: string
 
-! URxvt*perl-ext-common: string
-! URxvt*perl-ext: string
-
-! Colon-separated list of additional directories that hold extension scripts. When looking for perl extensions, urxvt will first look in
-! URxvt*perl-lib: path
-
-! Sets the hotkey that starts the incremental scrollback buffer search (default: "M-s").
-! URxvt*searchable-scrollback: keysym
-
 ! Compile frills: Sets the WM_TRANSIENT_FOR property to the given window id.
 ! URxvt*transient-for: windowid
 
@@ -139,6 +130,27 @@ URxvt*lineSpace: 2
 URxvt*altSendsEscape: true
 URxvt*modifier: alt
 
+! Extensions path
+URxvt.perl-lib: /home/iqbal/software/urxvt-perls/
+
+! Extensions to enable
+URxvt.perl-ext-common: default,url-select,keyboard-select,matcher,clipboard
+
+! Clipboard integration
+URxvt.keysym.C-C:   perl:clipboard:copy
+URxvt.keysym.C-V:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
+
+! URL select
+URxvt.keysym.M-u: perl:url-select:select_next
+
+! Free up Ctrl+Shift
+URxvt*iso14755: false
+
+! Need to figure these out
 URxvt.keysym.S-Up             : \033[1;2A
 URxvt.keysym.S-Down           : \033[1;2B
 URxvt.keysym.S-Right          : \033[1;2C
@@ -187,20 +199,3 @@ URxvt.keysym.M-C-S-Right      : \033[1;8C
 URxvt.keysym.M-C-S-Left       : \033[1;8D
 URxvt.keysym.M-C-S-Home       : \033[1;8H
 URxvt.keysym.M-C-S-End        : \033[1;8F
-
-URxvt.perl-lib: ~/software/urxvt-perls/
-
-! extensions
-URxvt.perl-ext-common: default,url-select,keyboard-select,matcher,clipboard
-
-! keyboard select
-URxvt.keysym.C-space: perl:keyboard-select:activate
-URxvt.keysym.M-s: perl:keyboard-select:search
-
-URxvt.keysym.C-C:   perl:clipboard:copy
-URxvt.keysym.C-V:   perl:clipboard:paste
-URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
-
-URxvt.keysym.M-u: perl:url-select:select_next
-
-URxvt*iso14755: false
