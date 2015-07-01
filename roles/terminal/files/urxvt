@@ -1,0 +1,206 @@
+! Zenburn theme, credits: https://wiki.mpich.org/mpich/index.php/Configure_xterm_Fonts_and_Colors_for_Your_Eyeball
+!BLK Cursor
+#define _color0        #000d18
+#define _color8        #000d18
+!RED Tag
+#define _color1        #e89393
+#define _color9        #e89393
+!GRN SpecialKey
+#define _color2        #9ece9e
+#define _color10       #9ece9e
+!YEL Keyword
+#define _color3        #f0dfaf
+#define _color11       #f0dfaf
+!BLU Number
+#define _color4        #8cd0d3
+#define _color12       #8cd0d3
+!MAG Precondit
+#define _color5        #c0bed1
+#define _color13       #c0bed1
+!CYN Float
+#define _color6        #dfaf8f
+#define _color14       #dfaf8f
+!WHT Search
+#define _color7        #efefef
+#define _color15       #efefef
+!FMT Include, StatusLine, ErrorMsg
+#define _colorBD       #ffcfaf
+#define _colorUL       #ccdc90
+#define _colorIT       #80d4aa
+!TXT Normal, Normal, Cursor
+#define _foreground    #dcdccc
+#define _background    #1f1f1f
+#define _cursorColor   #8faf9f
+
+URxvt*color0         : _color0
+URxvt*color1         : _color1
+URxvt*color2         : _color2
+URxvt*color3         : _color3
+URxvt*color4         : _color4
+URxvt*color5         : _color5
+URxvt*color6         : _color6
+URxvt*color7         : _color7
+URxvt*color8         : _color8
+URxvt*color9         : _color9
+URxvt*color10        : _color10
+URxvt*color11        : _color11
+URxvt*color12        : _color12
+URxvt*color13        : _color13
+URxvt*color14        : _color14
+URxvt*color15        : _color15
+URxvt*colorBD        : _colorBD
+URxvt*colorIT        : _colorIT
+URxvt*colorUL        : _colorUL
+URxvt*foreground     : _foreground
+URxvt*background     : _background
+URxvt*cursorColor    : _cursorColor
+
+! No transparency
+URxvt*transparent: false
+
+! Font
+URxvt*font:     xft:DejaVu Sans Mono:size=11:antialias=true
+URxvt*boldFont: xft:DejaVu Sans Mono:bold:size=11:antialias=true
+
+! Start as login shell
+URxvt*loginShell: true
+
+! Do not show scrollbar
+URxvt*scrollBar: false
+
+! True: de-iconify (map) on receipt of a bell character. False: no de-iconify (map) on receipt of a bell character [default].
+! URxvt*mapAlert: boolean
+
+! True: set the urgency hint for the wm on receipt of a bell character.  False: do not set the urgency hint [default].
+! URxvt*urgentOnBell: boolean
+
+! True: use visual bell on receipt of a bell character; option -vb.  False: no visual bell [default]; option +vb.
+! URxvt*visualBell: boolean
+
+! True: handle Meta (Alt) + keypress to set the 8th bit. False: handle Meta (Alt) + keypress as an escape prefix [default].
+! URxvt*meta8: boolean
+
+! The string to send when the backspace key is pressed. If set to DEC or unset it will send Delete (code 127) or, with control, Backspace
+! URxvt*backspacekey: string
+
+! The string to send when the delete key (not the keypad delete key) is pressed. If unset it will send the sequence traditionally
+! URxvt*deletekey: string
+
+! Set the key to be interpreted as the Meta key to: alt, meta, hyper, super, mod1, mod2, mod3, mod4, mod5; option -mod.
+! URxvt*modifier: modifier
+
+! Compile frills: Associate string with keysym sym. The intervening resource name keysym. cannot be omitted.
+! URxvt*keysym.sym: string
+
+! URxvt*perl-ext-common: string
+! URxvt*perl-ext: string
+
+! Colon-separated list of additional directories that hold extension scripts. When looking for perl extensions, urxvt will first look in
+! URxvt*perl-lib: path
+
+! Sets the hotkey that starts the incremental scrollback buffer search (default: "M-s").
+! URxvt*searchable-scrollback: keysym
+
+! Compile frills: Sets the WM_TRANSIENT_FOR property to the given window id.
+! URxvt*transient-for: windowid
+
+! Compile frills: Sets override-redirect for the terminal window, making it almost invisible to window managers; option
+! URxvt*override-redirect: boolean
+
+! Store tabs as wide characters
+URxvt*pastableTabs: true
+
+! Blink the cursor
+URxvt*cursorBlink: false
+
+! Let the pointer be always visible
+URxvt*pointerBlank: false
+
+! Extend the selection on triple click
+URxvt*tripleclickwords: true
+
+URxvt.insecure: true
+
+! More scrollback, useful if we are not in tmux session
+URxvt*saveLines: 100000
+
+! Sets of characters that should be treated the same when doing cut and paste
+URxvt*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+
+! The terminal type
+URxvt*termName: xterm
+
+! Set WM_URGENT on bell
+URxvt*bellIsUrgent: true
+
+URxvt*letterSpace: -1
+URxvt*lineSpace: 2
+
+URxvt*altSendsEscape: true
+URxvt*modifier: alt
+
+URxvt.keysym.S-Up             : \033[1;2A
+URxvt.keysym.S-Down           : \033[1;2B
+URxvt.keysym.S-Right          : \033[1;2C
+URxvt.keysym.S-Left           : \033[1;2D
+URxvt.keysym.S-Home           : \033[1;2H
+URxvt.keysym.S-End            : \033[1;2F
+URxvt.keysym.M-Up             : \033[1;3A
+URxvt.keysym.M-Down           : \033[1;3B
+URxvt.keysym.M-Right          : \033[1;3C
+URxvt.keysym.M-Left           : \033[1;3D
+URxvt.keysym.M-Page_Up        : \033[5;3~
+URxvt.keysym.M-Page_Down      : \033[6;3~
+URxvt.keysym.M-Home           : \033[1;3H
+URxvt.keysym.M-End            : \033[1;3F
+URxvt.keysym.M-S-Up           : \033[1;4A
+URxvt.keysym.M-S-Down         : \033[1;4B
+URxvt.keysym.M-S-Right        : \033[1;4C
+URxvt.keysym.M-S-Left         : \033[1;4D
+URxvt.keysym.M-S-Home         : \033[1;4H
+URxvt.keysym.M-S-End          : \033[1;4F
+URxvt.keysym.C-Up             : \033[1;5A
+URxvt.keysym.C-Down           : \033[1;5B
+URxvt.keysym.C-Right          : \033[1;5C
+URxvt.keysym.C-Left           : \033[1;5D
+URxvt.keysym.C-Page_Up        : \033[5;5~
+URxvt.keysym.C-Page_Down      : \033[6;5~
+URxvt.keysym.C-Home           : \033[1;5H
+URxvt.keysym.C-End            : \033[1;5F
+URxvt.keysym.C-S-Up           : \033[1;6A
+URxvt.keysym.C-S-Down         : \033[1;6B
+URxvt.keysym.C-S-Right        : \033[1;6C
+URxvt.keysym.C-S-Left         : \033[1;6D
+URxvt.keysym.C-S-Home         : \033[1;6H
+URxvt.keysym.C-S-End          : \033[1;6F
+URxvt.keysym.M-C-Up           : \033[1;7A
+URxvt.keysym.M-C-Down         : \033[1;7B
+URxvt.keysym.M-C-Right        : \033[1;7C
+URxvt.keysym.M-C-Left         : \033[1;7D
+URxvt.keysym.M-C-Page_Up      : \033[5;7~
+URxvt.keysym.M-C-Page_Down    : \033[6;7~
+URxvt.keysym.M-C-Home         : \033[1;7H
+URxvt.keysym.M-C-End          : \033[1;7F
+URxvt.keysym.M-C-S-Up         : \033[1;8A
+URxvt.keysym.M-C-S-Down       : \033[1;8B
+URxvt.keysym.M-C-S-Right      : \033[1;8C
+URxvt.keysym.M-C-S-Left       : \033[1;8D
+URxvt.keysym.M-C-S-Home       : \033[1;8H
+URxvt.keysym.M-C-S-End        : \033[1;8F
+
+URxvt.perl-lib: ~/software/urxvt-perls/
+
+! extensions
+URxvt.perl-ext-common: default,url-select,keyboard-select,matcher,clipboard
+
+! keyboard select
+URxvt.keysym.C-space: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+
+URxvt.keysym.C-C:   perl:clipboard:copy
+URxvt.keysym.C-V:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+URxvt.keysym.M-u: perl:url-select:select_next
+
+URxvt*iso14755: false
