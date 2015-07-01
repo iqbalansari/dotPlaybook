@@ -1,5 +1,8 @@
 - name: Install dependencies for URxvt
-  apt: pkg=libperl-dev update_cache=yes cache_valid_time=604800
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
+  with_items:
+    - libperl-dev
+    - xclip
   sudo: yes
 
 - name: Get latest release of URxvt
@@ -13,6 +16,18 @@
   shell: cd {{ ansible_env["HOME"] }}/software/rxvt-unicode-9.21/ && ./configure --prefix=/usr/local && make && make install
   sudo: yes
   when: urxvt_source|changed
+
+- name: Get urxvt-perls
+  git: repo=https://github.com/muennich/urxvt-perls.git accept_hostkey=True dest=~/software/urxvt-perls
+
+- name: Create ~/.urxvt/ext to hold custom extensions
+  shell: mkdir ~/.urxvt/ext creates=~/.urxvt/ext
+
+- name: Symlink urxvt-perls 'clipboard' extension
+  file: src=~/software/urxvt-perls/clipboard dest=~/.urxvt/ext/clipboard state=link
+
+- name: Symlink urxvt-perls 'url-select' extension
+  file: src=~/software/urxvt-perls/url-select dest=~/.urxvt/ext/url-select state=link
 
 - name: Create Xresources.d if it does not exist
   shell: mkdir ~/Xresources.d creates=~/Xresources.d

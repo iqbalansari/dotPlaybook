@@ -130,11 +130,8 @@ URxvt*lineSpace: 2
 URxvt*altSendsEscape: true
 URxvt*modifier: alt
 
-! Extensions path
-URxvt.perl-lib: /home/iqbal/software/urxvt-perls/
-
 ! Extensions to enable
-URxvt.perl-ext-common: default,url-select,keyboard-select,matcher,clipboard
+URxvt.perl-ext-common: default,url-select,matcher,clipboard
 
 ! Clipboard integration
 URxvt.keysym.C-C:   perl:clipboard:copy
