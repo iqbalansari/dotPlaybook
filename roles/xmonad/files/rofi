@@ -3,3 +3,4 @@ rofi.kb-mode-next     : mod4+Right,Control+Tab,mod4+s
 rofi.kb-mode-previous : mod4+Left,Control+Shift+Tab,mod4+Shift+s
 rofi.key-window       : mod4+s 
 rofi.sidebar-mode     : true
+rofi.fuzzy            : true
