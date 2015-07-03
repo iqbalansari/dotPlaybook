@@ -32,14 +32,7 @@ start_if_not_running () {
 
 xrdb -merge ~/.Xresources
 
-# uxterm is shell script wrapper around xterm which basically just execs xterm,
-# so we cannot check whether uxterm is running, using the current function and
-# should check the state of xterm instead
-if ! running xterm
-then
-    uxterm &
-fi
-
+start_if_not_running urxvt
 start_if_not_running emacs
 start_if_not_running firefox
 start_if_not_running rofi -key-window mod4+s
