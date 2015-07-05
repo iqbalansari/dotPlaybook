@@ -19,6 +19,8 @@
     - libm17n-dev
     - libotf-dev
     - graphicsmagick-libmagick-dev-compat
+    # To integrate terminal emacs with system clipboard
+    - xsel
   sudo: yes
 
 - name: Get sources for emacs 24.5

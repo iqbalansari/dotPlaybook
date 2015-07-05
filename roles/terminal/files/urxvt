@@ -138,9 +138,6 @@ URxvt.keysym.C-C:   perl:clipboard:copy
 URxvt.keysym.C-V:   perl:clipboard:paste
 URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 
-URxvt.clipboard.copycmd:  xclip -i -selection clipboard
-URxvt.clipboard.pastecmd: xclip -o -selection clipboard
-
 ! URL select
 URxvt.keysym.M-u: perl:url-select:select_next
 

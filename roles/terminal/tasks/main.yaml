@@ -2,7 +2,7 @@
   apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
   with_items:
     - libperl-dev
-    - xclip
+    - xsel
   sudo: yes
 
 - name: Get latest release of URxvt
