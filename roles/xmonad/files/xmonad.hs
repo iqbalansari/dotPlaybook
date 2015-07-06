@@ -115,6 +115,7 @@ myManagementHooks = composeOne [
   stringProperty "WM_NAME" =? "Hangouts"                                          -?> doShift "chat",
   stringProperty "WM_NAME" =? "*Org Capture*"                                     -?> doCenterFloat,
   stringProperty "WM_NAME" =? "Open Files"                                        -?> doCenterFloat,
+  stringProperty "WM_NAME" =? "File Upload"                                       -?> doCenterFloat,
   stringProperty "WM_NAME" =? "Save As"                                           -?> doCenterFloat,
   resource                 =? "file_properties"                                   -?> doCenterFloat,
   resource                 =? "Dialog"                                            -?> doFloat,
