@@ -7,5 +7,5 @@
   sudo: yes
 
 - name: Install latest Git
-  apt: pkg=git update_cache=yes cache_valid_time=604800 state=latest
+  apt: pkg=git update_cache=yes cache_valid_time=604800 state=present
   sudo: yes

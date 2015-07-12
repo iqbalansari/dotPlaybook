@@ -7,7 +7,7 @@
   sudo: yes
 
 - name: Install XMonad
-  apt: pkg=xmonad update_cache=yes cache_valid_time=604800 state=latest
+  apt: pkg=xmonad update_cache=yes cache_valid_time=604800 state=present
   sudo: yes
 
 - name: Install gnome-session-xmonad, gnome-panel and xcompmgr
@@ -19,7 +19,7 @@
   sudo: yes
 
 - name: Install ghc libraries required for configuring XMonad
-  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 state=latest
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 state=present
   with_items:
     - libghc-xmonad-dev
     - libghc-xmonad-contrib-dev

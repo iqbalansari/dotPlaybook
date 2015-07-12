@@ -52,7 +52,7 @@
   sudo: yes
 
 - name: Install Artha
-  apt: pkg=artha update_cache=yes cache_valid_time=604800 state=latest
+  apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present
   sudo: yes
 
 - name: Create ~/.config if does not yet exist
