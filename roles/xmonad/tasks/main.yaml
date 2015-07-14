@@ -48,21 +48,12 @@
 
 - name: Symlink XMonad personal config
   file: src={{ role_path }}/files/xmonad.hs dest=~/.xmonad/xmonad.hs state=link
-  register: xmonad_config
 
 - name: Symlink XMonad startup hook
   file: src={{ role_path }}/files/startup-hook dest=~/.xmonad/startup-hook state=link
 
 - name: Symlink script to invoke org-capture
   file: src={{ role_path }}/files/org-capture dest=~/.xmonad/org-capture state=link
-
-- name: Restart XMonad if config changed and XMonad is running
-  shell: xmonad --restart
-  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') != -1 and xmonad_config|changed
-
-- name: Recompile XMonad if config changed and xmonad is not running
-  shell: xmonad --recompile
-  when: lookup('env', 'DESKTOP_SESSION').find('xmonad') == -1 and xmonad_config|changed
 
 - name: Get Rofi source code
   git: repo=https://github.com/DaveDavenport/rofi.git depth=1 accept_hostkey=True dest=~/software/rofi
@@ -83,7 +74,7 @@
   lineinfile: dest=~/.Xresources line='#include "Xresources.d/rofi"' create=yes state=present
 
 - name: Restart rofi if config changed
-  shell: kill $(pgrep rofi) ; rofi -key-window mod4+s &
+  shell: kill $(pgrep rofi) && rofi -key-window mod4+s &
   when: rofi_config|changed
   
 - name: Symlink GTK 2 config
