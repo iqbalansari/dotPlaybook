@@ -10,6 +10,22 @@ else
     repo_dir=$PLAYBOOK_DIR
 fi
 
+update_apt_cache_if_needed () {
+    local now=$(date +%s)
+    local last_apt_update=0
+    
+    if [ -f /var/cache/apt/pkgcache.bin ]
+    then
+        last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
+    fi
+
+    if [ $((now - last_apt_update)) -gt 86400 ]
+    then
+        echo "apt cache is older than a day, updating now ... "
+        sudo apt-get update
+    fi
+}
+
 installed () {
     local retval=1
 
@@ -53,6 +69,8 @@ apt_install () {
         then
             sudo apt-add-repository -y "$ppa"
             sudo apt-get update
+        else
+            update_apt_cache_if_needed
         fi
 
         sudo apt-get install -y "$pkg"
