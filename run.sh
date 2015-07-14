@@ -63,7 +63,7 @@ apt_install () {
         local ppa=$2
     fi
 
-    if ! installed "$pkg"  "$version"
+    if ! installed "$pkg" "$version"
     then
         if [ -n "$ppa" ]
         then

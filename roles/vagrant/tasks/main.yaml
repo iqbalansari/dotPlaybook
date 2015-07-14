@@ -8,3 +8,7 @@
 - name: Download vagrant deb for 32 bit arch
   get_url: url=https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.3_i686.deb dest=~/software/vagrant/vagrant_1.7.3.deb timeout=100000
   when: not ansible_architecture == "x86_64"
+
+- name: Install vagrant
+  apt: deb={{ ansible_env["HOME"] }}/software/vagrant/vagrant_1.7.3.deb state=present
+  sudo: yes
