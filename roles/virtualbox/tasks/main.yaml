@@ -1,11 +1,11 @@
 - name: Add virtualbox PPA
-  lineinfile: dest=/etc/apt/sources.list line='deb http://download.virtualbox.org/virtualbox/debian precise contrib' state=present
+  apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian precise contrib' state=present update_cache=yes
   sudo: yes
 
 - name: Add signing key for virtualbox PPA
   apt_key: url=https://www.virtualbox.org/download/oracle_vbox.asc state=present
   sudo: yes
-
+  
 - name: Install virtualbox 5.0
   apt: pkg=virtualbox-5.0 update_cache=yes cache_valid_time=604800 state=present
   sudo: yes
