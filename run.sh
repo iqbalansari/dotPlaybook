@@ -96,45 +96,70 @@ install_dependencies () {
 pull_playbook () {
     # Make sure we are in the directory containing the script
     cd `dirname $0`
-    local origin=`git config --get remote.origin.url`
+    local origin=$(git config --get remote.origin.url)
+    local release=$(lsb_release -c -s)
 
-    if [ -d .git ] && test "${origin#*$repo}" != "$origin"
-    then
-        # If we are already in a cloned repo pull the latest changes
-        echo "Getting latest changes ... "
-        if ! (git pull) 
-        then
-            echo "There were some errors while pulling, please fix them, aborting"
-            exit
-        fi
-    else
-        # Otherwise we need to clone repo, before pulling check
-        # if the repo already exists
+    # Go to the directory containing the repo
+    if ! (test "${origin#*$repo}" != "$origin")
+    then        
+        # If we are not in a cloned copy, first clone the repo
         echo "Pulling the playbook ... "
         if [ -d $repo_dir ]
         then
+            # If the repo already exists just cd to it
             read -p "Found '$repo_dir', is it a previously cloned copy of the playbook [y/n]? " answer < /dev/tty
             if echo "$answer" | grep -iq "^y"
             then
                 echo "Run the script from the cloned repo, to avoid this check"
-                echo "Getting latest changes ... "
                 cd $repo_dir
-                if ! (git pull) 
-                then
-                    echo "There were some errors while pulling, please fix them, aborting"
-                    exit
-                fi
+
             else
                 echo "Cannot clone repo since '$repo_dir' already exists"
                 echo "You can specify the directory to install dotfiles with -d"
                 echo "Aborting ... "
                 exit
+
             fi
         else
+            # Otherwise clone it
             echo "Cloning playbook in $repo_dir directory ... "
             git clone $repo_url $repo_dir
             cd $repo_dir
         fi
+    fi
+
+    # Get the branch for the release
+    # Check if branch exists for the release
+    echo "Switching to branch for current release"
+    
+    if git ls-remote -q --heads | awk -F ' ' '{print $2}' | grep "refs/heads/$release" > /dev/null 2>&1
+    then
+        # Does it exists locally
+        if git rev-parse -q --verify "$release" > /dev/null 2>&1
+        then
+            # Just checkout to it
+            if ! (git checkout -q "$release")
+            then
+                echo "Failed to checkout to branch for release '$release', aborting ... "
+            fi
+        else
+            # Or create a local branch
+            if ! (git checkout -q -b "$release" "origin/$release")
+            then
+                echo "Failed to checkout to branch for release '$release', aborting ... "
+            fi
+        fi
+    else
+        echo "No branch exists for '$release'"
+        echo "Aborting ... "
+    fi
+
+    # Pull the latest changes
+    echo "Getting latest changes ... "
+    if ! (git pull -q) 
+    then
+        echo "There were some errors while pulling, please fix them, aborting"
+        exit
     fi
 }
 
