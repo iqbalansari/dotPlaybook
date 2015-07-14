@@ -7,6 +7,10 @@ export LD_LIBRARY_PATH="$HOME/local_packages/lib:"
 export ACLOCAL_PATH="$HOME/local_packages/share/aclocal/"
 export MANPATH="$HOME/local_packages/share/man:"
 
+# Locale settings
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 function exists { which $1 &> /dev/null }
 
 if exists tmux && [[ -z $TMUX && -z $INSIDE_EMACS && -o interactive && -n $TERM && "$TERM" != "dumb" && "$TERM" != "linux" ]] ;
