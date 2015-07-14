@@ -1,5 +1,5 @@
 - name: Add virtualbox PPA
-  apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian precise contrib' state=present update_cache=yes
+  apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian trusty contrib' state=present update_cache=yes
   sudo: yes
 
 - name: Add signing key for virtualbox PPA
