@@ -19,9 +19,9 @@ update_apt_cache_if_needed () {
         last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
     fi
 
-    if [ $((now - last_apt_update)) -gt 86400 ]
+    if [ $((now - last_apt_update)) -gt 604800 ]
     then
-        echo "apt cache is older than a day, updating now ... "
+        echo "apt cache is older than a week, updating now ... "
         sudo apt-get update
     fi
 }
