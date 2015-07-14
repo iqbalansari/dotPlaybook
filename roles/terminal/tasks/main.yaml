@@ -1,5 +1,5 @@
 - name: Install dependencies for URxvt
-  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
   with_items:
     - libperl-dev
     - xsel

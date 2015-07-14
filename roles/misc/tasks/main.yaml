@@ -3,12 +3,12 @@
   sudo: yes
 
 - name: Install rlwrap
-  apt: pkg=rlwrap update_cache=yes cache_valid_time=604800
+  apt: pkg=rlwrap update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 # Install vim, better for short edits
 - name: Install vim
-  apt: pkg=vim update_cache=yes cache_valid_time=604800
+  apt: pkg=vim update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 - name: Get sources for cloc 1.62
@@ -21,7 +21,7 @@
   shell: cd ~/software/cloc-1.62/ && make prefix={{ ansible_env["HOME"] }}/local_packages/ install creates={{ ansible_env["HOME"] }}/local_packages/bin/cloc
 
 - name: Install dependencies for building ag
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800
+  apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
   with_items:
     - automake
     - pkg-config
@@ -40,7 +40,7 @@
   shell: cd ~/software/the_silver_searcher-0.29.1/ && ./build.sh && ./configure --prefix={{ ansible_env["HOME"] }}/local_packages/ && make && make install creates={{ ansible_env["HOME"] }}/local_packages/bin/ag
 
 - name: Install curl
-  apt: pkg=curl update_cache=yes cache_valid_time=604800
+  apt: pkg=curl update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 - name: Add Artha's ppa's signing key
@@ -52,7 +52,7 @@
   sudo: yes
 
 - name: Install Artha
-  apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present
+  apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present install_recommends=no
   sudo: yes
 
 - name: Create ~/.config if does not yet exist

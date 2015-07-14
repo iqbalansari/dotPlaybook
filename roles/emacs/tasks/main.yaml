@@ -1,5 +1,5 @@
 - name: Install the prerequisites for emacs
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800
+  apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
   with_items:
     - libxaw7-dev
     - libjpeg-dev

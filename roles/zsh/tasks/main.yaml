@@ -1,5 +1,5 @@
 - name: Install the prerequisites for zsh
-  apt: pkg=libncurses5-dev update_cache=yes cache_valid_time=604800
+  apt: pkg=libncurses5-dev update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 - name: Download zsh 5.0.7 source

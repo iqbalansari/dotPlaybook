@@ -1,5 +1,5 @@
 - name: Install tmux dependencies
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800 install_recommends=no
   with_items:
     - libevent-dev
     - libncurses5-dev
@@ -23,7 +23,7 @@
   file: src={{ role_path }}/files/.tmux.conf dest=~/.tmux.conf state=link
 
 - name: Install curl
-  apt: pkg=curl update_cache=yes cache_valid_time=604800
+  apt: pkg=curl update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
   
   # If we are already in tmux simply split the window and run the command

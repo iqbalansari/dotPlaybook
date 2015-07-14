@@ -5,13 +5,13 @@
   file: dest=~/compressed state=directory
 
 - name: Install make
-  apt: pkg=make update_cache=yes cache_valid_time=604800
+  apt: pkg=make update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 - name: Install python-pip need to install some packages
-  apt: pkg=python-pip update_cache=yes cache_valid_time=604800
+  apt: pkg=python-pip update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
 
 - name: Install bzip2
-  apt: pkg=bzip2 update_cache=yes cache_valid_time=604800
+  apt: pkg=bzip2 update_cache=yes cache_valid_time=604800 install_recommends=no
   sudo: yes
