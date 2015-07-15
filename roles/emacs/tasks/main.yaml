@@ -19,6 +19,7 @@
     - libm17n-dev
     - libotf-dev
     - graphicsmagick-libmagick-dev-compat
+    - libgnutls-dev
     # To integrate terminal emacs with system clipboard
     - xsel
   sudo: yes
