@@ -1,4 +1,6 @@
-Ansible playbook to install the software I use on Ubuntu 14.04, right now it installs
+Ansible playbook to install the software I use on Ubuntu 14.04 and Ubuntu 12.04
+The playbooks are release specific and reside in the different branches. The playbooks
+install the following
 
 - tmux (v2.0) [http://tmux.sourceforge.net/]
 
