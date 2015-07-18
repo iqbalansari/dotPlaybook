@@ -13,7 +13,7 @@ fi
 update_apt_cache_if_needed () {
     local now=$(date +%s)
     local last_apt_update=0
-    
+
     if [ -f /var/cache/apt/pkgcache.bin ]
     then
         last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
@@ -101,7 +101,7 @@ pull_playbook () {
 
     # Go to the directory containing the repo
     if ! (test "${origin#*$repo}" != "$origin")
-    then        
+    then
         # If we are not in a cloned copy, first clone the repo
         echo "Pulling the playbook ... "
         if [ -d $repo_dir ]
@@ -131,11 +131,11 @@ pull_playbook () {
     # Get the branch for the release
     # Check if branch exists for the release
     echo "Switching to branch for current release"
-    
-    if git ls-remote -q --heads | awk -F ' ' '{print $2}' | grep "refs/heads/$release" > /dev/null 2>&1
+
+    if git ls-remote --exit-code origin "$release" > /dev/null
     then
         # Does it exists locally
-        if git rev-parse -q --verify "$release" > /dev/null 2>&1
+        if git rev-parse -q --verify "$release" > /dev/null
         then
             # Just checkout to it
             if ! (git checkout -q "$release")
@@ -156,7 +156,7 @@ pull_playbook () {
 
     # Pull the latest changes
     echo "Getting latest changes ... "
-    if ! (git pull -q) 
+    if ! (git pull -q)
     then
         echo "There were some errors while pulling, please fix them, aborting"
         exit
