@@ -132,22 +132,23 @@ pull_playbook () {
     # Check if branch exists for the release
     echo "Switching to branch for current release"
 
-    if git ls-remote --exit-code origin "$release" > /dev/null
+    # If it exists locally
+    if git rev-parse -q --verify "$release" > /dev/null
     then
-        # Does it exists locally
-        if git rev-parse -q --verify "$release" > /dev/null
+        # Just checkout to it
+        if ! (git checkout -q "$release")
         then
-            # Just checkout to it
-            if ! (git checkout -q "$release")
-            then
-                echo "Failed to checkout to branch for release '$release', aborting ... "
-            fi
-        else
-            # Or create a local branch
-            if ! (git checkout -q -b "$release" "origin/$release")
-            then
-                echo "Failed to checkout to branch for release '$release', aborting ... "
-            fi
+            echo "Failed to checkout to branch for release '$release', aborting ... "
+            exit
+        fi
+    # Else check if the repo exists at remote
+    elif git ls-remote --exit-code origin "$release" > /dev/null
+    then
+        # And create a local branch
+        if ! (git checkout -q -b "$release" "origin/$release")
+        then
+            echo "Failed to checkout to branch for release '$release', aborting ... "
+            exit
         fi
     else
         echo "No branch exists for '$release'"
