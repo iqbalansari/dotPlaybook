@@ -100,7 +100,7 @@ pull_playbook () {
     local release=$(lsb_release -c -s)
 
     # Go to the directory containing the repo
-    if ! (test "${origin#*$repo}" != "$origin")
+    if (test "${origin#*$repo}" = "$origin")
     then
         # If we are not in a cloned copy, first clone the repo
         echo "Pulling the playbook ... "
