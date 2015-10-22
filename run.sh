@@ -2,6 +2,7 @@
 
 repo=iqbalansari/dotPlaybook
 repo_url=https://github.com/$repo
+ansible_args=''
 
 if [ -z "$PLAYBOOK_DIR" ] ;
 then
@@ -77,13 +78,6 @@ apt_install () {
         echo "$1 installed"
     else
         echo "$1 is already installed, skipping ... "
-    fi
-}
-
-parse_arguments () {
-    if [ "$1" = "-d" ] && [ -n "$2" ]
-    then
-        repo_dir="$2"
     fi
 }
 
@@ -166,14 +160,24 @@ pull_playbook () {
 
 run_ansible () {
     echo "Running the playbook ... "
-    ansible-playbook playbook.yaml --ask-sudo-pass
+    eval exec "ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
 
 main () {
-    parse_arguments $*
+    for i in "$@" ; do
+        case $i in
+            -d=*)
+                repo_dir="${i#*=}"
+                ;;
+            *)
+                ansible_args="$ansible_args '$i'"
+                ;;
+        esac
+    done
+
     install_dependencies
     pull_playbook
     run_ansible
 }
 
-main $*
+main "$@"
