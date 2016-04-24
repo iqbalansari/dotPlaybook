@@ -11,6 +11,26 @@ else
     repo_dir=$PLAYBOOK_DIR
 fi
 
+log () {
+    local message="$1"
+    local type="$2"
+    local priority="$3"
+
+    local bold=0
+    if [ "$priority" = 'high' ] ; then
+        bold=1
+    fi
+
+    case $type in
+        normal) echo $message ;;
+        error)  echo "\033[$bold;31m$message\033[0m" ;;
+        info)   echo "\033[$bold;32m$message\033[0m" ;;
+        change) echo "\033[$bold;33m$message\033[0m" ;;
+        warn)   echo "\033[$bold;34m$message\033[0m" ;;
+        *)      echo $message ;;
+    esac
+}
+
 update_apt_cache_if_needed () {
     local now=$(date +%s)
     local last_apt_update=0
@@ -22,7 +42,7 @@ update_apt_cache_if_needed () {
 
     if [ $((now - last_apt_update)) -gt 604800 ]
     then
-        echo "apt cache is older than a week, updating now ... "
+        log "apt cache is older than a week, updating now ... " warn low
         sudo apt-get update
     fi
 }
@@ -51,7 +71,7 @@ installed () {
 }
 
 apt_install () {
-    echo "Installing $1 ... "
+    log "Installing $1 ... " info high
 
     if [ $# -ge 3 ]
     then
@@ -75,9 +95,9 @@ apt_install () {
         fi
 
         sudo apt-get install -y "$pkg"
-        echo "$1 installed"
+        log "$1 installed" change high
     else
-        echo "$1 is already installed, skipping ... "
+        log "$1 is already installed, skipping ... " normal low
     fi
 }
 
@@ -97,26 +117,26 @@ pull_playbook () {
     if (test "${origin#*$repo}" = "$origin")
     then
         # If we are not in a cloned copy, first clone the repo
-        echo "Pulling the playbook ... "
+        log "Pulling the playbook ... " info high
         if [ -d $repo_dir ]
         then
             # If the repo already exists just cd to it
             read -p "Found '$repo_dir', is it a previously cloned copy of the playbook [y/n]? " answer < /dev/tty
             if echo "$answer" | grep -iq "^y"
             then
-                echo "Run the script from the cloned repo, to avoid this check"
+                log "Run the script from the cloned repo, to avoid this check" info low
                 cd $repo_dir
 
             else
-                echo "Cannot clone repo since '$repo_dir' already exists"
-                echo "You can specify the directory to install dotfiles with -d"
-                echo "Aborting ... "
+                log "Cannot clone repo since '$repo_dir' already exists" error high
+                log "You can specify the directory to install dotfiles with -d" error high
+                log "Aborting ... " error high
                 exit
 
             fi
         else
             # Otherwise clone it
-            echo "Cloning playbook in $repo_dir directory ... "
+            log "Cloning playbook in $repo_dir directory ... " change low
             git clone $repo_url $repo_dir
             cd $repo_dir
         fi
@@ -124,7 +144,7 @@ pull_playbook () {
 
     # Get the branch for the release
     # Check if branch exists for the release
-    echo "Switching to branch for current release"
+    log "Switching to branch for current release" info high
 
     # If it exists locally
     if git rev-parse -q --verify "$release" > /dev/null
@@ -132,7 +152,7 @@ pull_playbook () {
         # Just checkout to it
         if ! (git checkout -q "$release")
         then
-            echo "Failed to checkout to branch for release '$release', aborting ... "
+            log "Failed to checkout to branch for release '$release', aborting ... " error high
             exit
         fi
     # Else check if the repo exists at remote
@@ -141,25 +161,25 @@ pull_playbook () {
         # And create a local branch
         if ! (git checkout -q -b "$release" "origin/$release")
         then
-            echo "Failed to checkout to branch for release '$release', aborting ... "
+            log "Failed to checkout to branch for release '$release', aborting ... " error high
             exit
         fi
     else
-        echo "No branch exists for '$release'"
-        echo "Aborting ... "
+        error "No branch exists for '$release'" high
+        error "Aborting ... " high
     fi
 
     # Pull the latest changes
-    echo "Getting latest changes ... "
+    log "Getting latest changes ... " normal low
     if ! (git pull -q)
     then
-        echo "There were some errors while pulling, please fix them, aborting"
+        log "There were some errors while pulling, please fix them, aborting" error high
         exit
     fi
 }
 
 run_ansible () {
-    echo "Running the playbook ... "
+    log "Running the playbook ... " info high
     eval exec "ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
 
