@@ -117,8 +117,6 @@ apt_install () {
 }
 
 install_ansible () {
-    cd `dirname $0`
-
     log "Installing ansible ... " info high
 
     if (test -f venv/bin/pip) && (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
@@ -223,8 +221,6 @@ pull_playbook () {
 }
 
 run_ansible () {
-    cd `dirname $0`
-
     log "Running the playbook ... " info high
     eval exec "venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
@@ -242,8 +238,8 @@ main () {
     done
 
     install_system_dependencies
-    install_ansible
     pull_playbook
+    install_ansible
     run_ansible
 }
 
