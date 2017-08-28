@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ANSIBLE_VERSION=2.3
+
 repo=iqbalansari/dotPlaybook
 repo_url=https://github.com/$repo
 ansible_args=''
@@ -10,6 +12,10 @@ then
 else
     repo_dir=$PLAYBOOK_DIR
 fi
+
+exists () {
+    which $1 1> /dev/null 2>&1
+}
 
 log () {
     local message="$1"
@@ -88,28 +94,66 @@ apt_install () {
     then
         if [ -n "$ppa" ]
         then
-            sudo apt-add-repository -y "$ppa"
-            sudo apt-get update
+            log "Adding PPA for $pkg ... " normal low
+            sudo apt-add-repository -y "$ppa" || exit 1
+            log "Updating package archives $pkg ... " normal low
+            sudo apt-get update || exit 1
         else
             update_apt_cache_if_needed
         fi
 
-        sudo apt-get install -y "$pkg"
+        log "$pkg not installed, installing ... "
+        if [ "$version" = "0" ]
+        then
+            sudo apt-get install -y "$pkg" || exit 1
+        else
+            sudo apt-get install -y "$pkg=$version*" || exit 1
+        fi
+
         log "$1 installed" change high
     else
         log "$1 is already installed, skipping ... " normal low
     fi
 }
 
-install_dependencies () {
+install_ansible () {
+    cd `dirname $0`
+
+    log "Installing ansible ... " info high
+
+    if (test -f venv/bin/pip) && (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+        log "ansible is already installed, skipping ... " normal low
+        return 0
+    fi
+
+    if ! (exists virtualenv) ; then
+        log "Installing virtualenv ... " info low
+        sudo pip2 install virtualenv
+    fi
+
+    # Create a virtualenv for installing the required version of ansible
+    if ! (test -f venv/bin/pip)  ; then
+        log "Creating virtualenv ... " info low
+        virtualenv -p $(which python2) --system-site-packages venv
+    fi
+
+    if ! (test -f venv/bin/ansible-playbook) || ! (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+        log "Installing ansible inside virtualenv ... " info low
+        venv/bin/pip install --ignore-installed ansible==2.3
+    fi
+}
+
+install_system_dependencies () {
+    apt_install python2.7
+    apt_install python-apt
     apt_install python-software-properties
     apt_install git
-    apt_install ansible 1.9.1 ppa:ansible/ansible
 }
 
 pull_playbook () {
     # Make sure we are in the directory containing the script
     cd `dirname $0`
+
     local origin=$(git config --get remote.origin.url)
     local release=$(lsb_release -c -s)
 
@@ -179,8 +223,10 @@ pull_playbook () {
 }
 
 run_ansible () {
+    cd `dirname $0`
+
     log "Running the playbook ... " info high
-    eval exec "ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
+    eval exec "venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
 
 main () {
@@ -195,7 +241,8 @@ main () {
         esac
     done
 
-    install_dependencies
+    install_system_dependencies
+    install_ansible
     pull_playbook
     run_ansible
 }
