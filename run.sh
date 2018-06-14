@@ -145,6 +145,7 @@ install_system_dependencies () {
     apt_install python2.7
     apt_install python-apt
     apt_install python-software-properties
+    apt_install python2.7-dev
     apt_install git
 }
 
