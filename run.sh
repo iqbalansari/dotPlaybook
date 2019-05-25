@@ -37,116 +37,89 @@ log () {
     esac
 }
 
-update_apt_cache_if_needed () {
-    local now=$(date +%s)
-    local last_apt_update=0
-
-    if [ -f /var/cache/apt/pkgcache.bin ]
+determine_system () {
+    if ! (exists uname)
     then
-        last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
+        log "'uname' does not exist, cannot determine OS version, aborting ..." error high
+        exit 1
     fi
 
-    if [ $((now - last_apt_update)) -gt 604800 ]
-    then
-        log "apt cache is older than a week, updating now ... " warn low
-        sudo apt-get update
-    fi
-}
+    local system="$(uname)"
 
-installed () {
-    local retval=1
+    case "$system" in
+        Linux)
+            if [ -f /etc/os-release ]; then
+                echo "$(grep '^ID=' /etc/os-release | cut -d= -f 2)/$(grep '^VERSION_CODENAME=' /etc/os-release | cut -d= -f 2)"
 
-    if dpkg-query -W -f='${Status}' $1 2>/dev/null | grep "ok installed" > /dev/null 2>&1
-    then
-        if [ -z $2 ]
-        then
-            retval=0
-        else
-            if dpkg --compare-versions $(dpkg-query -W -f='${Version}' $1 2>/dev/null) ge $2
-            then
-                retval=0
             else
-                retval=1
+                log "Unsupported Linux distro, aborting ..." error high
+                exit 1
             fi
-        fi
-    else
-        retval=1
-    fi
+        ;;
+        Darwin)
+            local version="$(defaults read loginwindow SystemVersionStampAsString)"
 
-    return "$retval"
+            if (test "${version#10.14}" != "$version")
+            then
+                echo 'macos/mojave'
+            elif (test "${version#10.13}" != "$version")
+            then
+                echo 'macos/high-sierra'
+            else
+                log "Unsupported macOS version, aborting ..." error high
+                exit 1
+            fi
+            ;;
+        *)
+            log "Do not how to run on '$system'" error high
+            exit 1
+            ;;
+    esac
 }
 
-apt_install () {
-    log "Installing $1 ... " info high
+ensure_system_dependencies () {
+    # Make sure we are in the directory containing the script
+    cd `dirname $0`
 
-    if [ $# -ge 3 ]
+    local system=$(determine_system)
+    # local system=bionic
+
+    log "Installing system dependencies for '$system'" info high
+
+    if (exists git)
     then
-        local pkg=$1
-        local version=$2
-        local ppa=$3
+        local origin="$(git config --get remote.origin.url)"
+        local local_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+
+        if (test "${origin#*$repo}" != "$origin") && (test "$local_branch" = "$system") && (test -f system-dependencies.sh)
+        then
+            log "Installing system dependencies for '$system' from cloned repository" info low
+            . system-dependencies.sh
+
+        else
+            fetch_system_dependencies_script
+
+        fi
     else
-        local pkg=$1
-        local version=0
-        local ppa=$2
+        fetch_system_dependencies_script
     fi
 
-    if ! installed "$pkg" "$version"
+    # This function is exposed by the system-dependencies.sh script
+    install_system_dependencies
+}
+
+fetch_system_dependencies_script () {
+    local system=$(determine_system)
+
+    log "Fetching script to install system dependencies from '$system'" info low
+
+    if ! eval "$(curl -fsL https://raw.githubusercontent.com/$repo/$system/system-dependencies.sh || echo 'false')"
     then
-        if [ -n "$ppa" ]
-        then
-            log "Adding PPA for $pkg ... " normal low
-            sudo apt-add-repository -y "$ppa" || exit 1
-            log "Updating package archives $pkg ... " normal low
-            sudo apt-get update || exit 1
-        else
-            update_apt_cache_if_needed
-        fi
-
-        log "$pkg not installed, installing ... "
-        if [ "$version" = "0" ]
-        then
-            sudo apt-get install -y "$pkg" || exit 1
-        else
-            sudo apt-get install -y "$pkg=$version*" || exit 1
-        fi
-
-        log "$1 installed" change high
+        log "Could fetch the script to install system dependencies for '$system' aborting ..." error high
+        exit 1
     else
-        log "$1 is already installed, skipping ... " normal low
+        log "Successfully fetched the script to install system dependencies for '$system'" change low
     fi
-}
-
-install_ansible () {
-    log "Installing ansible ... " info high
-
-    if (test -f venv/bin/pip) && (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
-        log "ansible is already installed, skipping ... " normal low
-        return 0
-    fi
-
-    if ! (exists virtualenv) ; then
-        log "Installing virtualenv ... " info low
-        sudo pip2 install virtualenv
-    fi
-
-    # Create a virtualenv for installing the required version of ansible
-    if ! (test -f venv/bin/pip)  ; then
-        log "Creating virtualenv ... " info low
-        virtualenv -p $(which python2) --system-site-packages venv
-    fi
-
-    if ! (test -f venv/bin/ansible-playbook) || ! (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
-        log "Installing ansible inside virtualenv ... " info low
-        venv/bin/pip install --ignore-installed ansible==2.3
-    fi
-}
-
-install_system_dependencies () {
-    apt_install python2.7
-    apt_install python-apt
-    apt_install python-software-properties
-    apt_install python2.7-dev
-    apt_install git
 }
 
 pull_playbook () {
@@ -154,7 +127,7 @@ pull_playbook () {
     cd `dirname $0`
 
     local origin=$(git config --get remote.origin.url)
-    local release=$(lsb_release -c -s)
+    local release=$(determine_system)
 
     # Go to the directory containing the repo
     if (test "${origin#*$repo}" = "$origin")
@@ -214,10 +187,40 @@ pull_playbook () {
 
     # Pull the latest changes
     log "Getting latest changes ... " normal low
-    if ! (git pull -q)
+    if ! (git pull --rebase)
     then
-        log "There were some errors while pulling, please fix them, aborting" error high
-        exit
+        log "Could not fetch latest changes, skipping" warn high
+    fi
+}
+
+install_ansible () {
+    log "Checking ansible ... " info high
+    if (test -f venv/bin/pip3) && (venv/bin/pip3 freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+        log "ansible is already installed, skipping ... " normal low
+        return 0
+    fi
+
+    log "Installing virtualenv ... " info high
+    if ! (exists virtualenv) ; then
+        sudo pip3 install virtualenv
+        log "virtualenv installed" change high
+    else
+        log "virtualenv is already installed, skipping ... " normal low
+    fi
+
+    # Create a virtualenv for installing the required version of ansible
+    log "Creating virtualenv ... " info high
+    if ! (test -f venv/bin/pip3)  ; then
+        virtualenv -p $(which python3) --system-site-packages venv
+        log "virtualenv created" change high
+    else
+        log "virtualenv already created, skipping ... " normal low
+    fi
+
+    log "Installing ansible inside virtualenv ... " info high
+    if ! (test -f venv/bin/ansible-playbook) || ! (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+        venv/bin/pip install --ignore-installed ansible=="$ANSIBLE_VERSION"
+        log "ansible installed inside virtualenv" change high
     fi
 }
 
@@ -238,7 +241,7 @@ main () {
         esac
     done
 
-    install_system_dependencies
+    ensure_system_dependencies
     pull_playbook
     install_ansible
     run_ansible
