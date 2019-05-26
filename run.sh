@@ -82,7 +82,6 @@ ensure_system_dependencies () {
     cd `dirname $0`
 
     local system=$(determine_system)
-    # local system=bionic
 
     log "Installing system dependencies for '$system'" info high
 
@@ -195,10 +194,13 @@ pull_playbook () {
 
 install_ansible () {
     log "Checking ansible ... " info high
-    if (test -f venv/bin/pip3) && (venv/bin/pip3 freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+    if (test -f .venv/bin/pip3) && (.venv/bin/pip3 freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
         log "ansible is already installed, skipping ... " normal low
         return 0
     fi
+
+    # Delete existing .venv/
+    rm -rf .venv/
 
     log "Installing virtualenv ... " info high
     if ! (exists virtualenv) ; then
@@ -210,23 +212,23 @@ install_ansible () {
 
     # Create a virtualenv for installing the required version of ansible
     log "Creating virtualenv ... " info high
-    if ! (test -f venv/bin/pip3)  ; then
-        virtualenv -p $(which python3) --system-site-packages venv
+    if ! (test -f .venv/bin/pip3)  ; then
+        virtualenv -p $(which python3) --system-site-packages .venv
         log "virtualenv created" change high
     else
         log "virtualenv already created, skipping ... " normal low
     fi
 
     log "Installing ansible inside virtualenv ... " info high
-    if ! (test -f venv/bin/ansible-playbook) || ! (venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
-        venv/bin/pip install --ignore-installed ansible=="$ANSIBLE_VERSION"
+    if ! (test -f .venv/bin/ansible-playbook) || ! (.venv/bin/pip freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
+        .venv/bin/pip install --ignore-installed ansible=="$ANSIBLE_VERSION"
         log "ansible installed inside virtualenv" change high
     fi
 }
 
 run_ansible () {
     log "Running the playbook ... " info high
-    eval exec "venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
+    eval exec ".venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
 
 main () {
