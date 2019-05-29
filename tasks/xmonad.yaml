@@ -1,0 +1,84 @@
+- name: Install and configure XMonad
+  block:
+    - name: Install XMonad
+      block:
+        - name: Add signing key for Joonas Javanainen XMonad backports PPA
+          apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x62F9B6120B20AE72 state=present
+          become: yes
+
+        - name: Add PPA for Joonas Javanainen XMonad backports
+          apt_repository: repo='ppa:gekkio/xmonad' update_cache=yes state=present
+          become: yes
+
+        - name: Install XMonad
+          apt: pkg=xmonad update_cache=yes cache_valid_time=604800 install_recommends=no state=present
+          become: yes
+
+        - name: Install gnome-session-xmonad, gnome-panel, gnome-applets, amixer and xcompmgr
+          apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
+          with_items:
+            - gnome-applets
+            - gnome-applets-data
+            - gnome-panel
+            - indicator-applet-session
+            - gnome-session-xmonad
+            - alsa-utils
+            - xcompmgr
+          become: yes
+
+        - name: Install ghc libraries required for configuring XMonad
+          apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no state=present
+          with_items:
+            - libghc-xmonad-dev
+            - libghc-xmonad-contrib-dev
+          become: yes
+
+      tags:
+        - xmonad
+        - provision
+
+    - name: Configure XMonad
+      block:
+        - name: Check if unity-greeter folder exists
+          stat: path=/usr/share/unity-greeter
+          register: unity_greeter_dir
+
+        - name: Add xmonad icons for unity greeter
+          copy: src=files/xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
+          when: unity_greeter_dir.stat.exists
+          become: yes
+
+        - name: Add gnome-xmonad icons for unity greeter
+          copy: src=files/xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
+          when: unity_greeter_dir.stat.exists
+          become: yes
+
+        - name: Create directory to hold XMonad config
+          command: mkdir ~/.xmonad creates=~/.xmonad
+
+        - name: Symlink XMonad personal config
+          install_dot: src=files/xmonad.hs dest=~/.xmonad/xmonad.hs
+
+        - name: Symlink XMonad startup hook
+          install_dot: src=files/startup-hook dest=~/.xmonad/startup-hook
+
+        - name: Symlink script to invoke org-capture
+          install_dot: src=files/org-capture dest=~/.xmonad/org-capture
+
+        - name: Record modification time for ~/.xmonad/xmonad.hs
+          stat: path=~/.xmonad/xmonad.hs
+          register: xmonad_hs_mod
+
+        - name: Record modification for compiled xmonad config
+          stat: path="{{ansible_user_dir}}/.xmonad/xmonad-{{ansible_architecture}}-{{ansible_system|lower}}"
+          register: xmonad_binary_mod
+
+        - name: Restart XMonad if the config has changed
+          shell: xmonad --recompile && xmonad --restart && notify-send "XMonad restarted"
+          when: (not xmonad_binary_mod.stat.exists or xmonad_binary_mod.stat.mtime|float < xmonad_hs_mod.stat.mtime|float)
+
+      tags:
+        - xmonad
+        - configuration
+
+  when: lookup('env', 'DISPLAY') and ansible_distribution == "Ubuntu"
