@@ -1,0 +1,33 @@
+- name: Configure Gnome Terminal
+  block:
+    - name: Checkout base16-gnome-terminal project
+      git: repo=https://github.com/chriskempson/base16-gnome-terminal dest=~/software/base16-gnome-terminal depth=1 accept_hostkey=yes update=yes
+      register: base16_gnome_terminal
+
+    - name: Install color theme
+      command: ~/software/base16-gnome-terminal/base16-tomorrow.dark.sh
+      changed_when: no
+
+    - name: Set installed theme as the default theme
+      command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-tomorrow-dark --type string
+      changed_when: no
+
+    - name: Change font
+      command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" "DejaVu Sans Mono 10" -t string
+      changed_when: no
+
+  when: ansible_distribution == 'Ubuntu' and lookup('env', 'DISPLAY')
+
+  tags:
+    - terminal
+    - configuration
+
+
+- name: Install iTerm
+  homebrew_cask: name=iterm2
+
+  when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - terminal
+    - provision
