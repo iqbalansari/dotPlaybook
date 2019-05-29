@@ -1,0 +1,28 @@
+- name: Install Virtualbox
+  block:
+    - name: Install Virtualbox on Ubuntu
+      block:
+        - name: Add signing key for virtualbox PPA
+          apt_key: url=https://www.virtualbox.org/download/oracle_vbox_2016.asc state=present
+          become: yes
+
+        - name: Add virtualbox PPA
+          apt_repository: repo="deb https://download.virtualbox.org/virtualbox/debian {{ansible_distribution_release}} contrib" state=present update_cache=yes
+          become: yes
+
+        - name: Install virtualbox 5.1
+          apt: pkg=virtualbox-5.1 update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+          become: yes
+
+        - name: Install dkms
+          apt: pkg=dkms update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+          become: yes
+      when: ansible_distribution == "Ubuntu" and lookup('env', 'DISPLAY')
+
+    - name: Install Virtualbox on macOS
+      homebrew_cask: name=virtualbox
+      when: ansible_distribution == "MacOSX"
+
+  tags:
+    - virtualbox
+    - provision
