@@ -1,0 +1,45 @@
+- name: Install required fonts
+  block:
+    - name: Create the fonts directory
+      file: path=~/.fonts state=directory
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Create the ~/Library/Fonts directory
+      file: path=~/Library/Fonts state=directory
+      when: ansible_distribution == "MacOSX"
+
+    - name: Get Source Code Pro font
+      get_url: url=https://github.com/adobe-fonts/source-code-pro/archive/2.010R-ro/1.030R-it.tar.gz dest=~/compressed/SourceCodePro.tar.gz
+
+    - name: Extract Source Code Pro font
+      unarchive: src=~/compressed/SourceCodePro.tar.gz creates=~/software/source-code-pro-2.010R-ro-1.030R-it dest=~/software
+
+    - name: Copy Source Code Pro font to ~/Library/Fonts/ directory
+      copy: src={{item}} dest=~/Library/Fonts/
+      with_fileglob:
+        - ~/software/source-code-pro-2.010R-ro-1.030R-it/OTF/*
+      when: ansible_distribution == "MacOSX"
+
+    - name: Copy Source Code Pro font to .fonts directory
+      copy: src={{item}} dest=~/.fonts/.
+      with_fileglob:
+        - ~/software/source-code-pro-2.010R-ro-1.030R-it/OTF/*
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Get Symbola font
+      block:
+        - name: Get Symbola font
+          get_url: url=http://users.teilar.gr/~g1951d/Symbola.zip sha256sum=8101ae2282e0ee788dceabed7d9a49be189ad0196028b2c29d06b45821611f05 dest=~/compressed/Symbola.zip
+
+        - name: Extract Symbola font
+          unarchive: src=~/compressed/Symbola.zip creates=~/.fonts/Symbola.ttf dest=~/.fonts/
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Update font cache
+      command: fc-cache -f -v
+      changed_when: no
+      when: ansible_distribution == "Ubuntu"
+
+  tags:
+    - fonts
+    - provision
