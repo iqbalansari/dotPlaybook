@@ -1,0 +1,124 @@
+- name: Compile and install Zsh from source
+  block:
+    - name: Install Zsh dependencies on Ubuntu
+      block:
+        - name: Install the prerequisites for Zsh
+          apt: pkg="{{item}}" update_cache=yes cache_valid_time=604800 install_recommends=no
+          become: yes
+          with_items:
+            - libncurses5-dev
+            - libncursesw5-dev
+
+        - name: Install xdotool required by zsh-notify plugin
+          apt: pkg=xdotool update_cache=yes cache_valid_time=604800 install_recommends=no
+          become: yes
+
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install Zsh dependencies on macOS
+      block:
+        - name: Install the prerequisites for zsh
+          homebrew: name="{{item}}"
+          with_items:
+            - ncurses
+            - pcre
+
+      when: ansible_distribution == 'MacOSX'
+
+    - name: Download Zsh source
+      get_url: url=http://sourceforge.net/projects/zsh/files/zsh/{{zsh_version}}/zsh-{{zsh_version}}.tar.gz/download dest=~/compressed/zsh-{{zsh_version}}.tar.gz sha256sum={{zsh_src_sha256sum}}
+
+    - name: Extract Zsh source
+      unarchive: src=~/compressed/zsh-{{zsh_version}}.tar.gz dest=~/software/ creates=~/software/zsh-{{zsh_version}}
+      register: zsh_source
+
+    - name: Check if Zsh is installed
+      shell: which zsh
+      register: zsh_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Configure Zsh installation
+      shell: cd ~/software/zsh-{{zsh_version}} && ./configure --prefix=/usr/local && make
+      register: zsh_configure
+      when: zsh_source is changed or zsh_installed.rc == 1
+
+    - name: Install Zsh
+      shell: cd {{ ansible_user_dir }}/software/zsh-{{zsh_version}} && sudo make install
+      become: yes
+      when: zsh_configure is changed
+
+    - name: Enable installed Zsh shell
+      lineinfile: dest=/etc/shells line="/usr/local/bin/zsh" state=present
+      become: yes
+
+  tags:
+    - zsh
+    - provision
+
+- name: Configure Zsh
+  block:
+    - name: Set zsh as the user shell
+      user: name={{ ansible_user_id }} shell=/usr/local/bin/zsh
+      become: yes
+
+    - name: Get zgen
+      git: repo=https://github.com/tarjoilija/zgen.git accept_hostkey=yes dest=~/software/zgen version={{zgen_version}}
+
+    - name: Get sandboxd
+      git: repo=https://github.com/benvan/sandboxd accept_hostkey=yes dest=~/software/sandboxd version={{sandboxd_version}}
+
+    - name: Symlink sandboxd
+      install_dot: src=~/software/sandboxd/sandboxd dest=~/.sandboxd
+
+    - name: Symlink sandboxrc
+      file: path=~/.sandboxrc state=touch
+
+    - name: Symlink zshrc
+      install_dot: src=files/zshrc dest=~/.zshrc
+
+    - name: Symlink zshenv
+      install_dot: src=files/zshenv dest=~/.zshenv
+
+    - name: Record modification time for ~/.zshrc
+      stat: path=~/.zshrc
+      register: zshrc_mod
+
+    - name: Record modification for zgen init files
+      stat: path="{{item}}"
+      with_fileglob:
+        - "{{ ansible_user_dir }}/.zgen/init*.zsh"
+      register: zgen_init_mods
+
+    - name: Delete old zgen init files
+      file: path="{{item.item}}" state=absent
+      with_items:
+        "{{zgen_init_mods.results | default([])}}"
+      when: (item.stat.mtime|float < zshrc_mod.stat.mtime|float)
+
+    - name: Install custom less input preprocessor
+      install_dot: src=files/less-input-preprocessor path=~/.local/bin/less-input-preprocessor
+
+  tags:
+    - zsh
+    - configuration
+    - provision
+
+- name: Install additional helpers for Zsh
+  block:
+    - name: Checkout autojump
+      git: repo=git://github.com/joelthelion/autojump.git dest=~/software/autojump accept_hostkey=yes version={{autojump_version}}
+
+    - name: Install autojump using the installation script
+      shell: cd ~/software/autojump && ./install.py -p ~/.local creates=~/.local/bin/autojump
+
+    - name: Get fzf
+      git: repo=https://github.com/junegunn/fzf accept_hostkey=yes dest=~/software/fzf version={{fzf_version}}
+
+    - name: Install fzf
+      shell: ~/software/fzf/install --all
+
+  tags:
+    - zsh
+    - provision

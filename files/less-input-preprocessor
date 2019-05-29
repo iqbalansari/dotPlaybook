@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+function exists { which "$1" &> /dev/null ; }
+filename="$1"
+declare -A binary_types=( [application/x-executable]=1 [application/octet-stream]=1 )
+
+if [ -f "$filename" ] ; then
+    # Let lesspipe handle the following types
+    case $(echo "$1" | tr '[:upper:]' '[:lower:]') in
+      *.a|*.arj|*.tar.bz2|*bz|*bz2|*deb|*.udeb|*.doc|*.gif|*.jpeg|*.jpg|*.pcd|*.png|*.tga|*.tiff|*.tif|*.iso|*bin|*.raw|*.lha|*.lzh|*.tar.lz|*.tlz|*.lz|*.tar.lzma|*.lzma|*.pdf|*.rar|*.r[0-9][0-9]|*.rpm|*.tar.gz|*.tgz|*.tar.z|*.tar.dz|*.gz|*.z|*.dz|*.tar|*.jar|*.war|*.ear|*.xpi|*.zip|*.7z|*.zoo)
+          if exists lesspipe ; then
+              lesspipe "$filename"
+          fi ;;
+
+      *)
+          file_op="$(file -b -i "$filename")"
+          file_type=(${file_op//;/})
+
+          if [[ -z "${binary_types[$file_type]}" ]] ; then
+
+              # Do not open files larger than an MB with highlighters
+              if [[ $(stat --printf="%s" "$filename" ) -lt 1048576 ]] ; then
+
+                  if exists source-highlight ; then
+                      # Fallback to pygments if source-highlight fails
+                      if ! source-highlight -i "$filename" -f esc 2> /dev/null && exists pygmentize ; then
+                          pygmentize 2> /dev/null "$filename"
+                      fi
+
+                  elif exists pygmentize ; then
+                      pygmentize 2> /dev/null "$filename"
+                  fi
+              fi
+
+          elif exists objdump ; then
+              objdump -d "$filename" 2> /dev/null
+
+          elif exists readelf ; then
+              readelf -a "$filename" 2>/dev/null
+
+          # Open binary files with xxd
+          elif exists xxd ; then
+              xxd "$filename" 2>/dev/null
+
+          fi ;;
+    esac
+fi
