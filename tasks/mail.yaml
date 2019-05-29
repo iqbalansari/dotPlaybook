@@ -1,0 +1,84 @@
+- name: Install software required for reading mail locally
+  block:
+    - name: Create the directory to hold mail
+      file: path=~/Maildir state=directory
+
+    - name: Install dependencies for imapfilter
+      apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - lua5.2
+        - liblua5.2-dev
+        - libssl-dev
+        - libpcre3-dev
+      become: yes
+
+    - name: Get imapfilter source
+      git: repo=https://github.com/lefcha/imapfilter accept_hostkey=yes dest=~/software/imapfilter version={{imapfilter_version}}
+      register: imapfilter_checkout
+
+    - name: Check if imapfilter is installed
+      shell: which imapfilter
+      register: imapfilter_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install imapfilter
+      shell: cd  ~/software/imapfilter && make INCDIRS=-I/usr/include/lua5.2 LIBLUA=-llua5.2 PREFIX={{ ansible_user_dir }}/.local install
+      when: imapfilter_checkout is changed or imapfilter_installed.rc == 1
+
+    - name: Install dependencies for offlineimap
+      apt: pkg=python-sqlite update_cache=yes install_recommends=no cache_valid_time=604800
+      become: yes
+
+    - name: Get offlineimap source
+      git: repo=https://github.com/OfflineIMAP/offlineimap accept_hostkey=yes dest=~/software/offlineimap version={{offlineimap_version}}
+      register: offlineimap_checkout
+
+    - name: Check if offlineimap is installed
+      shell: which offlineimap
+      register: offlineimap_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+      # Install globally, local installation turns out to be too fragile (needs PYTHONPATH setup properly)
+    - name: Install offlineimap
+      shell: cd {{ ansible_user_dir }}/software/offlineimap && python setup.py install
+      when: offlineimap_checkout is changed or offlineimap_installed.rc == 1
+      become: yes
+
+    - name: Install dependencies for mu4e
+      apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - autoconf
+        - g++
+        - libxapian-dev
+        - libgmime-2.6-dev
+        - libtool
+      become: yes
+
+    - name: Install spamassassin
+      apt: pkg=spamassassin update_cache=yes install_recommends=no cache_valid_time=604800
+      become: yes
+
+    - name: Enable spamassassin
+      lineinfile: dest=/etc/default/spamassassin regexp='^ENABLED=0' line='ENABLED=1' create=yes
+      become: yes
+      register: spamassassin_enabled
+
+    - name: Enable cron job to update spamassassin rules
+      lineinfile: dest=/etc/default/spamassassin regexp='^CRON=0' line='CRON=1' create=yes
+      become: yes
+      register: spamassassin_cron
+
+    - name: Restart spamassassin
+      service: name=spamassassin state=restarted
+      become: yes
+      when: spamassassin_enabled is changed or spamassassin_cron is changed
+
+  when: ansible_distribution == "Ubuntu" and lookup('env', 'USER') == 'iqbal'
+
+  tags:
+    - mail
+    - provision
