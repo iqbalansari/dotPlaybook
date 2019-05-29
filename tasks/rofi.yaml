@@ -1,0 +1,62 @@
+- name: Install and configure rofi
+  block:
+    - name: Install rofi
+      block:
+        - name: Install xcb-util-xrm
+          apt: pkg=libxcb-xrm-dev update_cache=yes cache_valid_time=604800 install_recommends=no state=present
+          become: yes
+
+        - name: Install dependencies for Rofi
+          apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
+          with_items:
+            - autoconf
+            - automake
+            - pkg-config
+            - libpango1.0-dev
+            - libpangocairo-1.0-0
+            - libcairo2-dev
+            - libglib2.0-dev
+            - libstartup-notification0-dev
+            - libxcb-util-dev
+            - libxkbcommon-x11-dev
+            - libxcb-ewmh-dev
+            - libxcb-xinerama0-dev
+            - libxcb-icccm4-dev
+            - libx11-dev
+          become: yes
+
+        - name: Get Rofi source code
+          git: repo=https://github.com/DaveDavenport/rofi.git accept_hostkey=yes dest=~/software/rofi version={{rofi_version}}
+          register: rofi_checkout
+
+        - name: Check if rofi is installed
+          shell: which rofi
+          register: rofi_installed
+          ignore_errors: yes
+          failed_when: no
+          changed_when: no
+
+        - name: Install Rofi
+          shell: cd ~/software/rofi && make distclean ; autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/.local/ --disable-i3support && make && make install
+          when: rofi_checkout is changed or rofi_installed.rc == 1
+
+      tags:
+        - rofi
+        - provision
+
+    - name: Configure rofi
+      block:
+        - name: Create Xresources.d if it does not exist
+          shell: mkdir ~/Xresources.d creates=~/Xresources.d
+
+        - name: Copy Rofi config
+          install_dot: src=files/rofi dest=~/Xresources.d/rofi
+
+        - name: Include rofi config in ~/.Xresources
+          lineinfile: dest=~/.Xresources line='#include "Xresources.d/rofi"' create=yes state=present
+
+      tags:
+        - rofi
+        - configuration
+
+  when: lookup('env', 'DISPLAY') and ansible_distribution == "Ubuntu"

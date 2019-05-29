@@ -1,0 +1,19 @@
+rofi.modi             : window,run,file:~/software/rofi/Examples/rofi-file-browser.sh,ssh
+rofi.kb-mode-next     : SuperL+Right,Control+Tab,SuperL+s
+rofi.kb-mode-previous : SuperL+Left,Control+Shift+Tab,SuperL+Shift+s
+rofi.key-window       : SuperL+s
+rofi.sidebar-mode     : true
+rofi.levenshtein-sort : true
+rofi.glob             : true
+rofi.fg               : #ffffff
+rofi.bg               : #000000
+rofi.hlfg             : #ffb964
+rofi.hlbg             : #000000
+
+! Monokai theme
+
+rofi.color-normal     : argb:00272822, #f8f8f2, argb:00272822, #141411, #f8f8f2
+rofi.color-urgent     : argb:00272822, #f92672, argb:00272822, #f92672, #f8f8f2
+rofi.color-active     : argb:00272822, #a6e22a, argb:00272822, #141411, #a6e22a
+rofi.color-window     : argb:ee272822, #002b36, #e6db74
+rofi.separator-style  : solid
