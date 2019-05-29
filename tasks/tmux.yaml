@@ -1,0 +1,86 @@
+- name: Compile and install tmux from source
+  block:
+    - name: Install tmux dependencies on Ubuntu
+      apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=604800 install_recommends=no
+      with_items:
+        - libevent-dev
+        - libncurses5-dev
+      become: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install tmux dependencies
+      homebrew: name={{ item }}
+      with_items:
+        - libevent
+        - ncurses
+      when: ansible_distribution == 'MacOSX'
+
+    - name: Get sources for tmux
+      git: repo=https://github.com/tmux/tmux.git accept_hostkey=yes dest=~/software/tmux version={{tmux_version}}
+      register: tmux_source
+
+    - name: Check if tmux is installed
+      shell: which tmux
+      register: tmux_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install tmux
+      shell: cd ~/software/tmux/ && ./autogen.sh && ./configure --prefix=$HOME/.local/ && make && make install
+      when: tmux_source is changed or tmux_installed.rc == 1
+
+  tags:
+    - tmux
+    - provision
+
+- name: Configure tmux
+  block:
+    - name: Install TPM
+      git: repo=https://github.com/tmux-plugins/tpm.git accept_hostkey=yes dest=~/.tmux/plugins/tpm version={{tpm_version}}
+
+    - name: Symlink .tmux.conf
+      install_dot: src=files/tmux.conf dest=~/.tmux.conf
+
+    # See https://github.com/jonas/tig/issues/559#issuecomment-320762376
+    - name: Check if terminfo for 'screen' is installed
+      stat: path=~/.terminfo/73/screen
+      register: terminfo
+
+    - name: Add terminfo entry for 'screen' terminal
+      block:
+        - name: Download the terminfo database
+          get_url: url=https://invisible-island.net/datafiles/current/terminfo.src.gz dest=~/compressed/terminfo.src.gz
+
+        - name: Uncompress the database
+          shell: gzip -d ~/compressed/terminfo.src.gz -c > ~/software/terminfo.src creates=~/software/terminfo.src
+
+        - name: Compile the terminfo entry for 'screen'
+          shell: tic -x -o ~/.terminfo -e screen ~/software/terminfo.src
+      when: not terminfo.stat.exists
+
+  tags:
+    - tmux
+    - configuration
+    - provision
+
+- name: Install tmux plugins
+  block:
+    # If we are already in tmux simply split the window and run the command
+    # Supressed changed, since there is no way to detect if the plugins were
+    # installed or simply skipped other than checking directory's mod time
+    # which feels an overkill
+    - name: Install tmux plugins (in a tmux session)
+      shell: $HOME/.local/bin/tmux split-window '~/.tmux/plugins/tpm/scripts/install_plugins.sh'
+      when: lookup('env', 'TMUX')
+      changed_when: no
+
+      # Otherwise we need to start the server, create a session and then run the shell command
+    - name: Install tmux plugins (outside a tmux session)
+      shell: $HOME/.local/bin/tmux start-server \; new-session -d \; run-shell 'PATH=~/.local/bin:$PATH ~/.tmux/plugins/tpm/scripts/install_plugins.sh'
+      when: not lookup('env', 'TMUX')
+      changed_when: no
+
+  tags:
+    - tmux
+    - provision
