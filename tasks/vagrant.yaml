@@ -1,0 +1,27 @@
+- name: Install Vagrant
+  block:
+    - name: Install Vagrant on Ubuntu
+      block:
+        - name: Create directory to hold vagrant deb
+          file: path=~/software/vagrant state=directory
+
+        - name: Download vagrant deb for 64 bit arch
+          get_url: url=https://releases.hashicorp.com/vagrant/{{vagrant_version}}/vagrant_{{vagrant_version}}_x86_64.deb dest=~/software/vagrant/vagrant_{{vagrant_version}}.deb timeout=100000
+          when: ansible_architecture == "x86_64"
+
+        - name: Download vagrant deb for 32 bit arch
+          get_url: url=https://releases.hashicorp.com/vagrant/{{vagrant_version}}/vagrant_{{vagrant_version}}_i686.deb dest=~/software/vagrant/vagrant_{{vagrant_version}}.deb timeout=100000
+          when: not ansible_architecture == "x86_64"
+
+        - name: Install vagrant
+          apt: deb={{ ansible_user_dir }}/software/vagrant/vagrant_{{vagrant_version}}.deb state=present
+          become: yes
+      when: ansible_distribution == "Ubuntu" and lookup('env', 'USER') != 'vagrant'
+
+    - name: Install Vagrant on macOS
+      homebrew_cask: name=vagrant
+      when: ansible_distribution == "MacOSX"
+
+  tags:
+    - vagrant
+    - provision
