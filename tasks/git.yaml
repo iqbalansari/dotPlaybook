@@ -1,0 +1,54 @@
+- name: Install latest git
+  block:
+    - name: Install git on Ubuntu
+      block:
+        - name: Add signing key for Git PPA
+          apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xA1715D88E1DF1F24 state=present
+          become: yes
+
+        - name: Add PPA for Git
+          apt_repository: repo='ppa:git-core/ppa' update_cache=yes state=present
+          become: yes
+
+        - name: Install latest Git
+          apt: pkg=git update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+          become: yes
+
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install git
+      homebrew: name=git
+      when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - git
+    - provision
+
+- name: Install tig
+  block:
+    - name: Get sources for Tig
+      git: repo=https://github.com/jonas/tig.git accept_hostkey=yes dest=~/software/tig version={{tig_version}}
+      register: tig_checkout
+
+    - name: Check if tig is installed
+      shell: which tig
+      register: tig_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install Tig
+      shell: cd ~/software/tig && make distclean ; autoreconf -i -I tools && ./configure --prefix=$HOME/.local/ && make && make install
+      when: tig_checkout is changed or tig_installed.rc == 1
+
+  tags:
+    - git
+    - tig
+    - provision
+
+
+- name: Symlink Git config file
+  install_dot: src=files/gitconfig dest=~/.gitconfig
+  tags:
+    - git
+    - configuration
