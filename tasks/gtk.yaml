@@ -1,0 +1,16 @@
+- name: Configure GTK
+  block:
+    - name: Symlink GTK 2 config
+      install_dot: src=file/gtkrc-2.0 dest=~/.gtkrc-2.0
+
+    - name: Create directory to hold GTK 3 config
+      command: mkdir -p ~/.config/gtk-3.0 creates=~/.config/gtk-3.0
+
+    - name: Symlink GTK 3 config
+      install_dot: src=file/gtk-3.0-settings.ini dest=~/.config/gtk-3.0/settings.ini
+
+  when: ansible_distribution == "Ubuntu" and lookup('env', 'DISPLAY')
+
+  tags:
+    - gtk
+    - configuration
