@@ -1,0 +1,81 @@
+- name: Create common directories
+  block:
+    - name: Create directory to hold uncompressed software sources
+      file: dest=~/software state=directory
+
+    - name: Create directory to hold compressed software sources
+      file: dest=~/compressed state=directory
+
+    - name: Create directory to hold locally installed software
+      file: dest=~/.local/bin state=directory
+
+  tags:
+    - provision
+
+- name: Install build depedencies and general packages on Ubuntu
+  block:
+    - name: Install ca-certificates
+      apt: pkg=ca-certificates update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install build tools
+      apt: pkg={{item}} update_cache=yes cache_valid_time=604800 install_recommends=no
+      with_items:
+        - make
+        - libtool
+        - autoconf
+        - automake
+        - pkg-config
+      become: yes
+
+    - name: Install gcc
+      apt: pkg=gcc update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install python-pip need to install some packages
+      apt: pkg=python-pip update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install bzip2
+      apt: pkg=bzip2 update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install unzip
+      apt: pkg=unzip update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install notify-send
+      apt: pkg=libnotify-bin update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+  when: ansible_distribution == 'Ubuntu'
+
+  tags:
+    - provision
+
+- name: Install build depedencies and general packages on macOS
+  block:
+    - name: Install build tools
+      homebrew: name={{item}}
+      with_items:
+        - libtool
+        - autoconf
+        - automake
+        - pkg-config
+
+    - name: Install gnu-tar
+      homebrew: name=gnu-tar
+
+    - name: Install bzip2
+      homebrew: name=bzip2
+
+    - name: Install unzip
+      homebrew: name=unzip
+
+    - name: Install terminal-notifier
+      homebrew: name=terminal-notifier
+
+  when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - provision
