@@ -1,0 +1,183 @@
+- name: Install misc packages on Ubuntu
+  block:
+    - name: Install httpie, a better tool for making HTTP requests from cmd
+      pip: name=httpie
+      become: yes
+
+    - name: Install curl
+      apt: pkg=curl update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install wget
+      apt: pkg=wget update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install xfce4-notifyd
+      apt: pkg=xfce4-notifyd update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Ensure config directory for xfce4-notifyd exists
+      file: path=~/.config/xfce4/xfconf/xfce-perchannel-xml/ state=directory
+
+    - name: Symlink custom config for xfce4-notifyd
+      install_dot: src=file/xfce4-notifyd.xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml
+
+    - name: Install rlwrap
+      apt: pkg=rlwrap update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    # Install vim, better for short edits
+    - name: Install vim
+      apt: pkg=vim update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Install htop
+      apt: pkg=htop update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+    - name: Get sources for cloc
+      get_url: url=http://sourceforge.net/projects/cloc/files/cloc/v{{cloc_version}}/cloc-{{cloc_version}}.tar.gz/download dest=~/compressed/cloc-{{cloc_version}}.tar.gz sha256sum={{cloc_src_sha256sum}}
+
+    - name: Extract cloc sources
+      unarchive: src=~/compressed/cloc-{{cloc_version}}.tar.gz dest=~/software creates=~/software/cloc-{{cloc_version}}
+
+    - name: Install cloc
+      shell: cd ~/software/cloc-{{cloc_version}}/ && make -n prefix={{ ansible_user_dir }}/.local/ install creates={{ ansible_user_dir }}/.local/bin/cloc
+
+    - name: Install dependencies for building ag
+      apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - automake
+        - pkg-config
+        - libpcre3-dev
+        - zlib1g-dev
+        - liblzma-dev
+      become: yes
+
+    - name: Get sources for ag
+      get_url: url=https://github.com/ggreer/the_silver_searcher/archive/{{ag_version}}.tar.gz dest=~/compressed/the_silver_searcher-{{ag_version}}.tar.gz
+
+    - name: Extract ag sources
+      unarchive: src=~/compressed/the_silver_searcher-{{ag_version}}.tar.gz dest=~/software creates=~/software/the_silver_searcher-{{ag_version}}
+      register: ag_source
+
+    - name: Check if ag is installed
+      shell: which ag
+      register: ag_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install ag
+      shell: cd ~/software/the_silver_searcher-{{ag_version}}/ && ./build.sh && ./configure --prefix=$HOME/.local/ && make && make install
+      when: ag_source is changed or ag_installed.rc == 1
+
+    - name: Get sources for jo
+      get_url: url=https://github.com/jpmens/jo/releases/download/v{{jo_version}}/jo-{{jo_version}}.tar.gz dest=~/compressed/jo-{{jo_version}}.tar.gz
+
+    - name: Extract jo sources
+      unarchive: src=~/compressed/jo-{{jo_version}}.tar.gz dest=~/software creates=~/software/jo-{{jo_version}}
+      register: jo_source
+
+    - name: Check if jo is installed
+      shell: which jo
+      register: jo_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install jo
+      shell: cd ~/software/jo-{{jo_version}} && ./configure --prefix=$HOME/.local/ && make check && make install
+      when: jo_source is changed or jo_installed.rc == 1
+
+    - name: Install dependencies for jq
+      apt: pkg={{ item }} state=present update_cache=yes install_recommends=no force=yes cache_valid_time=604800
+      with_items:
+        - flex
+        - bison
+        - libtool
+        - autoconf
+        - make
+      become: yes
+
+    - name: Get sources for jq
+      get_url: url=https://github.com/stedolan/jq/releases/download/jq-{{jq_version}}/jq-{{jq_version}}.tar.gz dest=~/compressed/jq-{{jq_version}}.tar.gz
+
+    - name: Extract jq sources
+      unarchive: src=~/compressed/jq-{{jq_version}}.tar.gz dest=~/software creates=~/software/jq-{{jq_version}}
+      register: jq_source
+
+    - name: Check if jq is installed
+      shell: which jq
+      register: jq_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install jq
+      shell: cd ~/software/jq-{{jq_version}} && ./configure --prefix=$HOME/.local/ && make install
+      when: jq_source is changed or jq_installed.rc == 1
+
+    - name: Install Artha
+      apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+      become: yes
+
+    - name: Create ~/.config if does not yet exist
+      command: mkdir ~/.config creates=~/.config
+
+    - name: Symlink artha config file
+      install_dot: src=file/artha.conf dest=~/.config/artha.conf
+
+    - name: Install mtp-tools
+      apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - libmtp-common
+        - mtp-tools
+        - libmtp-dev
+        - libmtp-runtime
+        - libmtp9
+      become: yes
+
+    - name: Find out kernel version
+      shell: uname -r
+      register: kernel_version
+      changed_when: no
+
+    - name: Install perf and friends
+      apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - linux-tools-{{ kernel_version.stdout }}
+        - linux-cloud-tools-{{ kernel_version.stdout }}
+      become: yes
+
+    - name: Install num-utils and moreutils
+      apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - num-utils
+        - moreutils
+      become: yes
+
+  when: ansible_distribution == 'Ubuntu'
+
+  tags:
+    - misc
+    - provision
+
+- name: Install misc packages on macOS
+  homebrew: name={{item}}
+  with_items:
+    - rlwrap
+    - vim
+    - htop
+    - jq
+    - httpie
+    - curl
+    - wget
+    - cloc
+    - jo
+
+  when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - misc
+    - provision
