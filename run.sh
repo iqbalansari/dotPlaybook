@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ANSIBLE_VERSION=2.3
+ANSIBLE_VERSION=2.5
 
 repo=iqbalansari/dotPlaybook
 repo_url=https://github.com/$repo
