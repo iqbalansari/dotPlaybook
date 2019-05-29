@@ -1,0 +1,46 @@
+- name: Install browsers on macOS
+  block:
+    - name: Install Firefox
+      homebrew_cask: name=firefox
+      tags:
+        - firefox
+        - provision
+
+    - name: Install Google Chrome
+      homebrew_cask: name=google-chrome
+      tags:
+        - google-chrome
+        - provision
+
+  when: ansible_distribution == 'MacOSX'
+
+- name: Install Firefox on Ubuntu
+  block:
+    - name: Download 64 bit Firefox
+      get_url: url=https://download.mozilla.org/?product=firefox-{{firefox_version}}-SSL&os=linux64&lang=en-US dest=~/compressed/firefox-{{firefox_version}}.tar.bz2
+      when: ansible_architecture == "x86_64"
+      register: firefox_64_download
+
+    - name: Download 32 bit Firefox
+      get_url: url=https://download.mozilla.org/?product=firefox-{{firefox_version}}-SSL&os=linux&lang=en-US dest=~/compressed/firefox-{{firefox_version}}.tar.bz2
+      when: not ansible_architecture == "x86_64"
+      register: firefox_32_download
+
+    - name: Extract Firefox
+      unarchive: src=~/compressed/firefox-{{firefox_version}}.tar.bz2 dest=~/software/
+      when: firefox_64_download is changed or firefox_32_download is changed
+
+    - name: Check if firefox is installed
+      shell: which firefox
+      register: firefox_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Symlink Firefox binary to .local/bin/
+      install_dot: src=~/software/firefox/firefox dest=~/.local/bin/firefox
+      when: firefox_64_download is changed or firefox_32_download is changed or firefox_installed.rc == 1
+
+  tags:
+    - firefox
+    - provision
