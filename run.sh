@@ -49,7 +49,7 @@ determine_system () {
     case "$system" in
         Linux)
             if [ -f /etc/os-release ]; then
-                echo "$(grep '^ID=' /etc/os-release | cut -d= -f 2)/$(grep '^VERSION_CODENAME=' /etc/os-release | cut -d= -f 2)"
+                echo "$(grep '^ID=' /etc/os-release | cut -d= -f 2)"
 
             else
                 log "Unsupported Linux distro, aborting ..." error high
@@ -57,18 +57,7 @@ determine_system () {
             fi
         ;;
         Darwin)
-            local version="$(defaults read loginwindow SystemVersionStampAsString)"
-
-            if (test "${version#10.14}" != "$version")
-            then
-                echo 'macos/mojave'
-            elif (test "${version#10.13}" != "$version")
-            then
-                echo 'macos/high-sierra'
-            else
-                log "Unsupported macOS version, aborting ..." error high
-                exit 1
-            fi
+            echo "macos"
             ;;
         *)
             log "Do not how to run on '$system'" error high
@@ -88,12 +77,11 @@ ensure_system_dependencies () {
     if (exists git)
     then
         local origin="$(git config --get remote.origin.url)"
-        local local_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
 
-        if (test "${origin#*$repo}" != "$origin") && (test "$local_branch" = "$system") && (test -f system-dependencies.sh)
+        if (test "${origin#*$repo}" != "$origin")
         then
             log "Installing system dependencies for '$system' from cloned repository" info low
-            . system-dependencies.sh
+            . "install-$system-dependencies.sh"
 
         else
             fetch_system_dependencies_script
@@ -112,7 +100,7 @@ fetch_system_dependencies_script () {
 
     log "Fetching script to install system dependencies from '$system'" info low
 
-    if ! eval "$(curl -fsL https://raw.githubusercontent.com/$repo/$system/system-dependencies.sh || echo 'false')"
+    if ! eval "$(curl -fsL https://raw.githubusercontent.com/$repo/master/install-$system-dependencies.sh || echo 'false')"
     then
         log "Could fetch the script to install system dependencies for '$system' aborting ..." error high
         exit 1
@@ -157,35 +145,8 @@ pull_playbook () {
         fi
     fi
 
-    # Get the branch for the release
-    # Check if branch exists for the release
-    log "Switching to branch for current release" info high
-
-    # If it exists locally
-    if git rev-parse -q --verify "$release" > /dev/null
-    then
-        # Just checkout to it
-        if ! (git checkout -q "$release")
-        then
-            log "Failed to checkout to branch for release '$release', aborting ... " error high
-            exit
-        fi
-    # Else check if the repo exists at remote
-    elif git ls-remote --exit-code origin "$release" > /dev/null
-    then
-        # And create a local branch
-        if ! (git checkout -q -b "$release" "origin/$release")
-        then
-            log "Failed to checkout to branch for release '$release', aborting ... " error high
-            exit
-        fi
-    else
-        error "No branch exists for '$release'" high
-        error "Aborting ... " high
-    fi
-
     # Pull the latest changes
-    log "Getting latest changes ... " normal low
+    log "Getting latest changes ... " info high
     if ! (git pull --rebase)
     then
         log "Could not fetch latest changes, skipping" warn high
