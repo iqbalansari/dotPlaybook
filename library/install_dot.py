@@ -94,6 +94,11 @@ def main():
 
             result['backedup_at'] = backup_dest
 
+        elif os.path.islink(dest):
+            # If the path does not exist but is the symlink, it means that the
+            # target does not exist
+            os.unlink(dest)
+
         os.symlink(src, dest)
         module.exit_json(changed=True, **result)
 
