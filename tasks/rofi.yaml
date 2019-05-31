@@ -2,9 +2,10 @@
   block:
     - name: Install rofi
       block:
-        - name: Install xcb-util-xrm
-          apt: pkg=libxcb-xrm-dev update_cache=yes cache_valid_time=604800 install_recommends=no state=present
+        - name: Add PPA for xcb-util-xrm (only on pre bionic releases)
+          apt_repository: repo='ppa:aguignard/ppa' state=present update_cache=yes
           become: yes
+          when: ansible_distribution_release != 'bionic'
 
         - name: Install dependencies for Rofi
           apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
@@ -18,11 +19,13 @@
             - libglib2.0-dev
             - libstartup-notification0-dev
             - libxcb-util-dev
+            - libxkbcommon-dev
             - libxkbcommon-x11-dev
             - libxcb-ewmh-dev
             - libxcb-xinerama0-dev
             - libxcb-icccm4-dev
             - libx11-dev
+            - libxcb-xrm-dev
           become: yes
 
         - name: Get Rofi source code
@@ -47,7 +50,7 @@
     - name: Configure rofi
       block:
         - name: Create Xresources.d if it does not exist
-          shell: mkdir ~/Xresources.d creates=~/Xresources.d
+          file: path=~/Xresources.d state=directory
 
         - name: Copy Rofi config
           install_dot: src=files/rofi dest=~/Xresources.d/rofi
