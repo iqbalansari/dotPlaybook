@@ -70,9 +70,9 @@ update_apt_cache_if_needed () {
     local now=$(date +%s)
     local last_apt_update=0
 
-    if [ -f /var/cache/apt/pkgcache.bin ]
+    if [ -f /var/lib/apt/periodic/update-success-stamp ]
     then
-        last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
+        last_apt_update=$(stat --printf '%Y' /var/lib/apt/periodic/update-success-stamp)
     fi
 
     if [ $((now - last_apt_update)) -gt 604800 ]
