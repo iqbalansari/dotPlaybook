@@ -66,6 +66,131 @@ determine_system () {
     esac
 }
 
+update_apt_cache_if_needed () {
+    local now=$(date +%s)
+    local last_apt_update=0
+
+    if [ -f /var/cache/apt/pkgcache.bin ]
+    then
+        last_apt_update=$(stat --printf '%Y' /var/cache/apt/pkgcache.bin)
+    fi
+
+    if [ $((now - last_apt_update)) -gt 604800 ]
+    then
+        log "apt cache is older than a week, updating now ... " warn low
+        sudo apt-get update
+    fi
+}
+
+apt_installed () {
+    local retval=1
+
+    if dpkg-query -W -f='${Status}' $1 2>/dev/null | grep "ok installed" > /dev/null 2>&1
+    then
+        if [ -z $2 ]
+        then
+            retval=0
+        else
+            if dpkg --compare-versions $(dpkg-query -W -f='${Version}' $1 2>/dev/null) ge $2
+            then
+                retval=0
+            else
+                retval=1
+            fi
+        fi
+    else
+        retval=1
+    fi
+
+    return "$retval"
+}
+
+apt_install () {
+    log "Installing $1 ... " info high
+
+    if [ $# -ge 3 ]
+    then
+        local pkg=$1
+        local version=$2
+        local ppa=$3
+    else
+        local pkg=$1
+        local version=0
+        local ppa=$2
+    fi
+
+    if ! apt_installed "$pkg" "$version"
+    then
+        if [ -n "$ppa" ]
+        then
+            log "Adding PPA for $pkg ... " normal low
+            sudo apt-add-repository -y "$ppa" || exit 1
+            log "Updating package archives $pkg ... " normal low
+            sudo apt-get update || exit 1
+        else
+            update_apt_cache_if_needed
+        fi
+
+        log "$pkg not installed, installing ... "
+        if [ "$version" = "0" ]
+        then
+            sudo apt-get install -y "$pkg" || exit 1
+        else
+            sudo apt-get install -y "$pkg=$version*" || exit 1
+        fi
+
+        log "$1 installed" change high
+    else
+        log "$1 is already installed, skipping ... " normal low
+    fi
+}
+
+install_system_dependencies_ubuntu () {
+    apt_install python3
+    apt_install python3-pip
+    apt_install python3-apt
+
+    if (test "$(lsb_release -c | awk '{print $2}')" = "bionic")
+    then
+        apt_install software-properties-common
+    else
+        apt_install python-software-properties
+    fi
+
+    apt_install python3-dev
+    apt_install git
+}
+
+install_system_dependencies_macos () {
+    log "Installing brew ... " info high
+    if ! (exists brew)
+    then
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        log "brew installed" change high
+    else
+        log "brew is already installed, skipping ... " normal low
+    fi
+
+    log "Installing git ... " info high
+    if ! (exists git)
+    then
+        brew install git
+        log "git installed" change high
+    else
+        log "git is already installed, skipping ... " normal low
+    fi
+
+    log "Installing python3 ... " info high
+    if ! (exists python3)
+    then
+        brew install python3
+        log "python3 installed" change high
+    else
+        log "python3 is already installed, skipping ... " normal low
+    fi
+
+}
+
 ensure_system_dependencies () {
     # Make sure we are in the directory containing the script
     cd `dirname $0`
@@ -74,38 +199,11 @@ ensure_system_dependencies () {
 
     log "Installing system dependencies for '$system'" info high
 
-    if (exists git)
-    then
-        local origin="$(git config --get remote.origin.url)"
-
-        if (test "${origin#*$repo}" != "$origin")
-        then
-            log "Installing system dependencies for '$system' from cloned repository" info low
-            . "./install-$system-dependencies.sh"
-
-        else
-            fetch_system_dependencies_script
-
-        fi
+    if type "install_system_dependencies_$system" > /dev/null; then
+        eval "install_system_dependencies_$system"
     else
-        fetch_system_dependencies_script
-    fi
-
-    # This function is exposed by the system-dependencies.sh script
-    install_system_dependencies
-}
-
-fetch_system_dependencies_script () {
-    local system=$(determine_system)
-
-    log "Fetching script to install system dependencies from '$system'" info low
-
-    if ! eval "$(curl -fsL https://raw.githubusercontent.com/$repo/master/install-$system-dependencies.sh || echo 'false')"
-    then
-        log "Could fetch the script to install system dependencies for '$system' aborting ..." error high
+        log "Do not know how to install system dependencies on '$system', aborting ..." error high
         exit 1
-    else
-        log "Successfully fetched the script to install system dependencies for '$system'" change low
     fi
 }
 
