@@ -81,7 +81,7 @@ ensure_system_dependencies () {
         if (test "${origin#*$repo}" != "$origin")
         then
             log "Installing system dependencies for '$system' from cloned repository" info low
-            . "install-$system-dependencies.sh"
+            . "./install-$system-dependencies.sh"
 
         else
             fetch_system_dependencies_script
