@@ -8,7 +8,7 @@ ansible_args=''
 
 if [ -z "$PLAYBOOK_DIR" ] ;
 then
-    repo_dir=~/dotPlaybook
+    repo_dir=~/.playbook
 else
     repo_dir=$PLAYBOOK_DIR
 fi
