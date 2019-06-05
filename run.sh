@@ -287,6 +287,7 @@ install_ansible () {
 
 run_ansible () {
     log "Running the playbook ... " info high
+    log ".venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args" info
     eval exec ".venv/bin/ansible-playbook playbook.yaml --ask-sudo-pass $ansible_args"
 }
 
