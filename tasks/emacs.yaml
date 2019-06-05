@@ -82,7 +82,7 @@
 - name: Configure emacs
   block:
     - name: Create directory to hold emacs configs
-      command: mkdir ~/.emacs_configs/ creates=~/.emacs_configs/
+      file: path=~/.emacs_configs/ state=directory
 
     - name: Clone personal emacs config
       git: repo={{ emacs_config_repo }} accept_hostkey=yes dest=~/.emacs_configs/{{ ansible_user_id }}
