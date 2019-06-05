@@ -84,8 +84,8 @@ if ! test "${INSIDE_EMACS#*comint}" = "$INSIDE_EMACS"; then
     unset zle_bracketed_paste
 fi
 
-if exists less-input-preprocessor ; then
-    export LESSOPEN="| less-input-preprocessor %s"
+if exists less-input-preprocessor.sh ; then
+    export LESSOPEN="| less-input-preprocessor.sh %s"
     export LESS="-R"
 fi
 
