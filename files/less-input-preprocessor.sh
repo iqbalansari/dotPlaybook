@@ -7,6 +7,14 @@ is_binary () {
     file --brief --mime "$1" | cut -d\; -f1 | grep -q '^application/\(x-executable\|octet-stream\|x-mach-binary\)$'
 }
 
+is_text () {
+    file --brief --mime "$1" | cut -d\; -f1 | grep -q '^text/'
+}
+
+is_small_enough () {
+    test $(du -k "$filename" | cut -f1) -lt 1048576
+}
+
 ## https://stackoverflow.com/a/3352015/5285712
 trim() {
     local var="$*"
@@ -17,38 +25,25 @@ trim() {
     echo "$var"
 }
 
-lesspipe_compatible () {
-    local raw_extensions="a arj tar bz2 bz bz2 deb udeb doc gif jpeg jpg pcd png
-                          tga tiff tif iso bin raw lha lzh tar.lz tlz lz tar.lzma
-                          lzma pdf rar r[0-9][0-9] rpm tar.gz tgz tar.z tar.dz gz
-                          z dz tar jar war ear xpi zip 7z zoo"
-    local extensions=$(trim "$(echo $raw_extensions | tr '\n' ' ')")
-    local regex="^[^.]*\.\\($(echo $extensions | sed 's/ /\\|/g')\\)$"
-
-    echo "$1" | grep -q -i "$regex"
-}
-
 filename="$1"
 
 if [ -f "$filename" ] ; then
-    if lesspipe_compatible filename ; then
-        lesspipe.sh "$filename"
-    else
-        if is_binary "$filename" ; then
-            case "$system" in
-                Linux)
-                    objdump -d "$filename" 2> /dev/null || readelf -a "$filename" 2>/dev/null
-                    ;;
-                Darwin)
-                    nm -g "$filename"
-                    ;;
-                *)
-                    exit 1
-                    ;;
-            esac
+    if (is_text "$filename") && (is_small_enough "$filename") ; then
+        source-highlight -i "$filename" -f esc 2> /dev/null || pygmentize 2> /dev/null "$filename" || lesspipe.sh "$filename" 2> /dev/null
 
-        elif [[ $(du -k "$filename" | cut -f1) -lt 1048576 ]] ; then
-            source-highlight -i "$filename" -f esc 2> /dev/null || pygmentize 2> /dev/null "$filename"
-        fi
+    elif is_binary "$filename" ; then
+        case "$(uname)" in
+            Linux)
+                objdump -d "$filename" 2> /dev/null || readelf -a "$filename" 2>/dev/null
+                ;;
+            Darwin)
+                otool -vt "$filename"
+                ;;
+            *)
+                exit 1
+                ;;
+        esac
     fi
+elif [ -d "$filename" ] ; then
+    lesspipe.sh "$filename" 2>/dev/null
 fi
