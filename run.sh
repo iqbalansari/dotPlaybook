@@ -134,9 +134,9 @@ apt_install () {
         log "$pkg not installed, installing ... "
         if [ "$version" = "0" ]
         then
-            sudo apt-get install -y "$pkg" || exit 1
+            sudo apt-get install --no-install-recommends --assume-yes "$pkg" || exit 1
         else
-            sudo apt-get install -y "$pkg=$version*" || exit 1
+            sudo apt-get install --no-install-recommends --assume-yes "$pkg=$version*" || exit 1
         fi
 
         log "$1 installed" change high
