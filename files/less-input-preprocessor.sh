@@ -43,7 +43,10 @@ if [ -f "$filename" ] ; then
                 exit 1
                 ;;
         esac
+    else
+        lesspipe.sh "$filename"
     fi
+
 elif [ -d "$filename" ] ; then
     lesspipe.sh "$filename" 2>/dev/null
 fi
