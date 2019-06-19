@@ -11,6 +11,10 @@ is_text () {
     file --brief --mime "$1" | cut -d\; -f1 | grep -q '^text/'
 }
 
+is_media () {
+    file --brief --mime "$1" | cut -d\; -f1 | grep -q '^\(video\|audio\)/'
+}
+
 is_small_enough () {
     test $(du -k "$filename" | cut -f1) -lt 1048576
 }
@@ -30,6 +34,9 @@ filename="$1"
 if [ -f "$filename" ] ; then
     if (is_text "$filename") && (is_small_enough "$filename") ; then
         source-highlight -i "$filename" -f esc 2> /dev/null || pygmentize 2> /dev/null "$filename" || lesspipe.sh "$filename" 2> /dev/null
+
+    elif is_media "$filename" ; then
+        ffprobe -hide_banner -i "$filename" 2>&1 | grep -v '^Unsupported codec with' 2>/dev/null
 
     elif is_binary "$filename" ; then
         case "$(uname)" in
