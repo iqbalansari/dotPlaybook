@@ -41,7 +41,7 @@ export MAILDIR="$HOME/Maildir/"
 
 # Make the shell aware of locally installed packages
 prepend_directories PATH "$HOME/.local/bin/" "$HOME/.local/sbin/"
-prepend_directories PKG_CONFIG_PATH "$HOME/.local/lib/pkgconfig" "/usr/local/lib/pkgconfig" ":"
+prepend_directories PKG_CONFIG_PATH "$HOME/.local/lib/pkgconfig" ":"
 prepend_directories ACLOCAL_PATH "$HOME/.local/share/aclocal/"
 prepend_directories CPATH "$HOME/.local/include/" ":"
 prepend_directories LIBRARY_PATH "$HOME/.local/lib" "$HOME/.local/lib64"
