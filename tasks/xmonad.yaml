@@ -20,7 +20,7 @@
             - gnome-applets
             - gnome-applets-data
             - gnome-panel
-            - indicator-applet-session
+            - indicator-applet-complete
             - gnome-session-xmonad
             - alsa-utils
             - xcompmgr
