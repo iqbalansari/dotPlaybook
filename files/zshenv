@@ -2,7 +2,7 @@
 
 ensure_directories () {
     for directory in $* ; do
-        if [[ "$directory" != ":" ]] ; then
+        if [[ "$directory" != ":" ]] && ! [[ -d "$directory" ]] ; then
             mkdir -p $directory
         fi
     done
