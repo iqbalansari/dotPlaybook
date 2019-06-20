@@ -59,5 +59,5 @@ elif [ -f "$filename" ] ; then
     fi
 
 elif [ -d "$filename" ] ; then
-    (tree -L 5 "$filename" || lesspipe.sh "$filename") 2>/dev/null
+    (tree -a -L 5 "$filename" || lesspipe.sh "$filename") 2>/dev/null
 fi
