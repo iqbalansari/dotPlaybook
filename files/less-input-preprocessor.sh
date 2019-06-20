@@ -31,17 +31,21 @@ trim() {
 
 filename="$1"
 
-if [ -f "$filename" ] ; then
+# Delegate to lesspipe of the name contains ':'
+if test "${filename#*:}" != "$filename" ; then
+    lesspipe.sh "$filename" 2> /dev/null
+
+elif [ -f "$filename" ] ; then
     if (is_text "$filename") && (is_small_enough "$filename") ; then
-        source-highlight -i "$filename" -f esc 2> /dev/null || pygmentize 2> /dev/null "$filename" || lesspipe.sh "$filename" 2> /dev/null
+        (pygmentize "$filename" || lesspipe.sh "$filename") 2> /dev/null
 
     elif is_media "$filename" ; then
-        ffprobe -hide_banner -i "$filename" 2>&1 | grep -v '^Unsupported codec with' 2>/dev/null
+        (which ffprobe > /dev/null && ffprobe -hide_banner -i "$filename" 2>&1 | grep -v '^Unsupported codec with' || lesspipe.sh "$filename") 2> /dev/null
 
     elif is_binary "$filename" ; then
         case "$(uname)" in
             Linux)
-                objdump -d "$filename" 2> /dev/null || readelf -a "$filename" 2>/dev/null
+                (objdump -d "$filename" || readelf -a "$filename") 2>/dev/null
                 ;;
             Darwin)
                 otool -vt "$filename"
@@ -51,9 +55,9 @@ if [ -f "$filename" ] ; then
                 ;;
         esac
     else
-        lesspipe.sh "$filename"
+        lesspipe.sh "$filename" 2>/dev/null
     fi
 
 elif [ -d "$filename" ] ; then
-    lesspipe.sh "$filename" 2>/dev/null
+    (tree -L 5 "$filename" || lesspipe.sh "$filename") 2>/dev/null
 fi
