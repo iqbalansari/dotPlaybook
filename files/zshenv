@@ -1,23 +1,49 @@
+#!/bin/zsh
+
+prepend_directories () {
+    variable="$1"
+    shift
+
+    code=$(cat <<EOF
+
+new_directories=$(echo ${(j.:.)*} | sed 's/::/:/g')
+
+if ! [[ "\$$variable" =~ "^\$new_directories" ]] ; then
+    if [[ -z "\$$variable" ]] ; then
+       export $variable="\$new_directories"
+    else
+       export $variable="\$(echo \$new_directories:\$$variable | sed 's/::/:/g')"
+    fi
+fi
+
+EOF
+        )
+
+    eval "$code"
+}
+
+# Locale settings
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Maildir location
+export MAILDIR="$HOME/Maildir/"
+
 # Make the shell aware of locally installed packages
-export PATH="$HOME/.local/bin/:$HOME/.local/sbin/:$PATH"
-export CPATH="$HOME/.local/include/:$CPATH"
-export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig:$PKG_CONFIG_PATH"
-export LD_RUN_PATH="$HOME/.local/lib:$HOME/.local/lib64:$LD_RUN_PATH"
-export LD_LIBRARY_PATH="$HOME/.local/lib:$HOME/.local/lib64:$LD_LIBRARY_PATH"
-export LIBRARY_PATH="$HOME/.local/lib:$HOME/.local/lib64:$LIBRARY_PATH"
-export ACLOCAL_PATH="$HOME/.local/share/aclocal/:$ACLOCAL_PATH"
-export MANPATH="$HOME/.local/share/man:$MANPATH"
+prepend_directories PATH "$HOME/.local/bin/" "$HOME/.local/sbin/"
+prepend_directories PKG_CONFIG_PATH "$HOME/.local/lib/pkgconfig" "/usr/local/lib/pkgconfig" ":"
+prepend_directories ACLOCAL_PATH "$HOME/.local/share/aclocal/"
+prepend_directories CPATH "$HOME/.local/include/" ":"
+prepend_directories LIBRARY_PATH "$HOME/.local/lib" "$HOME/.local/lib64"
+prepend_directories LD_RUN_PATH "$HOME/.local/lib" "$HOME/.local/lib64"
+prepend_directories LD_LIBRARY_PATH "$HOME/.local/lib" "$HOME/.local/lib64" ":"
+prepend_directories MANPATH "$HOME/.local/share/man"
+prepend_directories XDG_DATA_DIRS "$HOME/.local/share"
 
 if which wmctrl &> /dev/null ; then
     if wmctrl -m 2>/dev/null | head -n 1 | awk -F ':' '{print $2}' | grep -q xmonad ; then
         export _JAVA_AWT_WM_NONREPARENTING=1
     fi
-fi
-
-if [ -z "$XDG_DATA_DIRS" ] ; then
-    export XDG_DATA_DIRS="$HOME/.local/share"
-else
-    export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 fi
 
 if [[ -f ~/.zshenv-private ]] ; then
