@@ -1,10 +1,20 @@
 #!/bin/zsh
 
+ensure_directories () {
+    for directory in $* ; do
+        if [[ "$directory" != ":" ]] ; then
+            mkdir -p $directory
+        fi
+    done
+}
+
 prepend_directories () {
     variable="$1"
     shift
 
     code=$(cat <<EOF
+
+ensure_directories $*
 
 new_directories=$(echo ${(j.:.)*} | sed 's/::/:/g')
 
