@@ -37,7 +37,7 @@ if test "${filename#*:}" != "$filename" ; then
 
 elif [ -f "$filename" ] ; then
     if (is_text "$filename") && (is_small_enough "$filename") ; then
-        (pygmentize "$filename" || lesspipe.sh "$filename") 2> /dev/null
+        (pygmentize -O style=rrt "$filename" || lesspipe.sh "$filename") 2> /dev/null
 
     elif is_media "$filename" ; then
         (which ffprobe > /dev/null && ffprobe -hide_banner -i "$filename" 2>&1 | grep -v '^Unsupported codec with' || lesspipe.sh "$filename") 2> /dev/null
