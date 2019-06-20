@@ -20,7 +20,7 @@
       file: path=~/.config/xfce4/xfconf/xfce-perchannel-xml/ state=directory
 
     - name: Symlink custom config for xfce4-notifyd
-      install_dot: src=file/xfce4-notifyd.xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml
+      install_dot: src=files/xfce4-notifyd.xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml
 
     - name: Install rlwrap
       apt: pkg=rlwrap update_cache=yes cache_valid_time=604800 install_recommends=no
@@ -126,7 +126,7 @@
       command: mkdir ~/.config creates=~/.config
 
     - name: Symlink artha config file
-      install_dot: src=file/artha.conf dest=~/.config/artha.conf
+      install_dot: src=files/artha.conf dest=~/.config/artha.conf
 
     - name: Install mtp-tools
       apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
