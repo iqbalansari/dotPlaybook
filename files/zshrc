@@ -1,16 +1,10 @@
 #!/bin/zsh
 fpath=(~/.zsh $fpath)
 
-# Locale settings
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-# Maildir location
-export MAILDIR="$HOME/Maildir/"
-
 function exists { which $1 &> /dev/null }
 
-if exists tmux && [[ -z $TERMINOLOGY && -z $TMUX && -z $NO_TMUX && -z $INSIDE_EMACS && (-z $SSH_CONNECTION || "$USER" == "vagrant") && -o interactive && -n $TERM && "$TERM" != "dumb" && "$TERM" != "linux" ]] ||  ; then
+# Tmux configuration
+if exists tmux && [[ -z $TERMINOLOGY && -z $TMUX && -z $NO_TMUX && -z $INSIDE_EMACS && (-z $SSH_CONNECTION || "$USER" == "vagrant") && -o interactive && -n $TERM && "$TERM" != "dumb" && "$TERM" != "linux" ]] ; then
     # Attach to existing session
     if tmux list-sessions > /dev/null 2>&1; then
         tmux attach
@@ -20,14 +14,37 @@ if exists tmux && [[ -z $TERMINOLOGY && -z $TMUX && -z $NO_TMUX && -z $INSIDE_EM
     fi
 fi
 
+# Executes the given command outside tmux, this is needed since tmux is started immediately
+# on shell startup making it impossible to run a command without tmux
+notmux () {
+    local args
+
+    for i in "$@" ; do
+        args="$args '$i'"
+    done
+
+    if [[ -n $ROXTERM_PID ]] ; then
+        roxterm --tab -e "export NO_TMUX=yes; $args"
+    fi
+
+    if [[ "$COLORTERM" = "gnome-terminal" ]] ; then
+        if exists xdotool ; then
+            sh -c "xdotool key ctrl+shift+t && sleep 0.5 && tmux suspend && sleep 0.5 && xdotool type \"export NO_TMUX=yes ; cd $(pwd) && $args[0] $(print $args[1,-1]) ; exit\" && xdotool key Return" &!
+        else
+            echo "Please install xdotool for this command to work!"
+        fi
+    fi
+}
+
+
 if [[ -f $HOME/software/zgen/zgen.zsh ]] ; then
 
     # Use different init file inside emacs
     if [[ -n $INSIDE_EMACS ]] ; then
         if test "${INSIDE_EMACS#*comint}" != "$INSIDE_EMACS" ; then
-            ZGEN_INIT="${HOME}/.zgen/init-comint.zsh"
+            ZGEN_INIT="$HOME/.zgen/init-comint.zsh"
         else
-            ZGEN_INIT="${HOME}/.zgen/init-emacs.zsh"
+            ZGEN_INIT="$HOME/.zgen/init-emacs.zsh"
         fi
     fi
 
@@ -69,13 +86,19 @@ if [[ -f $HOME/software/zgen/zgen.zsh ]] ; then
     ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 fi
 
-# Use bash completions as well
+# Completion setup
+# Enable bash completions
 autoload bashcompinit
 bashcompinit
+
+# Use completions for exec command for notmux as well
+compdef notmux=exec
+compdef rlwrap=exec
 
 # Enable zsh specific glob features
 setopt extendedglob
 
+# Disable bracketed paste mode in Emacs
 if ! test "${INSIDE_EMACS#*comint}" = "$INSIDE_EMACS"; then
     # Set emacsclient to the editor
     export EDITOR=emacsclient
@@ -84,68 +107,14 @@ if ! test "${INSIDE_EMACS#*comint}" = "$INSIDE_EMACS"; then
     unset zle_bracketed_paste
 fi
 
+# Better display of files with less
 if exists less-input-preprocessor.sh ; then
     export LESSOPEN="| less-input-preprocessor.sh %s"
     export LESS="-R"
 fi
 
-[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
-
-# Redefine jo function exported by autojump to jfm since it conflicts with the jo the program
-if type jo > /dev/null ; then
-    jfm_source=$(which jo| sed 's/^jo/jfm/')
-    eval $jfm_source
-    unset -f jo
-fi
-
-if type jco > /dev/null ; then
-    jcfm_source=$(which jco| sed 's/^jco/jcfm/'| sed 's/jo /jfm /')
-    eval $jcfm_source
-    unset -f jco
-fi
-
-GPG_TTY=$(tty)
-export GPG_TTY
-
-# Snatch back alt-l
-bindkey '^[l' down-case-word
-
-# Executes the given command outside tmux, this is needed since tmux is started immediately
-# on shell startup making it impossible to run a command without tmux (think 'vagrant ssh'
-# if the vagrant also has a tmux instance it would become cumbersome to use it since all
-# keys will need to escaped otherwise the tmux running on host with take it)
-notmux () {
-    local args
-
-    for i in "$@" ; do
-        args="$args '$i'"
-    done
-
-    if [[ -n $ROXTERM_PID ]] ; then
-        roxterm --tab -e "export NO_TMUX=yes; $args"
-    fi
-
-    if [[ "$COLORTERM" = "gnome-terminal" ]] ; then
-        if exists xdotool ; then
-            sh -c "xdotool key ctrl+shift+t && sleep 0.5 && tmux suspend && sleep 0.5 && xdotool type \"export NO_TMUX=yes ; cd $(pwd) && $args[0] $(print $args[1,-1]) ; exit\" && xdotool key Return" &!
-        else
-            echo "Please install xdotool for this command to work!"
-        fi
-    fi
-}
-
-epm () {
-    epm_path=$(ls -l ~/.emacs.d/elpa*/epm*/epm | awk -F ' ' '{print $9}' | tail -1)
-    $epm_path $*
-}
-
-# Use completions for exec command for notmux as well
-compdef notmux=exec
-compdef rlwrap=exec
-
-if [[ -f ~/.zshrc-private ]] ; then
-    source ~/.zshrc-private
-fi
+# gpg configuration
+export GPG_TTY=$(tty)
 
 # Configuration for fzf
 export FZF_DEFAULT_OPTS='--reverse --border'
@@ -153,9 +122,22 @@ export FZF_TMUX_HEIGHT='100%'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Snatch back M-c and C-t
-bindkey '\ec' capitalize-word
-bindkey '^T' transpose-chars
-
 # Load sandboxd
 [ -f ~/.sandboxd ] && source ~/.sandboxd 1>/dev/null 2>&1
+
+# Configuration for autojump
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
+
+# Redefine jo function exported by autojump to jfm since it conflicts with the jo the program
+eval "$(which jo| sed 's/^jo/ajo/')"
+eval "$(which jco| sed 's/^jco/ajco/'| sed 's/jo /ajo /')"
+unset -f jo jco
+
+# Snatch back some keybindings
+bindkey '\ec' capitalize-word
+bindkey '\el' down-case-word
+bindkey '^T' transpose-chars
+
+if [[ -f ~/.zshrc-private ]] ; then
+    source ~/.zshrc-private
+fi
