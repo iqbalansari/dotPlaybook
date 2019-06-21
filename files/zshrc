@@ -140,10 +140,9 @@ export FZF_TMUX_HEIGHT='100%'
 # Configuration for autojump
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
-# Redefine jo function exported by autojump to jfm since it conflicts with the jo the program
-eval "$(which jo| sed 's/^jo/ajo/')"
-eval "$(which jco| sed 's/^jco/ajco/'| sed 's/jo /ajo /')"
-unset -f jo jco
+# Redefine ajo function exported by autojump to jfm since it conflicts with the jo the program
+typeset -f jo && eval "$(which jo| sed 's/^jo/ajo/')" && unset -f jo
+typeset -f jco && eval "$(which jco| sed 's/^jco/ajco/'| sed 's/jo /ajo /')" && unset -f jco
 
 # Snatch back some keybindings
 bindkey '\ec' capitalize-word
