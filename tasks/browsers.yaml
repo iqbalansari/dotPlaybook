@@ -41,6 +41,8 @@
       install_dot: src=~/software/firefox/firefox dest=~/.local/bin/firefox
       when: firefox_64_download is changed or firefox_32_download is changed or firefox_installed.rc == 1
 
+  when: ansible_distribution == 'Ubuntu'
+
   tags:
     - firefox
     - provision
