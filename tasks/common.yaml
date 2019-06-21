@@ -14,9 +14,9 @@
       when: ansible_distribution == 'MacOSX'
 
   tags:
-    - provision
+    - always
 
-- name: Install build depedencies and general packages on Ubuntu
+- name: Install build dependencies and general packages on Ubuntu
   block:
     - name: Install ca-certificates
       apt: pkg=ca-certificates update_cache=yes cache_valid_time=604800 install_recommends=no
@@ -55,7 +55,7 @@
   when: ansible_distribution == 'Ubuntu'
 
   tags:
-    - provision
+    - always
 
 - name: Install build depedencies and general packages on macOS
   block:
@@ -82,4 +82,4 @@
   when: ansible_distribution == 'MacOSX'
 
   tags:
-    - provision
+    - always
