@@ -25,14 +25,26 @@ notmux () {
 
     if [[ -n $ROXTERM_PID ]] ; then
         roxterm --tab -e "export NO_TMUX=yes; $args"
-    fi
 
-    if [[ "$COLORTERM" = "gnome-terminal" ]] ; then
+    elif [[ "$COLORTERM" = "gnome-terminal" ]] ; then
         if exists xdotool ; then
             sh -c "xdotool key ctrl+shift+t && sleep 0.5 && tmux suspend && sleep 0.5 && xdotool type \"export NO_TMUX=yes ; cd $(pwd) && $args[0] $(print $args[1,-1]) ; exit\" && xdotool key Return" &!
         else
             echo "Please install xdotool for this command to work!"
         fi
+
+    elif [[ "$TERM_PROGRAM" = "iTerm.app" ]] ; then
+        script=$(cat <<EOF
+tell application "iTerm"
+    tell current window
+         create tab with default profile command "zsh --login -c 'export NO_TMUX=yes ; cd \"$(pwd)\" && $args[0] $(print $args[1,-1]) ; exit'"
+    end tell
+end tell
+EOF
+                 )
+
+        osascript -e "$script"
+
     fi
 }
 
