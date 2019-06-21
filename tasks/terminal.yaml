@@ -13,12 +13,13 @@
       changed_when: no
 
     - name: Set installed theme as the default theme
-      command: gconftool-2 --set "/apps/gnome-terminal/global/default_profile" base-16-tomorrow-dark --type string
-      changed_when: no
+      gconftool2: key=/apps/gnome-terminal/global/default_profile value=base-16-tomorrow-dark value_type=string state=present
 
     - name: Change font
-      command: gconftool-2 -s "/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font" "DejaVu Sans Mono 10" -t string
-      changed_when: no
+      gconftool2: key=/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font value="Source Code Pro Regular 10" value_type=string state=present
+
+    - name: Do not show the menubar
+      dconf: key=/org/gnome/terminal/legacy/default-show-menubar value=false
 
   when: ansible_distribution == 'Ubuntu' and lookup('env', 'DISPLAY')
 
