@@ -1,0 +1,16 @@
+- name: Install and configure Spectacle
+  block:
+    - name: Install Spectacle
+      homebrew_cask: name=spectacle
+      tags:
+        - provision
+
+    - name: Symlink Spectacle configuration
+      install_dot: src=files/spectacle.json dest='~/Library/Application Support/Spectacle/Shortcuts.json'
+      tags:
+        - configuration
+
+  when: ansible_distribution == "MacOSX"
+
+  tags:
+    - spectacle

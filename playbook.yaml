@@ -57,6 +57,7 @@
     - import_tasks: tasks/browsers.yaml
     - import_tasks: tasks/terminal.yaml
     - import_tasks: tasks/xmonad.yaml
+    - import_tasks: tasks/spectacle.yaml
     - import_tasks: tasks/rofi.yaml
     - import_tasks: tasks/fonts.yaml
     - import_tasks: tasks/mail.yaml
