@@ -26,7 +26,7 @@ notmux () {
     if [[ -n $ROXTERM_PID ]] ; then
         roxterm --tab -e "export NO_TMUX=yes; $args"
 
-    elif [[ "$COLORTERM" = "gnome-terminal" ]] ; then
+    elif [[ "$COLORTERM" = "gnome-terminal" ]] || [[ -n "$VTE_VERSION" ]] ; then
         if exists xdotool ; then
             sh -c "xdotool key ctrl+shift+t && sleep 0.5 && tmux suspend && sleep 0.5 && xdotool type \"export NO_TMUX=yes ; cd $(pwd) && $args[0] $(print $args[1,-1]) ; exit\" && xdotool key Return" &!
         else
