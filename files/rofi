@@ -1,7 +1,7 @@
 rofi.modi             : window,run,file:~/software/rofi/Examples/rofi-file-browser.sh,ssh
-rofi.kb-mode-next     : SuperL+Right,Control+Tab,SuperL+s
-rofi.kb-mode-previous : SuperL+Left,Control+Shift+Tab,SuperL+Shift+s
-rofi.key-window       : SuperL+s
+rofi.kb-mode-next     : Super+Right,Control+Tab,Super+s
+rofi.kb-mode-previous : Super+Left,Control+Shift+Tab,Super+Shift+s
+rofi.key-window       : Super+s
 rofi.sidebar-mode     : true
 rofi.levenshtein-sort : true
 rofi.glob             : true

@@ -40,7 +40,7 @@
           changed_when: no
 
         - name: Install Rofi
-          shell: cd ~/software/rofi && make distclean ; autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/.local/ --disable-i3support && make && make install
+          shell: cd ~/software/rofi && make distclean ; autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/.local/ --disable-i3support --disable-check && make && make install
           when: rofi_checkout is changed or rofi_installed.rc == 1
 
       tags:
