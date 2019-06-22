@@ -1,0 +1,16 @@
+- name: Install and configure Karabiner
+  block:
+    - name: Install Karabiner
+      homebrew_cask: name=karabiner-elements
+      tags:
+        - provision
+
+    - name: Symlink Karabiner configuration
+      install_dot: src=files/karabiner.json dest='~/.config/karabiner/karabiner.json'
+      tags:
+        - configuration
+
+  when: ansible_distribution == "MacOSX"
+
+  tags:
+    - karabiner
