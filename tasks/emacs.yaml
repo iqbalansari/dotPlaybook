@@ -52,17 +52,26 @@
       register: emacs_source
 
     - name: Check if emacs is installed
-      shell: which emacs
-      register: emacs_installed
+      stat: path=~/.local/bin/emacs
+      register: emacs_installation
       ignore_errors: yes
       failed_when: no
       changed_when: no
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Check if emacs is installed
+      stat: path=~/Applications/Emacs.app
+      register: emacs_installation
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+      when: ansible_distribution == 'MacOSX'
 
     - name: Install Emacs
       block:
         - name: Install Emacs on Ubuntu
           shell: cd ~/software/emacs-{{emacs_version}} && ./configure CFLAGS=-no-pie --prefix=$HOME/.local/ --with-modules --with-x-toolkit=gtk3 --with-xwidgets && make && make install
-          when: ansible_distribution == 'Ubuntu' and emacs_installed.rc == 1
+          when: ansible_distribution == 'Ubuntu'
 
         - name: Install Emacs on macOS
           shell: cd ~/software/emacs-{{emacs_version}} && ./configure --prefix=$HOME/.local/ --with-modules --with-imagemagick --with-ns
@@ -72,7 +81,7 @@
             PKG_CONFIG_PATH: '/usr/local/opt/imagemagick@6/lib/pkgconfig'
           when: ansible_distribution == 'MacOSX'
 
-      when: emacs_source is changed
+      when: emacs_source is changed or not emacs_installation.stat.exists
 
     - name: Symlink Emacs.app to ~/Applications/ on macOS
       file: src=~/software/emacs-{{emacs_version}}/nextstep/Emacs.app path=~/Applications/Emacs.app state=link
