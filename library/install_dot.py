@@ -99,6 +99,13 @@ def main():
             # target does not exist
             os.unlink(dest)
 
+        try:
+            # Create the parent directory if it does not exist
+            os.makedirs(os.path.dirname(dest))
+        except OSError as exc:
+            if exc.errno != errno.EEXIST:
+                raise
+
         os.symlink(src, dest)
         module.exit_json(changed=True, **result)
 
