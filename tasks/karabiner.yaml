@@ -6,7 +6,7 @@
         - provision
 
     - name: Symlink Karabiner configuration
-      install_dot: src=files/karabiner.json dest='~/.config/karabiner/karabiner.json'
+      install_dot: src=files/karabiner dest='~/.config/karabiner'
       tags:
         - configuration
 
