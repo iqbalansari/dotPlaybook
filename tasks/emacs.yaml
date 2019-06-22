@@ -41,6 +41,7 @@
       homebrew: name={{ item }}
       with_items:
         - imagemagick@6
+        - libxml2
         - gnutls
       when: ansible_distribution == 'MacOSX'
 
@@ -74,7 +75,7 @@
           when: ansible_distribution == 'Ubuntu'
 
         - name: Install Emacs on macOS
-          shell: cd ~/software/emacs-{{emacs_version}} && ./configure --prefix=$HOME/.local/ --with-modules --with-imagemagick --with-ns
+          shell: cd ~/software/emacs-{{emacs_version}} && ./configure --prefix=$HOME/.local/ --with-modules --with-imagemagick --with-ns && make install
           environment:
             LDFLAGS: '-L/usr/local/opt/imagemagick@6/lib'
             CPPFLAGS: '-I/usr/local/opt/imagemagick@6/include'
