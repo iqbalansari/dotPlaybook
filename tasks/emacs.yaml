@@ -75,7 +75,7 @@
       when: emacs_source is changed
 
     - name: Symlink Emacs.app to ~/Applications/ on macOS
-      file: src=~/software/emacs-{{emacs_version}}/nextstep/Emacs.app
+      file: src=~/software/emacs-{{emacs_version}}/nextstep/Emacs.app path=~/Applications/Emacs.app state=link
       when: ansible_distribution == 'MacOSX'
 
   tags:
