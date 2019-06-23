@@ -49,7 +49,7 @@ class ActionModule(ActionBase):
             })
             return result
 
-        backup_dir = options.get('backup_dir', os.path.join(self._loader.get_basedir(), '.backups'))
+        backup_dir = options.get('backup_dir', '~/.backups')
 
         # Resolve src to any role specific file
         source = self.resolve_file_path(source)
