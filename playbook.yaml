@@ -19,6 +19,9 @@
 
     tpm_version: "v2.0.0"
 
+    git_version: "2.22.0"
+    git_src_sha256sum: 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f
+
     tig_version: "tig-2.2.1"
 
     rofi_version: "1.5.2"
