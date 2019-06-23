@@ -1,0 +1,35 @@
+- name: Install and configure xfce4-notifyd on Ubuntu
+  block:
+      - name: Install xfce4-notifyd
+        apt: pkg=xfce4-notifyd update_cache=yes cache_valid_time=604800 install_recommends=no
+        become: yes
+        tags:
+          - provision
+
+      - name: Configure xfce4-notifyd
+        block:
+          - name: Symlink custom gtk theme
+            install_dot: src=files/CustomGTKTheme dest=~/.themes/CustomGTKTheme
+
+          - name: Symlink custom config for xfce4-notifyd
+            install_dot: src=files/xfce-perchannel-xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml
+
+          - name: Reload xfconf
+            shell: pkill -HUP xfconfd
+            changed_when: no
+
+        tags:
+          - configure
+
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - xfce4-notifyd
+    - notifications
+
+- name: Install terminal-notifier on macOS
+  homebrew: name=terminal-notifier
+  when: ansible_distribution == 'MacOSX'
+  tags:
+    - terminal-notifier
+    - notifications
+    - provision

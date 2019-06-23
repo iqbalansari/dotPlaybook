@@ -60,6 +60,7 @@
     - import_tasks: tasks/spectacle.yaml
     - import_tasks: tasks/karabiner.yaml
     - import_tasks: tasks/rofi.yaml
+    - import_tasks: tasks/notifications.yaml
     - import_tasks: tasks/fonts.yaml
     - import_tasks: tasks/mail.yaml
     - import_tasks: tasks/gtk.yaml

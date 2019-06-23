@@ -76,9 +76,6 @@
     - name: Install unzip
       homebrew: name=unzip
 
-    - name: Install terminal-notifier
-      homebrew: name=terminal-notifier
-
   when: ansible_distribution == 'MacOSX'
 
   tags:
