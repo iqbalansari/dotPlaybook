@@ -16,6 +16,9 @@
       apt: pkg=xfce4-notifyd update_cache=yes cache_valid_time=604800 install_recommends=no
       become: yes
 
+    - name: Symlink custom gtk theme
+      install_dot: src=files/CustomGTKTheme dest=~/.themes/CustomGTKTheme
+
     - name: Symlink custom config for xfce4-notifyd
       install_dot: src=files/xfce-perchannel-xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml
 

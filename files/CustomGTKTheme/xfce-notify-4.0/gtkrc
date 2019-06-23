@@ -1,0 +1,33 @@
+style "custom-theme-window"
+{
+    bg[NORMAL] = "#373b41"
+    XfceNotifyWindow::border-color = "#ffffff"
+    XfceNotifyWindow::border-color-hover = "#ffffff"
+    XfceNotifyWindow::border-radius = 5.0
+    XfceNotifyWindow::border-width = 0
+    XfceNotifyWindow::border-width-hover = 0
+    XfceNotifyWindow::summary-bold = 1
+}
+class "XfceNotifyWindow" style "custom-theme-window"
+
+style "custom-theme-button"
+{
+    bg[NORMAL] = "#202020"
+    bg[PRELIGHT] = "#404040"
+    fg[NORMAL] = "#ffffff"
+    fg[PRELIGHT] = "#ffffff"
+}
+widget_class "XfceNotifyWindow.*.GtkButton*" style "custom-theme-button"
+
+style "custom-theme-text"
+{
+    fg[NORMAL] = "#ffffff"
+    GtkWidget::link-color = "#a7a7a7"
+}
+widget_class "XfceNotifyWindow.*.<GtkLabel>" style "custom-theme-text"
+
+style "custom-theme-summary"
+{
+    font_name = "Bold"
+}
+widget "XfceNotifyWindow.*.summary" style "custom-theme-summary"
