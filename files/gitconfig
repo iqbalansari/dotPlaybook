@@ -7,15 +7,17 @@
 [color]
 	pager = false
 
-[include]
-    path = ~/.gitconfig-private
-
 [tig]
     diff-highlight = true
 
 [push]
 	default = simple
+
 [pull]
 	rebase = true
+
 [rebase]
 	autoStash = true
+
+[include]
+    path = ~/.gitconfig-private
