@@ -4,4 +4,5 @@
   <property name="notify-location" type="uint" value="3"/>
   <property name="theme" type="string" value="CustomGTKTheme"/>
   <property name="initial-opacity" type="double" value="0.900000"/>
+  <property name="do-slideout" type="bool" value="true"/>
 </channel>
