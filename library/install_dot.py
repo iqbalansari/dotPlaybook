@@ -8,6 +8,7 @@ Works only on localhost, never needed to provision a remote machine with my dots
 """
 
 import os
+import re
 import datetime
 import shutil
 import errno
@@ -58,20 +59,22 @@ def main():
         # If the 'destination' does not already link to source, first
         # back it up
         if os.path.exists(dest):
-            backup_path = os.path.normpath(backup_dir + os.path.sep + os.path.dirname(dest))
-            backup_name = '{0}-{1}'.format(
-                os.path.basename(dest).replace('.', '_'),
-                datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-            )
-
             # Backup file/directory is of the format <backup_dir>/<destination>-<current-time>
-            backup_dest = os.path.join(backup_path, backup_name)
+
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+            unhidden_backup_path = os.path.sep.join(
+                [re.sub('^\.', '_', entry) for entry in dest.split(os.path.sep)]
+            )
+            backup_path = '{0}-{1}'.format(unhidden_backup_path, timestamp)
+
+            backup_dest = os.path.normpath(backup_dir + os.path.sep + backup_path)
 
             if module.check_mode:
                 module.exit_json(changed=True, backedup_at=backup_dest)
 
             try:
-                os.makedirs(backup_path)
+                # Ensure the parent directories of the backup location exist
+                os.makedirs(os.path.dirname(backup_dest))
             except OSError as exc:
                 if exc.errno != errno.EEXIST:
                     raise
@@ -89,6 +92,7 @@ def main():
 
             if os.path.isdir(dest):
                 shutil.rmtree(dest)
+
             else:
                 os.unlink(dest)
 
