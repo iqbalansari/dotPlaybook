@@ -7,15 +7,6 @@
       unarchive: src=~/compressed/git-{{git_version}}.tar.xz dest=~/software/ creates=~/software/git-{{git_version}}
       register: git_source
 
-    - name: Check if git is installed
-      stat: path=~/.local/bin/git
-      register: git_installation
-      changed_when: no
-
-    - name: Compile and install Git
-      shell: cd ~/software/git-{{git_version}} && ./configure --prefix=$HOME/.local/ && make && make install
-      when: git_source is changed or not git_installation.stat.exists
-
     - name: Check if diff-highlight is installed
       stat: path=~/.local/bin/diff-highlight
       register: diff_higlight_installation
