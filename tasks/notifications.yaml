@@ -1,8 +1,15 @@
 - name: Install and configure xfce4-notifyd on Ubuntu
   block:
       - name: Install xfce4-notifyd
-        apt: pkg=xfce4-notifyd update_cache=yes cache_valid_time=604800 install_recommends=no
-        become: yes
+        block:
+          - name: Install xfce4-notifyd
+            apt: pkg=xfce4-notifyd update_cache=yes cache_valid_time=604800 install_recommends=no
+            become: yes
+
+          - name: Uninstall notify-osd
+            apt: pkg=notify-osd state=absent
+            become: yes
+
         tags:
           - provision
 
