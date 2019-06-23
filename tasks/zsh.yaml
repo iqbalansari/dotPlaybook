@@ -97,29 +97,6 @@
         "{{zgen_init_mods.results | default([])}}"
       when: (item.stat.mtime|float < zshrc_mod.stat.mtime|float)
 
-    - name: Install lesspipe
-      block:
-        - name: Get lesspipe
-          git: repo=https://github.com/wofr06/lesspipe accept_hostkey=yes dest=~/software/lesspipe version={{lesspipe_version}}
-          register: lesspipe_source
-
-        - name: Check if lesspipe is installed
-          shell: which lesspipe
-          register: lesspipe_installed
-          ignore_errors: yes
-          failed_when: no
-          changed_when: no
-
-        - name: Install lesspipe
-          shell: cd ~/software/lesspipe && ./configure --prefix=~/.local/ --yes && make install && git checkout -f
-          when: lesspipe_source is changed or lesspipe_installed.rc == 1
-
-      tags:
-        - lesspipe
-
-    - name: Install custom less input preprocessor
-      install_dot: src=files/less-input-preprocessor.sh path=~/.local/bin/less-input-preprocessor.sh
-
   tags:
     - zsh
     - configuration

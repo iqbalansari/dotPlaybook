@@ -54,19 +54,20 @@
   tasks:
     - import_tasks: tasks/common.yaml
     - import_tasks: tasks/zsh.yaml
+    - import_tasks: tasks/less.yaml
     - import_tasks: tasks/tmux.yaml
     - import_tasks: tasks/emacs.yaml
     - import_tasks: tasks/git.yaml
     - import_tasks: tasks/browsers.yaml
     - import_tasks: tasks/terminal.yaml
+    - import_tasks: tasks/gtk.yaml
     - import_tasks: tasks/xmonad.yaml
+    - import_tasks: tasks/rofi.yaml
     - import_tasks: tasks/spectacle.yaml
     - import_tasks: tasks/karabiner.yaml
-    - import_tasks: tasks/rofi.yaml
     - import_tasks: tasks/notifications.yaml
     - import_tasks: tasks/fonts.yaml
     - import_tasks: tasks/mail.yaml
-    - import_tasks: tasks/gtk.yaml
     - import_tasks: tasks/vagrant.yaml
     - import_tasks: tasks/virtualbox.yaml
     - import_tasks: tasks/misc.yaml
