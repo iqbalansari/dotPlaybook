@@ -17,6 +17,8 @@
           - name: Reload xfconf
             shell: pkill -HUP xfconfd
             changed_when: no
+            failed_when: no
+            ignore_errors: yes
 
         tags:
           - configure
