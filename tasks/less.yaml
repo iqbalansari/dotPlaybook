@@ -19,15 +19,27 @@
     - less
     - provision
 
+- name: Install helpers for lesspipe
+  block:
+    - name: Install pygments for syntax highlighting in less
+      pip: name=pygments
+      become: yes
+
+    - name: Install tree on Ubuntu
+      apt: pkg=tree state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      become: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install tree on macOS
+      homebrew: name=tree
+      when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - less
+    - provision
+
 - name: Install custom less input preprocessor
   install_dot: src=files/less-input-preprocessor.sh path=~/.local/bin/less-input-preprocessor.sh
   tags:
     - less
     - configuration
-
-- name: Install pygments for syntax highlighting in less
-  pip: name=pygments
-  become: yes
-  tags:
-    - less
-    - provision
