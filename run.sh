@@ -283,12 +283,6 @@ install_ansible () {
         .venv/bin/pip install --ignore-installed ansible=="$ANSIBLE_VERSION"
         log "ansible installed inside virtualenv" change high
     fi
-
-    log "Installing psutil inside virtualenv ... " info high
-    if ! (.venv/bin/pip freeze | grep -q psutil) ; then
-        .venv/bin/pip install psutil
-        log "psutil installed inside virtualenv" change high
-    fi
 }
 
 run_ansible () {

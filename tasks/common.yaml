@@ -80,3 +80,6 @@
 
   tags:
     - always
+
+- name: Install psutil, dependency for dconf module
+  pip: name=psutil
