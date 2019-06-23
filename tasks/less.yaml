@@ -16,15 +16,18 @@
       when: lesspipe_source is changed or lesspipe_installed.rc == 1
 
   tags:
-    - lesspipe
+    - less
     - provision
 
 - name: Install custom less input preprocessor
   install_dot: src=files/less-input-preprocessor.sh path=~/.local/bin/less-input-preprocessor.sh
   tags:
-    - lesspipe
+    - less
     - configuration
 
 - name: Install pygments for syntax highlighting in less
   pip: name=pygments
   become: yes
+  tags:
+    - less
+    - provision
