@@ -1,5 +1,32 @@
 - name: Install Git
   block:
+    - name: Install system dependencies for Git on Ubuntu
+      apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - install-info
+        - dh-autoreconf
+        - libcurl4-gnutls-dev
+        - libexpat1-dev
+        - gettext
+        - libz-dev
+        - libssl-dev
+        - asciidoc
+        - xmlto
+        - docbook2x
+      become: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install system dependencies for Git on macOS
+      homebrew: name={{ item }}
+      with_items:
+        - autoconf
+        - gettext
+        - pcre2
+        - asciidoc
+        - xmlto
+        - docbook2x
+      when: ansible_distribution == 'MacOSX'
+
     - name: Get sources for Git
       get_url: url=https://mirrors.edge.kernel.org/pub/software/scm/git/git-{{git_version}}.tar.xz dest=~/compressed/git-{{git_version}}.tar.xz timeout=100000 sha256sum={{git_src_sha256sum}}
 
@@ -7,14 +34,35 @@
       unarchive: src=~/compressed/git-{{git_version}}.tar.xz dest=~/software/ creates=~/software/git-{{git_version}}
       register: git_source
 
+    - name: Check if git is installed
+      stat: path=~/.local/bin/git
+      register: git_installation
+      changed_when: no
+
+    - name: Compile and install Git
+      shell: cd ~/software/git-{{git_version}} && ./configure --prefix=$HOME/.local/ && make install && cd Documentation && make install
+      when: git_source is changed or not git_installation.stat.exists
+
     - name: Check if diff-highlight is installed
       stat: path=~/.local/bin/diff-highlight
       register: diff_higlight_installation
       changed_when: no
 
-    - name: Compile and install diff-highlight
+    - name: Compile and install Git
       shell: cd ~/software/git-{{git_version}}/contrib/diff-highlight && make && cp diff-highlight ~/.local/bin/diff-highlight
       when: git_source is changed or not diff_higlight_installation.stat.exists
+
+    - name: Install credential-osxkeychain on macOS
+      block:
+        - name: Check if credential-osxkeychain is installed
+          stat: path=~/.local/bin/credential-osxkeychain
+          register: credential_helper
+          changed_when: no
+
+        - name: Compile and install Git
+          shell: cd ~/software/git-{{git_version}}/contrib/credential/osxkeychain && make && cp git-credential-osxkeychain ~/.local/bin/git-credential-osxkeychain
+          when: git_source is changed or not credential_helper.stat.exists
+      when: ansible_distribution == 'MacOSX'
 
   tags:
     - git
