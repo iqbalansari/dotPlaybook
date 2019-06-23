@@ -82,4 +82,4 @@
     - always
 
 - name: Install psutil, dependency for dconf module
-  pip: name=psutil
+  pip: name=psutil virtualenv={{playbook_dir}}/.venv
