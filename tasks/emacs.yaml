@@ -57,8 +57,6 @@
         - name: Check if emacs is installed
           stat: path=~/.local/bin/emacs
           register: emacs_installation
-          ignore_errors: yes
-          failed_when: no
           changed_when: no
 
         - name: Install Emacs on Ubuntu
@@ -72,8 +70,6 @@
         - name: Check if emacs is installed
           stat: path=~/Applications/Emacs.app
           register: emacs_installation
-          ignore_errors: yes
-          failed_when: no
           changed_when: no
 
         - name: Install Emacs on macOS
