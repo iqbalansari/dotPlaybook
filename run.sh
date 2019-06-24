@@ -148,6 +148,7 @@ apt_install () {
 install_system_dependencies_ubuntu () {
     apt_install python3
     apt_install python3-pip
+    apt_install python3-setuptools
     apt_install python3-apt
 
     if (test "$(lsb_release -c | awk '{print $2}')" = "bionic")
