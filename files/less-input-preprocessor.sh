@@ -19,6 +19,19 @@ is_small_enough () {
     test $(du -k "$filename" | cut -f1) -lt 1048576
 }
 
+resolve_symlink () {
+    if exists realpath ; then
+        realpath "$1"
+
+    elif test "$(uname)" = "Darwin" ; then
+        stat -f '%Y' "$1"
+
+    else
+        echo "$1"
+
+    fi
+}
+
 ## https://stackoverflow.com/a/3352015/5285712
 trim() {
     local var="$*"
@@ -29,7 +42,7 @@ trim() {
     echo "$var"
 }
 
-filename="$1"
+filename=$(resolve_symlink "$1")
 
 # Delegate to lesspipe of the name contains ':'
 if test "${filename#*:}" != "$filename" ; then
