@@ -63,6 +63,7 @@
     - import_tasks: tasks/gtk.yaml
     - import_tasks: tasks/xmonad.yaml
     - import_tasks: tasks/rofi.yaml
+    - import_tasks: tasks/alfred.yaml
     - import_tasks: tasks/spectacle.yaml
     - import_tasks: tasks/karabiner.yaml
     - import_tasks: tasks/notifications.yaml

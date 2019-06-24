@@ -1,0 +1,6 @@
+- name: Install Alfred
+  homebrew_cask: name=alfred
+  when: ansible_distribution == "MacOSX"
+  tags:
+    - alfred
+    - provision
