@@ -18,6 +18,14 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "description": "Use Alt + 1 to switch to iTerm",
                                 "from": {
                                     "key_code": "1",
@@ -29,19 +37,10 @@
                                             "any"
                                         ]
                                     }
-
                                 },
                                 "to": [
                                     {
                                         "shell_command": "open -a iTerm.app"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
-                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -51,6 +50,14 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "description": "Use Alt + 2 to switch to iTerm",
                                 "from": {
                                     "key_code": "2",
@@ -62,19 +69,10 @@
                                             "any"
                                         ]
                                     }
-
                                 },
                                 "to": [
                                     {
                                         "shell_command": "open -a Emacs.app"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
-                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -84,6 +82,14 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "description": "Use Alt + 3 to switch to Firefox",
                                 "from": {
                                     "key_code": "3",
@@ -95,19 +101,10 @@
                                             "any"
                                         ]
                                     }
-
                                 },
                                 "to": [
                                     {
                                         "shell_command": "open -a Firefox.app"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
-                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -117,6 +114,14 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "description": "Use Alt + 4 to switch to Slack",
                                 "from": {
                                     "key_code": "4",
@@ -128,19 +133,10 @@
                                             "any"
                                         ]
                                     }
-
                                 },
                                 "to": [
                                     {
                                         "shell_command": "open -a Slack.app"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
-                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -150,6 +146,14 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "description": "Use Alt + l to switch to Slack",
                                 "from": {
                                     "key_code": "l",
@@ -161,19 +165,10 @@
                                             "any"
                                         ]
                                     }
-
                                 },
                                 "to": [
                                     {
                                         "shell_command": "/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
-                                        ]
                                     }
                                 ],
                                 "type": "basic"
