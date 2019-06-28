@@ -154,12 +154,13 @@
                                         "type": "frontmost_application_unless"
                                     }
                                 ],
-                                "description": "Use Option + l to lock screen",
+                                "description": "Use Command + Shift + l to lock screen",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
                                         "mandatory": [
-                                            "left_option"
+                                            "left_command",
+                                            "left_shift"
                                         ],
                                         "optional": [
                                             "any"
@@ -184,17 +185,9 @@
                                             "^org\\.virtualbox\\.app\\.VirtualBoxVM$"
                                         ],
                                         "type": "frontmost_application_unless"
-                                    },
-                                    {
-                                        "type": "device_unless",
-                                        "identifiers": [
-                                            {
-                                                "vendor_id": 1452
-                                            }
-                                        ]
                                     }
                                 ],
-                                "description": "Use Command + s to start Alfred",
+                                "description": "Use Option + s to start Alfred",
                                 "from": {
                                     "key_code": "s",
                                     "modifiers": {
