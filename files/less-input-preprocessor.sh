@@ -1,6 +1,7 @@
 #!/bin/sh
+
 exists () {
-    which "$1" &> /dev/null ;
+    which "$1" 1>/dev/null 2>&1 ;
 }
 
 is_binary () {
@@ -20,7 +21,10 @@ is_small_enough () {
 }
 
 resolve_symlink () {
-    if exists realpath ; then
+    if ! [ -e "$1" ] ; then
+        echo "$1"
+
+    elif exists realpath ; then
         realpath "$1"
 
     elif test "$(uname)" = "Darwin" ; then
