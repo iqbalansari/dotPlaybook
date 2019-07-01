@@ -21,6 +21,8 @@
             - gnome-applets-data
             - gnome-panel
             - indicator-applet
+            - indicator-datetime
+            - indicator-power
             - indicator-applet-session
             - indicator-applet-complete
             - gnome-session-xmonad
