@@ -17,6 +17,7 @@ import XMonad.Layout
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Accordion
 import XMonad.Layout.Tabbed
+import XMonad.Layout.Magnifier
 
 -- Smarter borders
 import XMonad.Layout.NoBorders
@@ -155,6 +156,10 @@ myKeys = [
   ]
   ++
   [
+    ((myModMask .|. controlMask, xK_m ), sendMessage Toggle)
+  ]
+  ++
+  [
     ((myModMask, xK_v ),       killAllOtherCopies), -- Make focused window always visible
     ((myModMask .|. shiftMask, xK_v ),  windows copyToAll) -- Toggle window state back
   ]
@@ -164,7 +169,7 @@ myMouseBindings = [
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayouts = dwmStyle shrinkText defaultTheme (smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full)))
+myLayouts = magnifierOff (dwmStyle shrinkText defaultTheme (smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full))))
   where
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
