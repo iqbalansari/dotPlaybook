@@ -13,6 +13,8 @@
             - autoconf
             - automake
             - pkg-config
+            - flex
+            - bison
             - libpango1.0-dev
             - libpangocairo-1.0-0
             - libcairo2-dev
