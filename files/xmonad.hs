@@ -30,6 +30,8 @@ import XMonad.ManageHook
 -- Additional helpers for manage hooks
 import XMonad.Hooks.ManageHelpers
 
+import XMonad.Hooks.FadeInactive
+
 import qualified XMonad.StackSet as W
 
 import qualified Data.Map as M
@@ -224,17 +226,22 @@ instance UrgencyHook LibNotifyUrgencyHook where
 
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
+myFadeHook :: X ()
+myFadeHook = fadeInactiveLogHook fadeAmount
+    where fadeAmount = 0.9
+
 main = do
   path       <- getEnv "PATH"
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {
-         modMask    = myModMask,
-         terminal   = myTerminal,
-         workspaces = myWorkspaces,
-         layoutHook = myLayouts,
-         manageHook = myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
+         modMask     = myModMask,
+         terminal    = myTerminal,
+         workspaces  = myWorkspaces,
+         layoutHook  = myLayouts,
+         logHook     = myFadeHook,
+         manageHook  = myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
