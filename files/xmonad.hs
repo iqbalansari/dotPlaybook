@@ -5,6 +5,7 @@ import XMonad.Config.Gnome
 
 -- For cycling workspaces
 import XMonad.Actions.CycleWS
+import XMonad.Actions.GroupNavigation
 
 -- Easier configuration of keybindings
 import XMonad.Util.EZConfig
@@ -118,6 +119,7 @@ myKeys = [
   ((myModMask,                               xK_f), sendMessage ToggleStruts),
   ((myModMask,                               xK_c), spawn "~/.xmonad/org-capture"),
   ((myModMask,                               xK_s), spawn "rofi -show window"),
+  ((mod1Mask,                                xK_Tab), spawn "rofi -show window"),
   ((myModMask,                               xK_u), focusUrgent),
 
   -- Use alt + ctrl + t to launch terminal
