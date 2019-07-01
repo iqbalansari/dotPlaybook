@@ -12,7 +12,7 @@
       dconf: key='/org/gnome/desktop/interface/gtk-theme' value="'Arc-Dark'"
 
     - name: Change icon theme to Humanity-Dark
-      dconf: key='/org/gnome/desktop/interface/icon-theme' value="'Humanity-Dark'"
+      dconf: key='/org/gnome/desktop/interface/icon-theme' value="'ubuntu-mono-dark'"
 
     - name: Change key theme to Emacs
       dconf: key='/org/gnome/desktop/interface/gtk-key-theme' value="'Emacs'"
