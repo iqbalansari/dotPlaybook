@@ -5,4 +5,5 @@
   <property name="theme" type="string" value="CustomGTKTheme"/>
   <property name="initial-opacity" type="double" value="0.900000"/>
   <property name="do-slideout" type="bool" value="true"/>
+  <property name="expire-timeout" type="int" value="20"/>
 </channel>
