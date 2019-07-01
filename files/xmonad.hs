@@ -155,13 +155,6 @@ myKeys = [
   ]
   ++
   [
-    ((myModMask .|. shiftMask, xK_j),   mirrorSensitive L),
-    ((myModMask .|. shiftMask, xK_k),   mirrorSensitive R),
-    ((myModMask .|. shiftMask, xK_l),   mirrorSensitive D),
-    ((myModMask .|. shiftMask, xK_h),   mirrorSensitive U)
-  ]
-  ++
-  [
     ((myModMask, xK_v ),       killAllOtherCopies), -- Make focused window always visible
     ((myModMask .|. shiftMask, xK_v ),  windows copyToAll) -- Toggle window state back
   ]
