@@ -1,3 +1,5 @@
+import Control.Concurrent
+
 import XMonad
 
 -- Integration with gnome
@@ -232,11 +234,17 @@ instance UrgencyHook LibNotifyUrgencyHook where
 myFadeHook :: X ()
 myFadeHook = fadeInactiveLogHook 0.9
 
+wallpaperBackgroundTask :: IO ()
+wallpaperBackgroundTask = do
+  setRandomWallpaper ["/usr/share/backgrounds/", "$HOME/.backgrounds"]
+  threadDelay (30 * 60 * 1000000)
+  wallpaperBackgroundTask
+
 main = do
   path       <- getEnv "PATH"
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
-  setRandomWallpaper ["/usr/share/backgrounds/", "$HOME/.backgrounds"]
+  forkIO wallpaperBackgroundTask
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {
          modMask     = myModMask,
