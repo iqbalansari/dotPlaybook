@@ -12,6 +12,9 @@ import XMonad.Util.EZConfig
 
 import XMonad.Prompt
 
+-- Displaying wallpaper
+import XMonad.Wallpaper
+
 -- The layouts
 import XMonad.Layout
 import XMonad.Layout.ResizableTile
@@ -233,6 +236,7 @@ main = do
   path       <- getEnv "PATH"
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
+  setRandomWallpaper ["/usr/share/backgrounds/", "$HOME/.backgrounds"]
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {
          modMask     = myModMask,
