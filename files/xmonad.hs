@@ -176,7 +176,7 @@ myMouseBindings = [
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayouts = magnifierOff (dwmStyle shrinkText defaultTheme (smartBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full))))
+myLayouts = magnifierOff (dwmStyle shrinkText defaultTheme (noBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full))))
   where
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
