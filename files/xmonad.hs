@@ -227,8 +227,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 myFadeHook :: X ()
-myFadeHook = fadeInactiveLogHook fadeAmount
-    where fadeAmount = 0.9
+myFadeHook = fadeInactiveLogHook 0.9
 
 main = do
   path       <- getEnv "PATH"
@@ -240,7 +239,7 @@ main = do
          terminal    = myTerminal,
          workspaces  = myWorkspaces,
          layoutHook  = myLayouts,
-         logHook     = myFadeHook,
+         logHook     = myFadeHook <+> logHook gnomeConfig,
          manageHook  = myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> startupHook gnomeConfig
          }
