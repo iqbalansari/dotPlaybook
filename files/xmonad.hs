@@ -214,7 +214,9 @@ myManagementHooks = composeOne [
   className                =? "Firefox"                                           -?> doShift "web",
   className                =? "Slack"                                             -?> doShift "chat",
   className                =? "Eog"                                               -?> doCenterFloat,
-  className                =? "Zenity"                                            -?> doCenterFloat
+  className                =? "Zenity"                                            -?> doCenterFloat,
+  className                =? "pritunl"                                           -?> doCenterFloat,
+  className                =? "Gnome-calculator"                                  -?> doCenterFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
