@@ -36,8 +36,8 @@ import XMonad.ManageHook
 
 -- Additional helpers for manage hooks
 import XMonad.Hooks.ManageHelpers
-
 import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.SetWMName
 import XMonad.Hooks.Place
 
 import qualified XMonad.StackSet as W
@@ -269,8 +269,8 @@ main = do
          workspaces  = myWorkspaces,
          layoutHook  = myLayouts,
          logHook     = myFadeHook <+> logHook gnomeConfig,
-         startupHook = spawn "~/.xmonad/startup-hook" >> startupHook gnomeConfig
          manageHook  = placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
+         startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
      `additionalMouseBindings` myMouseBindings
