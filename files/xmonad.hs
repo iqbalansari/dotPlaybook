@@ -76,7 +76,7 @@ myModMask = mod4Mask
 
 myTerminal = "gnome-terminal"
 
-myWorkspaces = ["shell", "emacs", "web", "chat", "vm"] ++ map show [6..9]
+myWorkspaces = ["terminal", "emacs", "web", "chat", "vm"] ++ map show [6..9]
 
 numPadKeys =
   [
@@ -136,7 +136,7 @@ myKeys = [
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 
   -- Use alt + ctrl + t to launch terminal
-  ((mod1Mask .|. controlMask, xK_t), spawn myTerminal),
+  ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
 
     -- Use alt + ctrl + l to lock screen
   ((mod1Mask .|. controlMask, xK_l), spawn "gnome-screensaver-command -l"),
@@ -182,8 +182,8 @@ myKeys = [
   ]
   ++
   [
-    ((myModMask, xK_v ),       killAllOtherCopies), -- Make focused window always visible
-    ((myModMask .|. shiftMask, xK_v ),  windows copyToAll) -- Toggle window state back
+    ((myModMask, xK_v),                       windows copyToAll), -- Toggle window state back
+    ((myModMask .|. shiftMask, xK_v ),       killAllOtherCopies)  -- Make focused window always visible
   ]
 
 myMouseBindings = [
