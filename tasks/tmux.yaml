@@ -40,7 +40,7 @@
       git: repo=https://github.com/tmux-plugins/tpm.git accept_hostkey=yes dest=~/.tmux/plugins/tpm version={{tpm_version}}
 
     - name: Symlink .tmux.conf
-      install_dot: src=files/tmux.conf dest=~/.tmux.conf
+      install_dot: src=files/tmux/tmux.conf dest=~/.tmux.conf
 
     # See https://github.com/jonas/tig/issues/559#issuecomment-320762376
     - name: Check if terminfo for 'screen' is installed

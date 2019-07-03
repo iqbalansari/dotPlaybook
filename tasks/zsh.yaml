@@ -76,10 +76,10 @@
       file: path=~/.sandboxrc state=touch
 
     - name: Symlink zshrc
-      install_dot: src=files/zshrc dest=~/.zshrc
+      install_dot: src=files/zsh/zshrc dest=~/.zshrc
 
     - name: Symlink zshenv
-      install_dot: src=files/zshenv dest=~/.zshenv
+      install_dot: src=files/zsh/zshenv dest=~/.zshenv
 
     - name: Record modification time for ~/.zshrc
       stat: path=~/.zshrc

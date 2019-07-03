@@ -16,10 +16,10 @@
       - name: Configure xfce4-notifyd
         block:
           - name: Symlink custom gtk theme
-            install_dot: src=files/CustomGTKTheme dest=~/.themes/CustomGTKTheme
+            install_dot: src=files/gtk/theme dest=~/.themes/CustomGTKTheme
 
           - name: Symlink custom config for xfce4-notifyd
-            install_dot: src=files/xfce-perchannel-xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml
+            install_dot: src=files/xfce-notifyd/xfce-perchannel-xml dest=~/.config/xfce4/xfconf/xfce-perchannel-xml
 
           - name: Reload xfconf
             shell: pkill -HUP xfconfd

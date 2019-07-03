@@ -116,7 +116,7 @@
       command: mkdir ~/.config creates=~/.config
 
     - name: Symlink artha config file
-      install_dot: src=files/artha.conf dest=~/.config/artha.conf
+      install_dot: src=files/artha/artha.conf dest=~/.config/artha.conf
 
     - name: Install mtp-tools
       apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800

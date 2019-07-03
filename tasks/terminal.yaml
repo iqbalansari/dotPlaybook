@@ -34,7 +34,7 @@
       homebrew_cask: name=iterm2
 
     - name: Symlink custom profile
-      install_dot: src=files/iterm-custom-profile.json dest='~/Library/Application Support/iTerm2/DynamicProfiles/iterm-custom-profile.json'
+      install_dot: src=files/iterm/iterm-custom-profile.json dest='~/Library/Application Support/iTerm2/DynamicProfiles/iterm-custom-profile.json'
 
     - name: Make the custom profile the default profile
       osx_defaults: domain=com.googlecode.iterm2 key='Default Bookmark Guid' type=string value='D159F1F0-2D8A-4766-9603-E487527862EC'

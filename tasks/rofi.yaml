@@ -55,7 +55,7 @@
           file: path=~/Xresources.d state=directory
 
         - name: Copy Rofi config
-          install_dot: src=files/rofi dest=~/Xresources.d/rofi
+          install_dot: src=files/rofi/rofi dest=~/Xresources.d/rofi
 
         - name: Include rofi config in ~/.Xresources
           lineinfile: dest=~/.Xresources line='#include "Xresources.d/rofi"' create=yes state=present

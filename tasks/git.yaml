@@ -91,7 +91,7 @@
     - provision
 
 - name: Symlink Git config file
-  install_dot: src=files/gitconfig dest=~/.gitconfig
+  install_dot: src=files/git/gitconfig dest=~/.gitconfig
   tags:
     - git
     - configuration

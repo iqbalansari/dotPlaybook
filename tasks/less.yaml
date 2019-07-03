@@ -39,7 +39,7 @@
     - provision
 
 - name: Install custom less input preprocessor
-  install_dot: src=files/less-input-preprocessor.sh path=~/.local/bin/less-input-preprocessor.sh
+  install_dot: src=files/less/less-input-preprocessor.sh path=~/.local/bin/less-input-preprocessor.sh
   tags:
     - less
     - configuration
