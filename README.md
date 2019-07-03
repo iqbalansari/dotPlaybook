@@ -6,14 +6,14 @@ ansible) and run the playbook. Below is a one-liner I use to get things up and
 running
 
 ```
-curl https://github.com/iqbalansari/dotPlaybook/raw/master/run.sh | sh
+curl -L https://github.com/iqbalansari/dotPlaybook/raw/master/run.sh | sh
 ```
 
 To setup dotfiles in a directory other than the default `~/.playbook` directory
 pass the path to the desired directory as `-d` argument
 
 ```
-curl https://github.com/iqbalansari/dotPlaybook/raw/master/run.sh | sh -s -- -d=/desired/path
+curl -L https://github.com/iqbalansari/dotPlaybook/raw/master/run.sh | sh -s -- -d=/desired/path
 ```
 
 `sudo` password is needed by the ansible playbook to install packages using
