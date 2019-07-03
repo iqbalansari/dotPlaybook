@@ -90,7 +90,7 @@ def main():
             else:
                 shutil.copy2(dest, backup_dest)
 
-            if os.path.isdir(dest):
+            if os.path.isdir(dest) and not os.path.islink(dest):
                 shutil.rmtree(dest)
 
             else:
