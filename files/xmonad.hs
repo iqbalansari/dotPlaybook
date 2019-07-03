@@ -9,6 +9,8 @@ import XMonad.Config.Gnome
 import XMonad.Actions.CycleWS
 import XMonad.Actions.GroupNavigation
 
+import XMonad.Actions.WithAll
+
 -- Easier configuration of keybindings
 import XMonad.Util.EZConfig
 
@@ -36,6 +38,7 @@ import XMonad.ManageHook
 import XMonad.Hooks.ManageHelpers
 
 import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.Place
 
 import qualified XMonad.StackSet as W
 
@@ -67,6 +70,7 @@ import Graphics.X11.ExtraTypes.XF86
 
 import System.Directory
 import System.Environment
+import XMonad.Actions.FloatKeys
 
 myModMask = mod4Mask
 
@@ -129,6 +133,7 @@ myKeys = [
   ((myModMask,                               xK_s), spawn "rofi -show window"),
   ((mod1Mask,                                xK_Tab), spawn "rofi -show window"),
   ((myModMask,                               xK_u), focusUrgent),
+  ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 
   -- Use alt + ctrl + t to launch terminal
   ((mod1Mask .|. controlMask, xK_t), spawn myTerminal),
@@ -139,6 +144,16 @@ myKeys = [
   -- Display a message using notify-send after reloading XMonad
   ((myModMask,                 xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
   ((myModMask .|. shiftMask,   xK_q), spawn "gnome-session-quit")
+  ]
+  ++
+  [
+    -- Bindings for working with floating windows
+    ((myModMask,                             xK_Left), withFocused (keysMoveWindow (-15, 0))),
+    ((myModMask,                             xK_Right), withFocused (keysMoveWindow (15, 0))),
+    ((myModMask,                             xK_Up), withFocused (keysMoveWindow (0, -15))),
+    ((myModMask,                             xK_Down), withFocused (keysMoveWindow (0, 15))),
+    ((myModMask,                             xK_equal), withFocused (keysResizeWindow (10, 10) (0.5, 0.5))),
+    ((myModMask,                             xK_minus), withFocused (keysResizeWindow (-10, -10) (0.5, 0.5)))
   ]
   ++
   [
@@ -254,9 +269,12 @@ main = do
          workspaces  = myWorkspaces,
          layoutHook  = myLayouts,
          logHook     = myFadeHook <+> logHook gnomeConfig,
-         manageHook  = myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> startupHook gnomeConfig
+         manageHook  = placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          }
      `additionalKeys` myKeys
      `additionalMouseBindings` myMouseBindings
      )
+
+  where
+    placementPreferCenter = withGaps (16,0,16,0) (smart (0.5,0.5))
