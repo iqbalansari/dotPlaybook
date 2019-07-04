@@ -11,6 +11,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.GroupNavigation
 
 import XMonad.Actions.WithAll
+import XMonad.Actions.GroupNavigation
 
 -- Easier configuration of keybindings
 import XMonad.Util.EZConfig
@@ -98,6 +99,14 @@ scratchPadName = "NSP"
 nonScratchPad :: WSType
 nonScratchPad = WSIs $ return ((scratchPadName /=) . W.tag)
 
+getCurrentClassName = withWindowSet $ \set -> case  W.peek set of
+  Just window -> runQuery className window
+  Nothing -> return ""
+
+switchOtherWindow direction = do
+  name <- getCurrentClassName
+  nextMatch direction (className =? name)
+
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,                               xK_n), moveTo Next nonScratchPad),
@@ -115,6 +124,10 @@ myKeys = [
   ((mod1Mask,                                xK_Tab), spawn "rofi -show window"),
   ((myModMask,                               xK_u), focusUrgent),
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
+
+  -- Quickly switch to another window of the same application
+  ((myModMask,                               xK_grave), switchOtherWindow Forward),
+  ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
 
   ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
   ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
