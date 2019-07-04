@@ -207,7 +207,7 @@ myKeys = [
 
 myMouseBindings = [
   -- Resize a window using any of the corners
-  ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
+  ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
 myLayouts = magnifierOff $ dwmStyle shrinkText defaultTheme $ noBorders $ avoidStruts $ layout
