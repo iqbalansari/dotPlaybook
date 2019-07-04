@@ -232,7 +232,8 @@ myManagementHooks = composeOne [
   className                =? "Eog"                                               -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
   className                =? "pritunl"                                           -?> doCenterFloat,
-  className                =? "Gnome-calculator"                                  -?> doCenterFloat
+  className                =? "Gnome-calculator"                                  -?> doCenterFloat,
+  className                =? "zoom"                                              -?> doCenterFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
@@ -250,9 +251,9 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 myFadeHook :: X ()
-myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not isNotification) 0.9
+myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.9
 
-isNotification = className =? "Xfce4-notifyd"
+shouldNotFade = className =? "Xfce4-notifyd" <||> className =? "zoom"
 
 wallpaperBackgroundTask :: IO ()
 wallpaperBackgroundTask = do
