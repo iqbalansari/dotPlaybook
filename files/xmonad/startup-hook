@@ -44,7 +44,6 @@ start_if_not_running gnome-terminal-server gnome-terminal
 start_if_not_running emacs
 start_if_not_running firefox
 start_if_not_running artha 
-start_if_not_running xcompmgr
 
 if [ -f ~/.xmonad/startup-hook-private ]
 then
