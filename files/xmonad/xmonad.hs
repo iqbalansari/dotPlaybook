@@ -88,42 +88,10 @@ numPadKeys =
     xK_KP_Home, xK_KP_Up, xK_KP_Page_Up
   ]
 
--- Credits: http://permalink.gmane.org/gmane.comp.lang.haskell.xmonad/14812
--- From: http://lpaste.net/8970541507006169088
-flipD :: Direction2D -> Direction2D
-flipD x = case x of -- possibly wrong
-            R -> U
-            L -> D
-            U -> L
-            D -> R
-
-changingDir :: (Direction2D -> Direction2D) -- ^ transform direction
-      -> [(Direction2D, X ())]
-      -> Direction2D -> X ()
-changingDir t assocs cmd = Data.Foldable.sequence_ $ lookup (t cmd) assocs
-
-withCurLayout :: (String -> r) -> X r
-withCurLayout f = gets (f . description . W.layout . W.workspace . W.current . windowset)
-
-isMirrored :: X Bool
-isMirrored = withCurLayout (\x -> "Mirror" `isInfixOf` x :: Bool)
-
-mirrorSensitive :: Direction2D -> X ()
-mirrorSensitive d = do
-    b <- isMirrored
-    changingDir (if b then flipD else id) mirrorSensitiveAssocs d
-
-mirrorSensitiveAssocs :: [(Direction2D, X ())]
-mirrorSensitiveAssocs =
-    [(L, sendMessage Shrink),
-     (R, sendMessage Expand),
-     (D, sendMessage MirrorShrink),
-     (U, sendMessage MirrorExpand)]
-
 myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
-    NS "terminal" "gnome-terminal -e 'tmux new-session' --class terminal" (className =? "terminal") defaultFloating,
-    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") defaultFloating
+    NS "terminal" "gnome-terminal -e 'tmux new-session' --class terminal" (className =? "terminal") doCenterFloat,
+    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat
     ]
   where
     name = stringProperty "WM_NAME"
@@ -210,9 +178,9 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayouts = magnifierOff $ dwmStyle shrinkText defaultTheme $ noBorders $ avoidStruts $ layout
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ noBorders $ avoidStruts $ standardLayout
   where
-    layout = tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full
+    standardLayout = tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full
 
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
@@ -232,7 +200,6 @@ myManagementHooks = composeOne [
   isFullscreen                                                                    -?> doFullFloat,
   name                     =? "Hangouts"                                          -?> doShift "chat",
   name                     =? "*Org Capture*"                                     -?> doCenterFloat,
-  name                     =? "*Notes*"                                           -?> doCenterFloat,
   name                     =? "Open Files"                                        -?> doCenterFloat,
   name                     =? "File Upload"                                       -?> doCenterFloat,
   name                     =? "Save As"                                           -?> doCenterFloat,
@@ -298,7 +265,7 @@ main = do
          modMask     = myModMask,
          terminal    = myTerminal,
          workspaces  = myWorkspaces,
-         layoutHook  = myLayouts,
+         layoutHook  = myLayoutHook,
          logHook     = myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
          manageHook  = namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
