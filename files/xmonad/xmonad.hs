@@ -77,7 +77,7 @@ myModMask = mod4Mask
 
 myTerminal = "gnome-terminal"
 
-myWorkspaces = ["terminal", "emacs", "web", "chat", "vm"] ++ map show [6..9]
+myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ map show [7..9]
 
 numPadKeys =
   [
@@ -232,11 +232,13 @@ myManagementHooks = composeOne [
   className                =? "Eog"                                               -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
   className                =? "pritunl"                                           -?> doCenterFloat,
-  className                =? "Gnome-calculator"                                  -?> doCenterFloat,
-  className                =? "zoom"                                              -?> doCenterFloat
+  className                =? "Gnome-calculator"                                  -?> doCenterFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
+  ] <+> composeAll [
+  className =? "zoom" --> doShift "zoom",
+  className =? "zoom" --> doCenterFloat
   ]
 
 -- Notify about activity in a window using notify send
