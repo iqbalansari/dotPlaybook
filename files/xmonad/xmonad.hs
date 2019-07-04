@@ -253,7 +253,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 myFadeHook :: X ()
-myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.9
+myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.8
 
 shouldNotFade = className =? "Xfce4-notifyd" <||> className =? "zoom"
 
