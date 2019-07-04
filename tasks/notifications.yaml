@@ -28,11 +28,11 @@
             ignore_errors: yes
 
         tags:
-          - configure
+          - configuration
 
   when: ansible_distribution == "Ubuntu"
   tags:
-    - xfce4-notifyd
+    - xfce-notifyd
     - notifications
 
 - name: Install terminal-notifier on macOS
