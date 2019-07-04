@@ -1,4 +1,5 @@
 import Control.Concurrent
+import Control.Monad
 
 import XMonad
 
@@ -249,7 +250,9 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 myFadeHook :: X ()
-myFadeHook = fadeInactiveLogHook 0.9
+myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not isNotification) 0.9
+
+isNotification = className =? "Xfce4-notifyd"
 
 wallpaperBackgroundTask :: IO ()
 wallpaperBackgroundTask = do
