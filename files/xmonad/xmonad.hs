@@ -52,6 +52,7 @@ import qualified XMonad.Actions.FlexibleResize as Flex
 import XMonad.Hooks.UrgencyHook
 import XMonad.Util.NamedWindows
 import XMonad.Util.Run
+import XMonad.Util.NamedScratchpad
 
 -- Needed for mirror sensitive resizing
 import XMonad.Util.Types
@@ -118,6 +119,14 @@ mirrorSensitiveAssocs =
      (D, sendMessage MirrorShrink),
      (U, sendMessage MirrorExpand)]
 
+scratchpads = [
+-- run htop in xterm, find it by title, use default floating window placement
+    NS "terminal" "gnome-terminal -e 'tmux new-session' --class terminal" (className =? "terminal") defaultFloating,
+    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") defaultFloating
+    ]
+  where
+    name = stringProperty "WM_NAME"
+
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,                               xK_n), nextWS),
@@ -135,6 +144,9 @@ myKeys = [
   ((mod1Mask,                                xK_Tab), spawn "rofi -show window"),
   ((myModMask,                               xK_u), focusUrgent),
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
+
+  ((myModMask .|. controlMask,               xK_t), namedScratchpadAction scratchpads "terminal"),
+  ((myModMask .|. controlMask,               xK_n), namedScratchpadAction scratchpads "notes"),
 
   -- Use alt + ctrl + t to launch terminal
   ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
@@ -210,11 +222,12 @@ myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
   isDialog                                                                        -?> doFloat,
   isFullscreen                                                                    -?> doFullFloat,
-  stringProperty "WM_NAME" =? "Hangouts"                                          -?> doShift "chat",
-  stringProperty "WM_NAME" =? "*Org Capture*"                                     -?> doCenterFloat,
-  stringProperty "WM_NAME" =? "Open Files"                                        -?> doCenterFloat,
-  stringProperty "WM_NAME" =? "File Upload"                                       -?> doCenterFloat,
-  stringProperty "WM_NAME" =? "Save As"                                           -?> doCenterFloat,
+  name                     =? "Hangouts"                                          -?> doShift "chat",
+  name                     =? "*Org Capture*"                                     -?> doCenterFloat,
+  name                     =? "*Notes*"                                           -?> doCenterFloat,
+  name                     =? "Open Files"                                        -?> doCenterFloat,
+  name                     =? "File Upload"                                       -?> doCenterFloat,
+  name                     =? "Save As"                                           -?> doCenterFloat,
   resource                 =? "file_properties"                                   -?> doCenterFloat,
   resource                 =? "Dialog"                                            -?> doFloat,
   resource                 =? "update-manager"                                    -?> doFloat,
@@ -240,6 +253,8 @@ myManagementHooks = composeOne [
   className =? "zoom" --> doShift "zoom",
   className =? "zoom" --> doCenterFloat
   ]
+  where
+    name = stringProperty "WM_NAME"
 
 -- Notify about activity in a window using notify send
 -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
