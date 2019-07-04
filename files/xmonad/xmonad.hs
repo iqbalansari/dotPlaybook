@@ -120,7 +120,7 @@ mirrorSensitiveAssocs =
      (D, sendMessage MirrorShrink),
      (U, sendMessage MirrorExpand)]
 
-scratchpads = [
+myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
     NS "terminal" "gnome-terminal -e 'tmux new-session' --class terminal" (className =? "terminal") defaultFloating,
     NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") defaultFloating
@@ -151,8 +151,8 @@ myKeys = [
   ((myModMask,                               xK_u), focusUrgent),
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 
-  ((myModMask .|. controlMask,               xK_t), namedScratchpadAction scratchpads "terminal"),
-  ((myModMask .|. controlMask,               xK_n), namedScratchpadAction scratchpads "notes"),
+  ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
+  ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
 
   -- Use alt + ctrl + t to launch terminal
   ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
@@ -210,8 +210,10 @@ myMouseBindings = [
   ((myModMask, button3), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayouts = magnifierOff (dwmStyle shrinkText defaultTheme (noBorders(avoidStruts(tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full))))
+myLayouts = magnifierOff $ dwmStyle shrinkText defaultTheme $ noBorders $ avoidStruts $ layout
   where
+    layout = tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full
+
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
 
