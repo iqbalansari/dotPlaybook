@@ -28,7 +28,7 @@
             - indicator-applet-complete
             - gnome-session-xmonad
             - alsa-utils
-            - xcompmgr
+            - compton
           become: yes
 
         - name: Install ghc libraries required for configuring XMonad
