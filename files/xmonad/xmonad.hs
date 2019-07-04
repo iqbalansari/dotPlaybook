@@ -27,9 +27,6 @@ import XMonad.Layout.Accordion
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Magnifier
 
--- Smarter borders
-import XMonad.Layout.NoBorders
-
 -- avoid struts
 import XMonad.Hooks.ManageDocks
 
@@ -178,7 +175,7 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ noBorders $ avoidStruts $ standardLayout
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ standardLayout
   where
     standardLayout = tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full
 
@@ -265,6 +262,7 @@ main = do
          modMask     = myModMask,
          terminal    = myTerminal,
          workspaces  = myWorkspaces,
+         borderWidth = 0,
          layoutHook  = myLayoutHook,
          logHook     = myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
          manageHook  = namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
