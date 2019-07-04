@@ -40,6 +40,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.Place
+import XMonad.Hooks.EwmhDesktops
 
 import qualified XMonad.StackSet as W
 
@@ -127,17 +128,22 @@ scratchpads = [
   where
     name = stringProperty "WM_NAME"
 
+scratchPadName = "NSP"
+
+nonScratchPad :: WSType
+nonScratchPad = WSIs $ return ((scratchPadName /=) . W.tag)
+
 myKeys = [
   -- Switching / moving windows to workspace
-  ((myModMask,                               xK_n), nextWS),
-  ((myModMask,                               xK_p), prevWS),
-  ((myModMask .|. shiftMask,                 xK_n), shiftToNext),
-  ((myModMask .|. shiftMask,                 xK_p), shiftToPrev),
+  ((myModMask,                               xK_n), moveTo Next nonScratchPad),
+  ((myModMask,                               xK_p), moveTo Prev nonScratchPad),
+  ((myModMask .|. shiftMask,                 xK_n), shiftTo Next nonScratchPad),
+  ((myModMask .|. shiftMask,                 xK_p), shiftTo Prev nonScratchPad),
   ((myModMask,                               xK_o), windows W.focusDown),
   ((myModMask .|. shiftMask,                 xK_o), windows W.swapDown),
-  ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftToNext >> nextWS),
-  ((myModMask .|. controlMask .|. shiftMask, xK_p), shiftToPrev >> prevWS),
-  ((myModMask,                               xK_b), toggleWS),
+  ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
+  ((myModMask .|. controlMask .|. shiftMask, xK_p), shiftTo Prev nonScratchPad >> moveTo Prev nonScratchPad),
+  ((myModMask,                               xK_b), toggleWS' [scratchPadName]),
   ((myModMask,                               xK_f), sendMessage ToggleStruts),
   ((myModMask,                               xK_c), spawn "~/.xmonad/org-capture"),
   ((myModMask,                               xK_s), spawn "rofi -show window"),
@@ -291,8 +297,8 @@ main = do
          terminal    = myTerminal,
          workspaces  = myWorkspaces,
          layoutHook  = myLayouts,
-         logHook     = myFadeHook <+> logHook gnomeConfig,
-         manageHook  = placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
+         logHook     = myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
+         manageHook  = namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
