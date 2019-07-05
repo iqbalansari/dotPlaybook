@@ -7,10 +7,4 @@ rofi.key-window       : Super+s
 rofi.sidebar-mode     : true
 rofi.levenshtein-sort : true
 rofi.glob             : true
-
-! Mostly similar to Tomorrow night theme, but with a lighter background
-rofi.color-normal     : #373b41, #c5c8c6, #373b41, #373b41, #ffffff
-rofi.color-urgent     : #373b41, #cc6666, #373b41, #373b41, #cc6666
-rofi.color-active     : #373b41, #81a2be, #373b41, #373b41, #81a2be
-rofi.color-window     : #373b41, #373b41, #1d1f21
-rofi.separator-style  : solid
+rofi.theme            : ~/.config/rofi/theme.rasi

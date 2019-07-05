@@ -57,6 +57,8 @@
         - name: Symlink Rofi config
           install_dot: src=files/rofi/config dest=~/.config/rofi/config
 
+        - name: Symlink Rofi theme
+          install_dot: src=files/rofi/theme.rasi dest=~/.config/rofi/theme.rasi
       tags:
         - rofi
         - configuration

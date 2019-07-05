@@ -1,0 +1,76 @@
+* {
+    background-color:  rgba(0,0,0,0);
+
+    black: #000000;
+    lightblack: #1d1f21;
+    red: #cc6666;
+    orange: #e8ae5b;
+    green: #86af80;
+    blue: #81a2be;
+    white: #c5c8c6;
+
+    text-color:  @white;
+}
+
+window {
+    background-color: @lightblack;
+    border: 1px solid;
+    border-color: @black;
+    children: [ mainbox ];
+}
+
+mainbox {
+	spacing:  0em;
+	padding: 0px;
+	width: 200px;
+	expand: true;
+    children: [ inputbar, message, listview, sidebar ];
+}
+
+inputbar {
+    text-color: @green;
+    padding: 8px;
+    children: [ prompt, textbox-prompt-colon, entry ];
+}
+
+prompt {
+    text-color: @orange;
+}
+
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    text-color: @orange;
+    margin:     0px 0.3em 0em 0em ;
+}
+
+listview {
+    padding: 0em 1em;
+    dynamic: false;
+}
+
+element {
+    padding: 0.2em 0em;
+}
+
+element selected normal {
+    text-color: @blue;
+}
+
+element active {
+    text-color: @green;
+}
+
+element urgent {
+    text-color: @red;
+}
+
+sidebar {
+    border: 2px 0px 0px 0px;
+    background-color: @lightblack;
+    padding: 10px;
+}
+
+button.selected {
+    text-color: @green;
+}
