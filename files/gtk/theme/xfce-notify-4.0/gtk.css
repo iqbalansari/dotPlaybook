@@ -1,17 +1,18 @@
 #XfceNotifyWindow {
-    background-color: #373b41;
-    border-radius: 5px;
+    background-color: #1d1f21;
+    border-radius: 5px; 
     border: none;
-    padding: 20px;
 }
 
 #XfceNotifyWindow label,
 #XfceNotifyWindow image {
-    color: #ffffff;
+    color: #c5c8c6;
 }
+
 
 #XfceNotifyWindow label#summary {
     font-weight: Bold;
+    margin-bottom: 10px;
 }
 
 #XfceNotifyWindow button {
