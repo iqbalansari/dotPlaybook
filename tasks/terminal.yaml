@@ -1,22 +1,18 @@
 - name: Configure Gnome Terminal
   block:
-    - name: Install gconftool
-      apt: pkg=gconf2 update_cache=yes cache_valid_time=604800 install_recommends=no
+    - name: Ensure dconf is installed
+      apt: pkg=dconf-cli update_cache=yes cache_valid_time=604800 install_recommends=no
       become: yes
 
-    - name: Checkout base16-gnome-terminal project
-      git: repo=https://github.com/chriskempson/base16-gnome-terminal dest=~/software/base16-gnome-terminal depth=1 accept_hostkey=yes update=yes
-      register: base16_gnome_terminal
-
     - name: Install color theme
-      command: ~/software/base16-gnome-terminal/base16-tomorrow.dark.sh
+      command: files/gnome-terminal/base16-tomorrow-dark-theme.sh
       changed_when: no
 
     - name: Set installed theme as the default theme
-      gconftool2: key=/apps/gnome-terminal/global/default_profile value=base-16-tomorrow-dark value_type=string state=present
+      dconf: key=/org/gnome/terminal/legacy/profiles:/default value='"62f4ee90-5743-478c-af66-c64366b4a452"' state=present
 
     - name: Change font
-      gconftool2: key=/apps/gnome-terminal/profiles/base-16-tomorrow-dark/font value="Source Code Pro Regular 10" value_type=string state=present
+      dconf: key=/org/gnome/terminal/legacy/profiles:/:62f4ee90-5743-478c-af66-c64366b4a452/font value='"Source Code Pro Regular 10"' state=present
 
     - name: Do not show the menubar
       dconf: key=/org/gnome/terminal/legacy/default-show-menubar value=false
