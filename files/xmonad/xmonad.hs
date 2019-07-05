@@ -24,8 +24,6 @@ import XMonad.Wallpaper
 -- The layouts
 import XMonad.Layout
 import XMonad.Layout.ResizableTile
-import XMonad.Layout.Accordion
-import XMonad.Layout.Tabbed
 import XMonad.Layout.Magnifier
 
 -- avoid struts
@@ -88,7 +86,8 @@ numPadKeys =
 
 myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
-    NS "terminal" "gnome-terminal --name terminal -- tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "Terminal") doCenterFloat,
+    NS "terminal" "gnome-terminal --class scratch-terminal -e 'tmux set-option -g set-titles off \\; new-session -A -s scratch'" (className =? "scratch-terminal") doCenterFloat,
+    NS "htop" "gnome-terminal --class scratch-htop -- htop" (className =? "scratch-htop") doCenterFloat,
     NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat
     ]
   where
@@ -132,6 +131,7 @@ myKeys = [
   ((myModMask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
 
   ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
+  ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
   ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
 
   -- Use alt + ctrl + t to launch terminal
@@ -192,7 +192,7 @@ myMouseBindings = [
 
 myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ standardLayout
   where
-    standardLayout = tiled ||| Mirror tiled ||| Accordion ||| simpleTabbed ||| Full
+    standardLayout = tiled ||| Mirror tiled ||| Full
 
     -- default tiling algorithm partitions the screen into two panes
     tiled   = ResizableTall nmaster delta ratio []
