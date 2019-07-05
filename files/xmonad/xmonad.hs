@@ -88,7 +88,7 @@ numPadKeys =
 
 myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
-    NS "terminal" "gnome-terminal --name terminal -- tmux set-option -g set-titles off \\; new-session" (name =? "Terminal") doCenterFloat,
+    NS "terminal" "gnome-terminal --name terminal -- tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "Terminal") doCenterFloat,
     NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat
     ]
   where
