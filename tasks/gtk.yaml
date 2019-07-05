@@ -1,15 +1,7 @@
 - name: Configure GTK
   block:
-    - name: Add Noobslab themes PPA
-      apt_repository: repo='ppa:noobslab/themes' update_cache=yes state=present
-      become: yes
-
-    - name: Install latest Arc theme
-      apt: pkg=arc-theme update_cache=yes cache_valid_time=604800 state=present install_recommends=no
-      become: yes
-
     - name: Change the theme to Adwaita-Dark
-      dconf: key='/org/gnome/desktop/interface/gtk-theme' value="'Arc-Dark'"
+      dconf: key='/org/gnome/desktop/interface/gtk-theme' value="'Adwaita-dark'"
 
     - name: Change icon theme to Humanity-Dark
       dconf: key='/org/gnome/desktop/interface/icon-theme' value="'ubuntu-mono-dark'"
