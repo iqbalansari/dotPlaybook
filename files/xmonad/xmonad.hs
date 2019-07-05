@@ -128,6 +128,8 @@ myKeys = [
   -- Quickly switch to another window of the same application
   ((myModMask,                               xK_grave), switchOtherWindow Forward),
   ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
+  ((myModMask,                               xK_Tab), nextMatch Backward (return True)),
+  ((myModMask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
 
   ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
   ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
@@ -277,7 +279,7 @@ main = do
          workspaces  = myWorkspaces,
          borderWidth = 0,
          layoutHook  = myLayoutHook,
-         logHook     = myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
+         logHook     = historyHook <+> myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
          manageHook  = namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
