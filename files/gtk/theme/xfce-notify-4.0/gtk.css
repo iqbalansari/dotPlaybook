@@ -12,19 +12,19 @@
 
 #XfceNotifyWindow label#summary {
     font-weight: Bold;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 #XfceNotifyWindow button {
     border-style: none;
     background-image: none;
-    background-color: #202020;
+    background-color: #404040;
     color: #ffffff;
 }
 
 #XfceNotifyWindow button:hover {
     border-style: none;
     background-image: none;
-    background-color: #404040;
+    background-color: #5b5a5a;
     color: #ffffff;
 }
