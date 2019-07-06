@@ -67,7 +67,7 @@
             changed_when: no
 
           - name: Install Dunst
-            shell: cd ~/software/dunst && make PREFIX=$HOME/.local SERVICEDIR_DBUS=$HOME/.local/share/dbus-1/services SERVICEDIR_SYSTEMD=~/.config/systemd/user install
+            shell: cd ~/software/dunst && make PREFIX=$HOME/.local SERVICEDIR_DBUS=$HOME/.local/share/dbus-1/services SERVICEDIR_SYSTEMD=~/.config/systemd/user install dunstify && cp dunstify $HOME/.local/bin/dunstify
             when: dunst_checkout is changed or dunst_installed.rc == 1
 
         tags:
@@ -76,7 +76,7 @@
       - name: Configure dunst
         block:
           - name: Symlink dunst config
-            install_dot: src=files/dunst/config dest=~/.config/dunst/dunstrc
+            install_dot: src=files/dunst/dunstrc dest=~/.config/dunst/dunstrc
 
         tags:
           - configuration
