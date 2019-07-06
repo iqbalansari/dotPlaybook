@@ -1,9 +1,5 @@
 - name: Configure Gnome Terminal
   block:
-    - name: Ensure dconf is installed
-      apt: pkg=dconf-cli update_cache=yes cache_valid_time=604800 install_recommends=no
-      become: yes
-
     - name: Install color theme
       command: files/gnome-terminal/base16-tomorrow-dark-theme.sh
       changed_when: no

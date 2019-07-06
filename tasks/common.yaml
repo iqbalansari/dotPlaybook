@@ -81,7 +81,16 @@
   tags:
     - always
 
-- name: Install psutil, dependency for dconf module
-  pip: name=psutil virtualenv={{playbook_dir}}/.venv
+- name: Install dconf
+  block:
+    - name: Install psutil, dependency for dconf module
+      pip: name=psutil virtualenv={{playbook_dir}}/.venv
+
+    - name: Ensure dconf is installed
+      apt: pkg=dconf-cli update_cache=yes cache_valid_time=604800 install_recommends=no
+      become: yes
+
+  when: ansible_distribution == 'Ubuntu'
+
   tags:
     - always
