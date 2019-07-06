@@ -21,7 +21,6 @@
             - gnome-applets-data
             - gnome-panel
             - indicator-applet
-            - indicator-notifications
             - indicator-datetime
             - indicator-power
             - indicator-applet-session
