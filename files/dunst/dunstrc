@@ -30,7 +30,7 @@
 
     ### Text ###
 
-    font = Monospace 6
+    font = Ubuntu 6
 
     line_height = 1
 
@@ -125,12 +125,12 @@
 [urgency_low]
     background = "#222222"
     foreground = "#888888"
-    timeout = 10
+    timeout = 20
 
 [urgency_normal]
     background = "#1d1f21"
     foreground = "#c5c8c6"
-    timeout = 10
+    timeout = 20
 
 [urgency_critical]
     background = "#900000"
