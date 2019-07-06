@@ -9,6 +9,12 @@
     - name: Change key theme to Emacs
       dconf: key='/org/gnome/desktop/interface/gtk-key-theme' value="'Emacs'"
 
+    - name: Symlink gtk2 configuration
+      install_dot: src=files/gtk/gtkrc-2.0 dest=~/.gtkrc-2.0
+
+    - name: Symlink gtk3 configuration
+      install_dot: src=files/gtk/gtk-3.0 dest=~/.config/gtk-3.0
+
   when: ansible_distribution == "Ubuntu" and lookup('env', 'DISPLAY')
 
   tags:
