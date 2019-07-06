@@ -47,7 +47,7 @@ prepend_directories CPATH "$HOME/.local/include/" ":"
 prepend_directories LIBRARY_PATH "$HOME/.local/lib" "$HOME/.local/lib64"
 prepend_directories LD_RUN_PATH "$HOME/.local/lib" "$HOME/.local/lib64"
 prepend_directories LD_LIBRARY_PATH "$HOME/.local/lib" "$HOME/.local/lib64" ":"
-prepend_directories MANPATH "$HOME/.local/share/man"
+prepend_directories MANPATH "$HOME/.local/share/man" ":"
 prepend_directories XDG_DATA_DIRS "$HOME/.local/share"
 
 if which wmctrl &> /dev/null ; then
