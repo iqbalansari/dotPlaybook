@@ -32,7 +32,58 @@
 
   when: ansible_distribution == "Ubuntu"
   tags:
+    - never
     - xfce-notifyd
+    - notifications
+
+- name: Install and configure Dunst on Ubuntu
+  block:
+      - name: Install Dunst
+        block:
+          - name: Install dependencies for Dunst
+            apt: pkg={{item}} update_cache=yes cache_valid_time=604800 install_recommends=no
+            with_items:
+              - libdbus-1-dev
+              - libx11-dev
+              - libxinerama-dev
+              - libxrandr-dev
+              - libxss-dev
+              - libglib2.0-dev
+              - libpango1.0-dev
+              - libgtk-3-dev
+              - libxdg-basedir-dev
+              - libnotify-dev
+            become: yes
+
+          - name: Get Dunst source code
+            git: repo=https://github.com/dunst-project/dunst.git accept_hostkey=yes dest=~/software/dunst version={{dunst_version}}
+            register: dunst_checkout
+
+          - name: Check if dunst is installed
+            shell: which dunst
+            register: dunst_installed
+            ignore_errors: yes
+            failed_when: no
+            changed_when: no
+
+          - name: Install Dunst
+            shell: cd ~/software/dunst && make PREFIX=~/.local SERVICEDIR_DBUS=~/.local/share/dbus-1/services SERVICEDIR_SYSTEMD=~/.config/systemd/user install
+            when: dunst_checkout is changed or dunst_installed.rc == 1
+
+        tags:
+          - provision
+
+      - name: Configure dunst
+        block:
+          - name: Symlink dunst config
+            install_dot: src=files/dunst/config dest=~/.config/dunst/dunstrc
+
+        tags:
+          - configuration
+
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - dunst
     - notifications
 
 - name: Install terminal-notifier on macOS

@@ -26,6 +26,8 @@
 
     rofi_version: "1.5.2"
 
+    dunst_version: "v1.4.1"
+
     sandboxd_version: 675745c8a8104da28fd07ff0c8b5f965c1316406
 
     zgen_version: "111f9e3"
