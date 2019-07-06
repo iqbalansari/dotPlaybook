@@ -67,7 +67,7 @@
             changed_when: no
 
           - name: Install Dunst
-            shell: cd ~/software/dunst && make PREFIX=~/.local SERVICEDIR_DBUS=~/.local/share/dbus-1/services SERVICEDIR_SYSTEMD=~/.config/systemd/user install
+            shell: cd ~/software/dunst && make PREFIX=$HOME/.local SERVICEDIR_DBUS=$HOME/.local/share/dbus-1/services SERVICEDIR_SYSTEMD=~/.config/systemd/user install
             when: dunst_checkout is changed or dunst_installed.rc == 1
 
         tags:
