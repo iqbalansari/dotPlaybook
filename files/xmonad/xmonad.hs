@@ -270,6 +270,7 @@ main = do
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
   spawn "xrdb -merge ~/.Xresources"
+  spawn "gnome-panel"
   spawn "compton -c -C"
   forkIO wallpaperBackgroundTask
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (

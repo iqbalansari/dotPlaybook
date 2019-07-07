@@ -14,7 +14,7 @@
           apt: pkg=xmonad update_cache=yes cache_valid_time=604800 install_recommends=no state=present
           become: yes
 
-        - name: Install gnome-session-xmonad, gnome-panel, gnome-applets, amixer and xcompmgr
+        - name: Install gnome-session-xmonad, gnome-panel, gnome-applets, amixer and compton
           apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
           with_items:
             - gnome-applets
@@ -23,6 +23,7 @@
             - indicator-applet
             - indicator-datetime
             - indicator-power
+            - indicator-session
             - indicator-applet-session
             - indicator-applet-complete
             - gnome-session-xmonad
@@ -36,6 +37,10 @@
             - libghc-xmonad-dev
             - libghc-xmonad-contrib-dev
             - libghc-xmonad-wallpaper-dev
+          become: yes
+
+        - name: Replace the default gnome-xmonad.session file with a custom version without gnome-flashback
+          copy: src=files/xmonad/gnome-xmonad.session dest=/usr/share/gnome-session/sessions/gnome-xmonad.session
           become: yes
 
       tags:
