@@ -3,7 +3,7 @@
 
     # The geometry of the window:
     #   [{width}]x{height}[+/-{x}+/-{y}]
-    geometry = "300x5-30-20"
+    geometry = "500x5-30-20"
 
     indicate_hidden = yes
 
@@ -136,3 +136,7 @@
     background = "#900000"
     foreground = "#ffffff"
     frame_color = "#ff0000"
+
+[handle_empty_body]
+    body = ""
+    format = "<b>%s</b>\n\n<small><i>%a</i></small>"
