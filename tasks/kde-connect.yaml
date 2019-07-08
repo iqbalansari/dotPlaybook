@@ -1,0 +1,23 @@
+- name: Configure kdeconnect
+  block:
+     - name: Add signing key for WebUpd8 Indicator KDE Connect  PPA
+       apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x7B2C3B0889BF5709A105D03AC2518248EEA14886 state=present
+       become: yes
+
+     - name: Add PPA for WebUpd8 Indicator KDE Connect
+       apt_repository: repo='ppa:webupd8team/indicator-kdeconnect' update_cache=yes state=present
+       become: yes
+
+     - name: Install kdeconnect, indicator-kdeconnect and python-nautilus
+       apt: pkg={{item}} update_cache=yes cache_valid_time=604800 install_recommends=no state=present
+       with_items:
+         - kdeconnect
+         - indicator-kdeconnect
+         - python-nautilus
+       become: yes
+
+  when: ansible_distribution == 'Ubuntu' and lookup('env', 'DISPLAY')
+
+  tags:
+    - kdeconnect
+    - provision

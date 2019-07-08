@@ -271,6 +271,7 @@ main = do
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
   spawn "xrdb -merge ~/.Xresources"
   spawn "gnome-panel"
+  spawn "indicator-kdeconnect"
   spawn "compton -c -C"
   spawn "dunst"
   forkIO wallpaperBackgroundTask
