@@ -9,6 +9,9 @@
     - name: Create directory to hold locally installed software
       file: dest=~/.local/bin state=directory
 
+    - name: Create directory to hold locally installed applications
+      file: dest=~/.local/share/applications state=directory
+
     - name: Create the Application directory on macOS
       file: dest=~/Applications state=directory
       when: ansible_distribution == 'MacOSX'
@@ -30,6 +33,7 @@
         - autoconf
         - automake
         - pkg-config
+        - patch
       become: yes
 
     - name: Install gcc
