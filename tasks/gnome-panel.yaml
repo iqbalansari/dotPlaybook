@@ -13,6 +13,8 @@
         - indicator-applet-session
         - indicator-applet-complete
 
+      become: yes
+
       tags:
         - provision
 
