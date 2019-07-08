@@ -92,6 +92,7 @@
   when: ansible_distribution == "Ubuntu"
   tags:
     - dunst
+    - xmonad
     - notifications
 
 - name: Install terminal-notifier on macOS

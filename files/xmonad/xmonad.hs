@@ -272,6 +272,7 @@ main = do
   spawn "xrdb -merge ~/.Xresources"
   spawn "gnome-panel"
   spawn "compton -c -C"
+  spawn "dunst"
   forkIO wallpaperBackgroundTask
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {
