@@ -1,0 +1,7 @@
+- name: Install terminal-notifier on macOS
+  homebrew: name=terminal-notifier
+  when: ansible_distribution == 'MacOSX'
+  tags:
+    - terminal-notifier
+    - notifications
+    - provision

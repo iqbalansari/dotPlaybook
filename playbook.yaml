@@ -61,10 +61,12 @@
     - import_tasks: tasks/emacs.yaml
     - import_tasks: tasks/git.yaml
     - import_tasks: tasks/browsers.yaml
-    - import_tasks: tasks/terminal.yaml
+    - import_tasks: tasks/gnome-terminal.yaml
+    - import_tasks: tasks/iterm2.yaml
     - import_tasks: tasks/gtk.yaml
     - import_tasks: tasks/rofi.yaml
-    - import_tasks: tasks/notifications.yaml
+    - import_tasks: tasks/dunst.yaml
+    - import_tasks: tasks/terminal-notifier.yaml
     - import_tasks: tasks/xmonad.yaml
     - import_tasks: tasks/alfred.yaml
     - import_tasks: tasks/spectacle.yaml

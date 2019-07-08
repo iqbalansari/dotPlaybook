@@ -1,0 +1,22 @@
+- name: Install and configure iTerm
+  block:
+    - name: Install iTerm2
+      homebrew_cask: name=iterm2
+      tags:
+        - provision
+
+    - name: Symlink custom profile
+      install_dot: src=files/iterm/iterm-custom-profile.json dest='~/Library/Application Support/iTerm2/DynamicProfiles/iterm-custom-profile.json'
+      tags:
+        - configuration
+
+    - name: Make the custom profile the default profile
+      osx_defaults: domain=com.googlecode.iterm2 key='Default Bookmark Guid' type=string value='D159F1F0-2D8A-4766-9603-E487527862EC'
+      tags:
+        - configuration
+
+  when: ansible_distribution == 'MacOSX'
+
+  tags:
+    - iterm2
+    - terminal
