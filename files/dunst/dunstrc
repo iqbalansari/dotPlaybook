@@ -3,7 +3,7 @@
 
     # The geometry of the window:
     #   [{width}]x{height}[+/-{x}+/-{y}]
-    geometry = "500x5-30-20"
+    geometry = "500x5-30-40"
 
     indicate_hidden = yes
 
