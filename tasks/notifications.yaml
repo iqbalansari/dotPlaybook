@@ -86,9 +86,6 @@
         tags:
           - configuration
 
-      - name: Install dunst desktop application
-        copy: src=files/dunst/dunst.desktop dest=~/.local/share/applications/dunst.desktop
-
   when: ansible_distribution == "Ubuntu"
   tags:
     - dunst
