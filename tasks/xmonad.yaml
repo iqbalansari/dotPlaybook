@@ -17,15 +17,6 @@
         - name: Install gnome-session-xmonad, gnome-panel, gnome-applets, amixer and compton
           apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
           with_items:
-            - gnome-applets
-            - gnome-applets-data
-            - gnome-panel
-            - indicator-applet
-            - indicator-datetime
-            - indicator-power
-            - indicator-session
-            - indicator-applet-session
-            - indicator-applet-complete
             - gnome-session-xmonad
             - alsa-utils
             - compton
