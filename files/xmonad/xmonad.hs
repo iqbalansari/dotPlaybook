@@ -88,7 +88,8 @@ myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
     NS "terminal" "gnome-terminal --class scratch-terminal -e 'tmux set-option -g set-titles off \\; new-session -A -s scratch'" (className =? "scratch-terminal") doCenterFloat,
     NS "htop" "gnome-terminal --class scratch-htop -- htop" (className =? "scratch-htop") doCenterFloat,
-    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat
+    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat,
+    NS "zeal" "zeal" (className =? "Zeal") doCenterFloat
     ]
   where
     name = stringProperty "WM_NAME"
@@ -133,6 +134,7 @@ myKeys = [
   ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
   ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
   ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
+  ((myModMask .|. controlMask,               xK_z), namedScratchpadAction myScratchpads "zeal"),
 
   -- Use alt + ctrl + t to launch terminal
   ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
