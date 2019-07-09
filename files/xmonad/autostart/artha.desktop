@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Artha
+GenericName=Thesaurus
+Comment=Handy thesaurus based on WordNet
+Icon=artha
+TryExec=artha
+Exec=artha
+StartupNotify=true
+Terminal=false

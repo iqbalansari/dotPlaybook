@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=GNU Emacs
+GenericName=Text Editor
+Comment=GNU Emacs Text Editor
+Icon=emacs
+TryExec=emacs
+Exec=emacs
+StartupWMClass=Emacs
+Terminal=false

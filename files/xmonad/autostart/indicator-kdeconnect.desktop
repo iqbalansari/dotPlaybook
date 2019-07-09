@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=KDE Connect Indicator
+GenericName=Indicator for KDE Connect
+Comment=An awesome system for Desktop-Phone continuity.
+Icon=kdeconnect
+TryExec=indicator-kdeconnect
+Exec=indicator-kdeconnect
+Terminal=false

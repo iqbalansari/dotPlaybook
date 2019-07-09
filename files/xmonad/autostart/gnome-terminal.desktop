@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=GNOME Terminal
+GenericName=Terminal
+Comment=Use the command line
+Icon=utilities-terminal
+TryExec=gnome-terminal
+Exec=gnome-terminal
+OnlyShowIn=GNOME;Unity;GNOME-Flashback;

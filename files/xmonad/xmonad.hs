@@ -269,11 +269,11 @@ main = do
   path       <- getEnv "PATH"
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
+
+  -- Merge Xresources file, need to this since LightDM merges
+  -- Xresources using -nocpp option [https://bugs.launchpad.net/lightdm/+bug/1084885]
+  -- thus any preprocessor statements are ignored
   spawn "xrdb -merge ~/.Xresources"
-  spawn "gnome-panel"
-  spawn "indicator-kdeconnect"
-  spawn "compton -c -C"
-  spawn "dunst"
   forkIO wallpaperBackgroundTask
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {

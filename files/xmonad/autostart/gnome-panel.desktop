@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=GNOME Panel
+GenericName=Desktop Panel
+Comment=Launch other applications and provide various utilities to manage windows, show the time, etc.
+Icon=gnome-panel
+TryExec=gnome-panel
+Exec=gnome-panel
+OnlyShowIn=GNOME-Flashback;
+Terminal=false

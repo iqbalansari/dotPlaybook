@@ -59,6 +59,11 @@
           when: unity_greeter_dir.stat.exists
           become: yes
 
+        - name: Configure the applications to autostart
+          install_dot: src={{ item }} dest=~/.config/autostart/{{ item | basename }}
+          with_fileglob:
+            - '{{ playbook_dir }}/files/xmonad/autostart/*.desktop'
+
         - name: Create directory to hold XMonad config
           command: mkdir ~/.xmonad creates=~/.xmonad
 

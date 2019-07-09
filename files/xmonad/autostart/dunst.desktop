@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Dunst
+GenericName=Notification daemon
+Comment=A lightweight notification daemon
+Icon=dunst
+TryExec=dunst
+Exec=dunst
+OnlyShowIn=GNOME-Flashback;
+Terminal=false
+NoDisplay=true

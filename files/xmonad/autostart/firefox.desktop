@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Mozilla Firefox
+GenericName=Web Browser
+Comment=Browse the World Wide Web
+Icon=firefox
+TryExec=firefox
+Exec=firefox
+Terminal=false
+StartupWMClass=Firefox
