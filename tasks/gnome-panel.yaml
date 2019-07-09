@@ -19,17 +19,7 @@
         - provision
 
     - name: Configure gnome-panel to match Tomorrow Night theme
-      dconf: key=/org/gnome/gnome-panel/{{item.key}} value={{item.value}} state=present
-      with_dict:
-        layout/toplevels/top-panel/size: 28
-        layout/toplevels/top-panel/theme/custom-bg-color: 'true'
-        layout/toplevels/top-panel/theme/custom-fg-color: 'true'
-        layout/toplevels/top-panel/theme/bg-color: "'rgb(29,31,33)'"
-        layout/toplevels/top-panel/theme/fg-color: "'rgb(197,200,198)'"
-        layout/toplevels/bottom-panel/theme/custom-bg-color: 'true'
-        layout/toplevels/bottom-panel/theme/custom-fg-color: 'true'
-        layout/toplevels/bottom-panel/theme/bg-color: "'rgb(29,31,33)'"
-        layout/toplevels/bottom-panel/theme/fg-color: "'rgb(197,200,198)'"
+      shell: cat {{ playbook_dir }}/files/gnome-panel/gnome-panel.conf | dconf load /org/gnome/gnome-panel/
 
       tags:
         - configuration
