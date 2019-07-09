@@ -39,6 +39,12 @@
 
     - name: Configure XMonad
       block:
+        - name: Configure Nautilus to to hide trash and home icons
+          dconf: key=/org/gnome/nautilus/desktop/{{item.key}} value={{item.value}} state=present
+          with_dict:
+            home-icon-visible: 'false'
+            trash-icon-visible: 'false'
+
         - name: Check if unity-greeter folder exists
           stat: path=/usr/share/unity-greeter
           register: unity_greeter_dir
