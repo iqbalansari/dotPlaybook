@@ -114,13 +114,13 @@
     per_monitor_dpi = true
 
 [shortcuts]
-    close = ctrl+space
+    close = mod4+semicolon
 
-    close_all = ctrl+shift+space
+    close_all = mod4+shift+semicolon
 
-    history = ctrl+grave
+    history = mod4+apostrophe
 
-    context = ctrl+shift+period
+    context = mod4+bracketleft
 
 [urgency_low]
     background = "#222222"
