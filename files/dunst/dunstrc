@@ -140,3 +140,7 @@
 [handle_empty_body]
     body = ""
     format = "<b>%s</b>\n\n<small><i>%a</i></small>"
+
+[do_not_remember_otp_notications]
+    summary = "*OTP*"
+    history_ignore = yes
