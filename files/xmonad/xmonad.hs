@@ -25,6 +25,7 @@ import XMonad.Wallpaper
 import XMonad.Layout
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Magnifier
+import XMonad.Layout.Spacing
 
 -- avoid struts
 import XMonad.Hooks.ManageDocks
@@ -197,7 +198,7 @@ myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ s
     standardLayout = tiled ||| Mirror tiled ||| Full
 
     -- default tiling algorithm partitions the screen into two panes
-    tiled   = ResizableTall nmaster delta ratio []
+    tiled   = smartSpacing 5 $ ResizableTall nmaster delta ratio []
 
     -- The default number of windows in the master pane
     nmaster = 1
