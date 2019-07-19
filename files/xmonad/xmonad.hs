@@ -221,7 +221,6 @@ myManagementHooks = composeOne [
   resource                 =? "file_properties"                                   -?> doCenterFloat,
   resource                 =? "Dialog"                                            -?> doFloat,
   resource                 =? "update-manager"                                    -?> doFloat,
-  className                =? "Xfce4-notifyd"                                     -?> doIgnore,
   className                =? "gnome-font-viewer"                                 -?> doCenterFloat,
   className                =? "Gcr-prompter"                                      -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
@@ -235,7 +234,8 @@ myManagementHooks = composeOne [
   className                =? "Eog"                                               -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
   className                =? "pritunl"                                           -?> doCenterFloat,
-  className                =? "Gnome-calculator"                                  -?> doCenterFloat
+  className                =? "Gnome-calculator"                                  -?> doCenterFloat,
+  isNotification                                                                  -?> doIgnore
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
@@ -244,7 +244,8 @@ myManagementHooks = composeOne [
   className =? "zoom" --> doCenterFloat
   ]
   where
-    name = stringProperty "WM_NAME"
+    name       = stringProperty "WM_NAME"
+    isNotification = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION"
 
 -- Notify about activity in a window using notify send
 -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
@@ -260,7 +261,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
 myFadeHook :: X ()
 myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.8
 
-shouldNotFade = className =? "Xfce4-notifyd" <||> className =? "zoom"
+shouldNotFade = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION" <||> className =? "zoom"
 
 wallpaperBackgroundTask :: IO ()
 wallpaperBackgroundTask = do
