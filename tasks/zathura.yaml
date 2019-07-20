@@ -1,0 +1,23 @@
+- name: Install and configure Zathura
+  block:
+    - name: Install Zathura
+      apt: pkg=zathura update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+
+      with_items:
+        - zathura
+        - zathura-djvu
+        - zathura-pdf-poppler
+        - zathura-ps
+
+      become: yes
+
+      tags:
+        - provision
+
+    - name: Symlink Zathura configuration
+      install_dot: src=files/zathura/zathurarc dest=~/.config/zathura/zathurarc
+
+  when: lookup('env', 'DISPLAY') and ansible_distribution == "Ubuntu"
+
+  tags:
+    - zathura

@@ -70,6 +70,7 @@
     - import_tasks: tasks/gnome-panel.yaml
     - import_tasks: tasks/kde-connect.yaml
     - import_tasks: tasks/xmonad.yaml
+    - import_tasks: tasks/zathura.yaml
     - import_tasks: tasks/alfred.yaml
     - import_tasks: tasks/spectacle.yaml
     - import_tasks: tasks/karabiner.yaml
