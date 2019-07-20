@@ -10,6 +10,8 @@
     white: #c5c8c6;
 
     text-color:  @white;
+
+    font: "Source Code Pro Regular 12";
 }
 
 window {

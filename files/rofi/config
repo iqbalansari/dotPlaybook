@@ -1,4 +1,4 @@
-rofi.modi             : window,run,file:~/software/rofi/Examples/rofi-file-browser.sh,ssh
+rofi.modi             : window,run,file:~/software/rofi/Examples/rofi-file-browser.sh
 rofi.kb-mode-next     : Super+Right,Control+Tab,Super+s
 rofi.kb-mode-previous : Super+Left,Control+Shift+Tab,Super+Shift+s
 rofi.kb-row-up        : Up,Control+p,Alt+Shift+Tab
