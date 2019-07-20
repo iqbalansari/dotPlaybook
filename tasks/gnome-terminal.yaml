@@ -7,8 +7,11 @@
     - name: Set installed theme as the default theme
       dconf: key=/org/gnome/terminal/legacy/profiles:/default value='"62f4ee90-5743-478c-af66-c64366b4a452"' state=present
 
-    - name: Change font
-      dconf: key=/org/gnome/terminal/legacy/profiles:/:62f4ee90-5743-478c-af66-c64366b4a452/font value='"Source Code Pro Regular 10"' state=present
+    - name: Do not use system font
+      dconf: key=/org/gnome/terminal/legacy/profiles:/:62f4ee90-5743-478c-af66-c64366b4a452/use-system-font value=false state=present
+
+    - name: Use source code pro as the font
+      dconf: key=/org/gnome/terminal/legacy/profiles:/:62f4ee90-5743-478c-af66-c64366b4a452/font value='"Source Code Pro Regular 12"' state=present
 
     - name: Do not show the menubar
       dconf: key=/org/gnome/terminal/legacy/default-show-menubar value=false
