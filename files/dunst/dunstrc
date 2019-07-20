@@ -30,7 +30,7 @@
 
     ### Text ###
 
-    font = Ubuntu 8
+    font = Ubuntu 12
 
     line_height = 1
 
@@ -111,7 +111,7 @@
     mouse_right_click = close_all
 
 [experimental]
-    per_monitor_dpi = true
+    per_monitor_dpi = false
 
 [shortcuts]
     close = mod4+semicolon
