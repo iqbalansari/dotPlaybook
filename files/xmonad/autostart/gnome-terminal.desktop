@@ -7,3 +7,4 @@ Icon=utilities-terminal
 TryExec=gnome-terminal
 Exec=gnome-terminal
 OnlyShowIn=GNOME;Unity;GNOME-Flashback;
+Hidden=true

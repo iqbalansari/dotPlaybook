@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=St
+GenericName=Terminal
+Comment=Simple Terminal
+Icon=utilities-terminal
+TryExec=st
+Exec=st
+StartupWMClass=St
