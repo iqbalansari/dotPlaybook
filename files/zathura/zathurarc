@@ -42,6 +42,7 @@ set render-loading-fg "#86af80"
 set highlight-color "#8abeb7"
 set highlight-active-color "#f0c674"
 
+set recolor-keephue true
 set recolor-lightcolor "#1d1f21"
 set recolor-darkcolor "#c5c8c6"
 
@@ -49,3 +50,7 @@ set font "Source Code Pro Regular 12"
 
 # Display hidden directories while opening files
 set show-hidden true
+
+set continuous-hist-save true
+
+map [index] q toggle_index
