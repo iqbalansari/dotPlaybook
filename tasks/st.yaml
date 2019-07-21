@@ -23,6 +23,9 @@
           shell: cd ~/software/st && make PREFIX=~/.local install
           when: st_checkout is changed or not st_installation.stat.exists
 
+        - name: Install desktop file for st
+          install_dot: src='{{ playbook_dir }}/files/apps/st.desktop' dest=~/.local/share/applications/st.desktop
+
       tags:
         - provision
 
