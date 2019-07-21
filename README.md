@@ -1,5 +1,5 @@
 Ansible playbook to install the software I use regularly. The playbook works on
-Ubuntu 18.04, Ubuntu 16.04, macOS Mojave and High Seirra.
+Ubuntu 18.04, macOS Mojave and High Seirra.
 
 The `run.sh` script in the repo is used to install the dependencies (git,
 ansible) and run the playbook. Below is a one-liner I use to get things up and
