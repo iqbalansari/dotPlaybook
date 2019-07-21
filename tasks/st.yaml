@@ -37,6 +37,11 @@
         - name: Load st Xresources file from main Xresources file
           lineinfile: path=~/.Xresources line='#include "Xresources.d/st"' state=present create=yes
 
+          # Ubuntu runs xrdb with -nocpp option as such the include st resource file is ignored
+          # the following forces reloading of the Xresources file
+        - name: Ensure xrdb is run with -merge flag on startup
+          lineinfile: path=~/.xsessionrc line='xrdb -merge .Xresources' state=present create=yes
+
         - name: Reload Xresources
           shell: xrdb -merge ~/Xresources.d/st
           changed_when: no
