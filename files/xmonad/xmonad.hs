@@ -74,7 +74,7 @@ import XMonad.Actions.FloatKeys
 
 myModMask = mod4Mask
 
-myTerminal = "gnome-terminal"
+myTerminal = "st"
 
 myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ map show [7..9]
 
@@ -87,8 +87,8 @@ numPadKeys =
 
 myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
-    NS "terminal" "gnome-terminal --class scratch-terminal -e 'tmux set-option -g set-titles off \\; new-session -A -s scratch'" (className =? "scratch-terminal") doCenterFloat,
-    NS "htop" "gnome-terminal --class scratch-htop -- htop" (className =? "scratch-htop") doCenterFloat,
+    NS "terminal" "st -t scratch-terminal -e tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "scratch-terminal") doCenterFloat,
+    NS "htop" "st -t scratch-htop -e htop" (name =? "scratch-htop") doCenterFloat,
     NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat,
     NS "zeal" "zeal" (className =? "Zeal") doCenterFloat
     ]
