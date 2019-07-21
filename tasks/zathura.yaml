@@ -1,15 +1,24 @@
 - name: Install and configure Zathura
   block:
-    - name: Install Zathura
-      apt: pkg=zathura update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+    - name: Install latest version of Zathura
+      block:
+        - name: Add signing key for Pavel's Zathura PPA
+          apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xAEC82AC78B65E182 state=present
+          become: yes
 
-      with_items:
-        - zathura
-        - zathura-djvu
-        - zathura-pdf-poppler
-        - zathura-ps
+        - name: Add Pavel's PPA for Zathura
+          apt_repository: repo='ppa:spvkgn/zathura' update_cache=yes state=present
+          become: yes
 
-      become: yes
+        - name: Install Zathura
+          apt: pkg=zathura update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+          with_items:
+            - zathura
+            - zathura-djvu
+            - zathura-pdf-poppler
+            - zathura-ps
+
+          become: yes
 
       tags:
         - provision
