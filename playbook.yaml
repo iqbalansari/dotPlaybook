@@ -81,4 +81,5 @@
     - import_tasks: tasks/mail.yaml
     - import_tasks: tasks/vagrant.yaml
     - import_tasks: tasks/virtualbox.yaml
+    - import_tasks: tasks/artha.yaml
     - import_tasks: tasks/misc.yaml

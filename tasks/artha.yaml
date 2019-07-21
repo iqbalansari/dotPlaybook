@@ -1,0 +1,17 @@
+- name: Install and configure Artha
+  block:
+    - name: Install Artha
+      apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+      become: yes
+      tags:
+        - provision
+
+    - name: Symlink artha config file
+      install_dot: src=files/artha/artha.conf dest=~/.config/artha.conf
+      tags:
+        - configuration
+
+  when: lookup('env', 'DISPLAY') and ansible_distribution == "Ubuntu"
+
+  tags:
+    - artha

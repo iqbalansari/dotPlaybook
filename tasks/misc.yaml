@@ -108,13 +108,6 @@
       shell: cd ~/software/jq-{{jq_version}} && ./configure --prefix=$HOME/.local/ && make install
       when: jq_source is changed or jq_installed.rc == 1
 
-    - name: Install Artha
-      apt: pkg=artha update_cache=yes cache_valid_time=604800 state=present install_recommends=no
-      become: yes
-
-    - name: Symlink artha config file
-      install_dot: src=files/artha/artha.conf dest=~/.config/artha.conf
-
     - name: Install mtp-tools
       apt: pkg={{ item }} update_cache=yes install_recommends=no cache_valid_time=604800
       with_items:
