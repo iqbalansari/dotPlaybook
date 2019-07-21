@@ -2,8 +2,8 @@ rofi.modi             : window,combi,file:~/software/rofi/Examples/rofi-file-bro
 rofi.combi-modi       : drun,run
 rofi.display-combi    : run
 rofi.kb-mode-next     : Super+Right,Control+Tab,Super+s
-rofi.kb-mode-previous : Super+Left,Control+Shift+Tab,Super+Shift+s
-rofi.kb-row-up        : Up,Control+p,Alt+Shift+Tab
+rofi.kb-mode-previous : Super+Left,Control+ISO_Left_Tab,Super+S
+rofi.kb-row-up        : Up,Control+p,Alt+ISO_Left_Tab
 rofi.kb-row-down      : Down,Control+n,Alt+Tab
 rofi.key-window       : Super+s
 rofi.sidebar-mode     : true
