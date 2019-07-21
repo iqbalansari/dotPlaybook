@@ -3,57 +3,8 @@
   environment:
     PATH: "{{lookup('env', 'HOME')}}/.local/bin/:{{lookup('env', 'PATH')}}"
 
-  vars:
-    emacs_version: "26.2"
-    emacs_src_sha256sum: 151ce69dbe5b809d4492ffae4a4b153b2778459de6deb26f35691e1281a9c58e 
-    emacs_config_repo: https://github.com/iqbalansari/dotEmacs.git
-    emacs_config_push_url: git@github.com:iqbalansari/dotEmacs.git
-
-    tmux_version: "2.9"
-
-    zsh_version: "5.1.1"
-    zsh_src_sha256sum: 94ed5b412023761bc8d2f03c173f13d625e06e5d6f0dff2c7a6e140c3fa55087
-
-    firefox_version: "60.0.2"
-    conkeror_version: "debian-1.0--pre-1+git160130-1"
-
-    tpm_version: "v2.0.0"
-
-    git_version: "2.22.0"
-    git_src_sha256sum: 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f
-
-    st_version: 4a9b405ab00c478683de4dc3316a2fd7772393a5
-
-    tig_version: "tig-2.2.1"
-
-    rofi_version: "1.5.2"
-
-    dunst_version: "v1.4.1"
-
-    sandboxd_version: 675745c8a8104da28fd07ff0c8b5f965c1316406
-
-    zgen_version: "111f9e3"
-
-    autojump_version: "release-v22.2.4"
-
-    imapfilter_version: "v2.6.12"
-
-    offlineimap_version: "v6.5.6"
-
-    vagrant_version: "2.0.3"
-
-    fzf_version: "0.16.5"
-
-    cloc_version: "1.62"
-    cloc_src_sha256sum: c4111ef5768b1c2844c0c826988df6f92fbb5aa7452a5005d3a031d68631acb3
-
-    ag_version: "0.31.0"
-
-    jo_version: "1.0"
-
-    jq_version: "1.5"
-
-    lesspipe_version: "2ddec0d"
+  vars_files:
+    - variables.yaml
 
   tasks:
     - import_tasks: tasks/common.yaml
