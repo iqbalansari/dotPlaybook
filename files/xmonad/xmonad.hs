@@ -122,7 +122,7 @@ myKeys = [
   ((myModMask,                               xK_f), sendMessage ToggleStruts),
   ((myModMask,                               xK_c), spawn "~/.xmonad/org-capture"),
   ((myModMask,                               xK_s), spawn "rofi -show window"),
-  ((mod1Mask,                                xK_Tab), spawn "rofi -show window"),
+  ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
   ((myModMask,                               xK_u), focusUrgent),
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 

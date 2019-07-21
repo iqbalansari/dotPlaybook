@@ -1,4 +1,6 @@
-rofi.modi             : window,run,file:~/software/rofi/Examples/rofi-file-browser.sh
+rofi.modi             : window,combi,file:~/software/rofi/Examples/rofi-file-browser.sh
+rofi.combi-modi       : drun,run
+rofi.display-combi    : run
 rofi.kb-mode-next     : Super+Right,Control+Tab,Super+s
 rofi.kb-mode-previous : Super+Left,Control+Shift+Tab,Super+Shift+s
 rofi.kb-row-up        : Up,Control+p,Alt+Shift+Tab
@@ -7,4 +9,5 @@ rofi.key-window       : Super+s
 rofi.sidebar-mode     : true
 rofi.levenshtein-sort : true
 rofi.glob             : true
+rofi.show-icons       : true
 rofi.theme            : ~/.config/rofi/theme.rasi
