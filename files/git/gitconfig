@@ -20,4 +20,4 @@
 	autoStash = true
 
 [include]
-    path = ~/.gitconfig-private
+    path = ~/.gitconfig.local
