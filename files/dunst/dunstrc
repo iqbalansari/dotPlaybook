@@ -82,8 +82,8 @@
 
     ### Misc/Advanced ###
 
-    # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+    # Use rofi instead of dmenu
+    dmenu = ~/.local/bin/rofi -dmenu -p dunst
 
     # Browser for opening urls in context menu.
     browser = ~/.local/bin/firefox -new-tab
