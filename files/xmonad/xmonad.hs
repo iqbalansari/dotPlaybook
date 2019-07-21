@@ -12,6 +12,7 @@ import XMonad.Actions.GroupNavigation
 
 import XMonad.Actions.WithAll
 import XMonad.Actions.GroupNavigation
+import XMonad.Actions.SpawnOn
 
 -- Easier configuration of keybindings
 import XMonad.Util.EZConfig
@@ -126,6 +127,9 @@ myKeys = [
   ((myModMask,                               xK_u), focusUrgent),
   ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 
+  -- Spawn a terminal in the current workspace
+  ((myModMask .|. shiftMask,                 xK_Return), spawnHere myTerminal),
+
   -- Quickly switch to another window of the same application
   ((myModMask,                               xK_grave), switchOtherWindow Forward),
   ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
@@ -228,6 +232,7 @@ myManagementHooks = composeOne [
   className                =? "Gnome-fallback-mount-helper"                       -?> doCenterFloat,
   className                =? "Display"                                           -?> doCenterFloat,
   className                =? "Artha"                                             -?> doCenterFloat,
+  className                =? "St"                                                -?> doShift "terminal",
   className                =? "Emacs"                                             -?> doShift "emacs",
   className                =? "Firefox"                                           -?> doShift "web",
   className                =? "Slack"                                             -?> doShift "chat",
@@ -287,7 +292,7 @@ main = do
          borderWidth = 0,
          layoutHook  = myLayoutHook,
          logHook     = historyHook <+> myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
-         manageHook  = namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
+         manageHook  = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
