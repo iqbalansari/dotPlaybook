@@ -45,6 +45,9 @@
           shell: cd ~/software/rofi && make distclean ; autoreconf -i && mkdir -p build && cd build && ../configure --prefix=$HOME/.local/ --disable-i3support --disable-check && make && make install
           when: rofi_checkout is changed or rofi_installed.rc == 1
 
+        - name: Create symlink to rofi named dmenu
+          file: src=~/.local/bin/rofi path=~/.local/bin/dmenu state=link
+
       tags:
         - rofi
         - provision
