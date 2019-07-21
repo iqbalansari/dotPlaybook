@@ -1,0 +1,45 @@
+- name: Install and configure st
+  block:
+    - name: Install st
+      block:
+        - name: Install the prerequisites for st
+          apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+          with_items:
+            - libx11-dev
+            - libxft-dev
+            - fontconfig
+          become: yes
+
+        - name: Get st (LukeSmithxyz's fork) source code
+          git: repo=https://github.com/LukeSmithxyz/st.git accept_hostkey=yes dest=~/software/st version={{st_version}}
+          register: st_checkout
+
+        - name: Check if st is installed
+          stat: path=~/.local/bin/st
+          register: st_installation
+          changed_when: no
+
+        - name: Compile and install st
+          shell: cd ~/software/st && make PREFIX=~/.local install
+          when: st_checkout is changed or not st_installation.stat.exists
+
+      tags:
+        - provision
+
+    - name: Configure st
+      block:
+        - name: Symlink Xresources file for st
+          install_dot: src=files/st/st.xresources dest=~/Xresources.d/st
+
+        - name: Load st Xresources file from main Xresources file
+          lineinfile: path=~/.Xresources line='#include "Xresources.d/st"' state=present create=yes
+
+        - name: Reload Xresources
+          shell: xrdb -merge ~/Xresources.d/st
+          changed_when: no
+
+      tags:
+        - configuration
+
+  tags:
+    - st

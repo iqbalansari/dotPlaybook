@@ -1,0 +1,22 @@
+st.font: SourceCodePro-12;
+
+st.background: #1d1f21
+st.foreground: #c5c8c6
+st.cursorColor: white
+
+st.color0: #1d1f21
+st.color1: #cc6666
+st.color2: #b5bd68
+st.color3: #f0c674
+st.color4: #81a2be
+st.color5: #b294bb
+st.color6: #8abeb7
+st.color7: #c5c8c6
+st.color8: #969896
+st.color9: #cc6666
+st.color10: #b5bd68
+st.color11: #f0c674
+st.color12: #81a2be
+st.color13: #b294bb
+st.color14: #8abeb7
+st.color15: #ffffff

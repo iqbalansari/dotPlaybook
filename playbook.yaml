@@ -22,6 +22,8 @@
     git_version: "2.22.0"
     git_src_sha256sum: 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f
 
+    st_version: 4a9b405ab00c478683de4dc3316a2fd7772393a5
+
     tig_version: "tig-2.2.1"
 
     rofi_version: "1.5.2"
@@ -61,6 +63,7 @@
     - import_tasks: tasks/emacs.yaml
     - import_tasks: tasks/git.yaml
     - import_tasks: tasks/browsers.yaml
+    - import_tasks: tasks/st.yaml
     - import_tasks: tasks/gnome-terminal.yaml
     - import_tasks: tasks/iterm2.yaml
     - import_tasks: tasks/gtk.yaml
