@@ -1,77 +1,52 @@
+import System.Directory
+import System.Environment
+
 import Control.Concurrent
 import Control.Monad
 
-import XMonad
+import Data.Foldable
+import Data.List
+import qualified Data.Map as M
 
--- Integration with gnome
+import Graphics.X11.ExtraTypes.XF86
+
+import XMonad
+import qualified XMonad.StackSet as W
+import XMonad.ManageHook
+import XMonad.Prompt
+import XMonad.Wallpaper
+import XMonad.Util.EZConfig
+
 import XMonad.Config.Gnome
 
--- For cycling workspaces
 import XMonad.Actions.CycleWS
 import XMonad.Actions.GroupNavigation
-
 import XMonad.Actions.WithAll
 import XMonad.Actions.GroupNavigation
 import XMonad.Actions.SpawnOn
+import XMonad.Actions.CopyWindow
+import XMonad.Actions.SwapWorkspaces
+import XMonad.Actions.FloatKeys
+import qualified XMonad.Actions.FlexibleResize as Flex
 
--- Easier configuration of keybindings
-import XMonad.Util.EZConfig
-
-import XMonad.Prompt
-
--- Displaying wallpaper
-import XMonad.Wallpaper
-
--- The layouts
 import XMonad.Layout
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Magnifier
 import XMonad.Layout.Spacing
+import XMonad.Layout.DwmStyle
 
--- avoid struts
 import XMonad.Hooks.ManageDocks
-
-import XMonad.ManageHook
-
--- Additional helpers for manage hooks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.Place
 import XMonad.Hooks.EwmhDesktops
-
-import qualified XMonad.StackSet as W
-
-import qualified Data.Map as M
-
--- Allows resizing from any corner of the window
-import qualified XMonad.Actions.FlexibleResize as Flex
-
--- Hooks to run when window sets WM_URGENT
 import XMonad.Hooks.UrgencyHook
+
 import XMonad.Util.NamedWindows
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
-
--- Needed for mirror sensitive resizing
 import XMonad.Util.Types
-import Data.Foldable
-import Data.List
-
--- Swapping workspaces
-import XMonad.Actions.SwapWorkspaces
-
--- Displaying DWM style decorations
-import XMonad.Layout.DwmStyle
-
- -- Creating copies of windows
-import XMonad.Actions.CopyWindow
-
-import Graphics.X11.ExtraTypes.XF86
-
-import System.Directory
-import System.Environment
-import XMonad.Actions.FloatKeys
 
 myModMask = mod4Mask
 
