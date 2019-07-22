@@ -20,7 +20,11 @@
           changed_when: no
 
         - name: Compile and install st
-          shell: cd ~/software/st && make PREFIX=~/.local install
+          shell: >
+            cd ~/software/st && \
+            patch -p1 < {{ playbook_dir }}/files/st/00001-Use-Control-Shift-Instead-of-Alt.patch && \
+            make PREFIX=~/.local install && \
+            git reset --hard HEAD
           when: st_checkout is changed or not st_installation.stat.exists
 
         - name: Install desktop file for st
