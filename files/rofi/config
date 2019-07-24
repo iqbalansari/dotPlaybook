@@ -9,5 +9,4 @@ rofi.key-window       : Super+s
 rofi.sidebar-mode     : true
 rofi.levenshtein-sort : true
 rofi.glob             : true
-rofi.show-icons       : true
 rofi.theme            : ~/.config/rofi/theme.rasi
