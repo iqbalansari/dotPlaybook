@@ -133,6 +133,10 @@ myKeys = [
     ((myModMask,                             xK_Right), withFocused (keysMoveWindow (15, 0))),
     ((myModMask,                             xK_Up), withFocused (keysMoveWindow (0, -15))),
     ((myModMask,                             xK_Down), withFocused (keysMoveWindow (0, 15))),
+    ((myModMask .|. shiftMask,               xK_Left), withFocused (keysMoveWindow (-150, 0))),
+    ((myModMask .|. shiftMask,               xK_Right), withFocused (keysMoveWindow (150, 0))),
+    ((myModMask .|. shiftMask,               xK_Up), withFocused (keysMoveWindow (0, -150))),
+    ((myModMask .|. shiftMask,               xK_Down), withFocused (keysMoveWindow (0, 150))),
     ((myModMask,                             xK_equal), withFocused (keysResizeWindow (10, 10) (0.5, 0.5))),
     ((myModMask,                             xK_minus), withFocused (keysResizeWindow (-10, -10) (0.5, 0.5)))
   ]
