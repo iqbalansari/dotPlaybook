@@ -1,4 +1,5 @@
 ---
+### Applications
 # Emacs
 emacs_version: "26.2"
 emacs_src_sha256sum: 151ce69dbe5b809d4492ffae4a4b153b2778459de6deb26f35691e1281a9c58e
@@ -56,3 +57,8 @@ jo_version: "1.0"
 
 # jq
 jq_version: "1.5"
+
+## Languages
+# Factor
+factor_version: '0.98'
+factor_sha256sum: e60e4c77cc4e133d1324aa11c2549c99bc91e92b9c19b41ed57c79fdd4ca009c

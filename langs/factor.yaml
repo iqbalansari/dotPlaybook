@@ -1,0 +1,38 @@
+- name: Install Factor on Ubuntu
+  block:
+    - name: Install the prerequisites Factor
+      apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - libc6-dev
+        - libpango1.0-dev
+        - libx11-dev
+        - xorg-dev
+        - libgtk2.0-dev
+        - gtk2-engines-pixbuf
+        - libgtkglext1-dev
+      become: yes
+
+    - name: Fetch the desired Factor binary package
+      get_url:
+        url: http://downloads.factorcode.org/releases/{{factor_version}}/factor-linux-{{ansible_architecture | regex_replace('_', '-')}}-{{factor_version}}.tar.gz
+        dest: ~/compressed/factor-linux-{{ansible_architecture}}-{{factor_version}}.tar.gz
+        timeout: 100000
+        sha256sum: '{{factor_sha256sum}}'
+
+    - name: Create directory to hold the Factor binary
+      file: dest=~/languages/factor-{{factor_version}} state=directory
+
+    - name: Extract the Factor binary package
+      unarchive:
+        src: ~/compressed/factor-linux-{{ansible_architecture | regex_replace('_', '-')}}-{{factor_version}}.tar.gz
+        dest: ~/languages/factor-{{factor_version}}
+        creates: ~/software/factor-{{factor_version}}/factor
+
+    - name: Symlink Factor binary
+      file: src=~/languages/factor-{{factor_version}}/factor/factor dest=~/.local/bin/factor state=link
+
+  when: ansible_distribution == 'Ubuntu'
+  tags:
+    - factor
+    - lang
+    - never

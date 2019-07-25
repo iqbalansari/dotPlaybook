@@ -34,3 +34,5 @@
     - import_tasks: tasks/virtualbox.yaml
     - import_tasks: tasks/artha.yaml
     - import_tasks: tasks/misc.yaml
+      # Tasks to setup language environments
+    - import_tasks: langs/factor.yaml
