@@ -7,33 +7,33 @@
     - variables.yaml
 
   tasks:
-    - import_tasks: tasks/common.yaml
-    - import_tasks: tasks/zsh.yaml
-    - import_tasks: tasks/less.yaml
-    - import_tasks: tasks/tmux.yaml
-    - import_tasks: tasks/emacs.yaml
-    - import_tasks: tasks/git.yaml
-    - import_tasks: tasks/browsers.yaml
-    - import_tasks: tasks/st.yaml
-    - import_tasks: tasks/gnome-terminal.yaml
-    - import_tasks: tasks/iterm2.yaml
-    - import_tasks: tasks/gtk.yaml
-    - import_tasks: tasks/rofi.yaml
-    - import_tasks: tasks/dunst.yaml
-    - import_tasks: tasks/terminal-notifier.yaml
-    - import_tasks: tasks/gnome-panel.yaml
-    - import_tasks: tasks/kde-connect.yaml
-    - import_tasks: tasks/xmonad.yaml
-    - import_tasks: tasks/zathura.yaml
-    - import_tasks: tasks/alfred.yaml
-    - import_tasks: tasks/spectacle.yaml
-    - import_tasks: tasks/karabiner.yaml
-    - import_tasks: tasks/fonts.yaml
-    - import_tasks: tasks/mail.yaml
-    - import_tasks: tasks/vagrant.yaml
-    - import_tasks: tasks/virtualbox.yaml
-    - import_tasks: tasks/artha.yaml
-    - import_tasks: tasks/misc.yaml
+    - import_tasks: apps/common.yaml
+    - import_tasks: apps/zsh.yaml
+    - import_tasks: apps/less.yaml
+    - import_tasks: apps/tmux.yaml
+    - import_tasks: apps/emacs.yaml
+    - import_tasks: apps/git.yaml
+    - import_tasks: apps/browsers.yaml
+    - import_tasks: apps/st.yaml
+    - import_tasks: apps/gnome-terminal.yaml
+    - import_tasks: apps/iterm2.yaml
+    - import_tasks: apps/gtk.yaml
+    - import_tasks: apps/rofi.yaml
+    - import_tasks: apps/dunst.yaml
+    - import_tasks: apps/terminal-notifier.yaml
+    - import_tasks: apps/gnome-panel.yaml
+    - import_tasks: apps/kde-connect.yaml
+    - import_tasks: apps/xmonad.yaml
+    - import_tasks: apps/zathura.yaml
+    - import_tasks: apps/alfred.yaml
+    - import_tasks: apps/spectacle.yaml
+    - import_tasks: apps/karabiner.yaml
+    - import_tasks: apps/fonts.yaml
+    - import_tasks: apps/mail.yaml
+    - import_tasks: apps/vagrant.yaml
+    - import_tasks: apps/virtualbox.yaml
+    - import_tasks: apps/artha.yaml
+    - import_tasks: apps/misc.yaml
       # Tasks to setup language environments
     - import_tasks: langs/factor.yaml
     - import_tasks: langs/c.yaml
