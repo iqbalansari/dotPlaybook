@@ -1,0 +1,51 @@
+- name: Install tools to work with C/C++ on Ubuntu
+  block:
+    - name: Install rtags
+      block:
+        - name: Install prerequisites for RTags on Ubuntu
+          apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+          with_items:
+            - pkg-config
+            - cmake
+            - llvm
+            - libclang-dev
+            - g++
+          become: yes
+
+        - name: Get RTags source code
+          get_url:
+            url: https://github.com/Andersbakken/rtags/releases/download/v{{rtags_version}}/rtags-{{rtags_version}}.tar.gz
+            dest: ~/compressed/rtags-{{rtags_version}}.tar.gz
+            timeout: 100000
+            sha256sum: '{{rtags_sha256sum}}'
+
+        - name: Extract RTags sources
+          unarchive: src=~/compressed/rtags-{{rtags_version}}.tar.gz dest=~/software/ creates=~/software/rtags-{{rtags_version}}
+          register: rtags_source
+
+        - name: Install RTags
+          block:
+            - name: Check if RTags is installed
+              stat: path=~/.local/bin/rtags
+              register: rtags_installation
+              changed_when: no
+
+            - name: Install RTags
+              shell: |
+                cd ~/software/rtags-{{rtags_version}} && \
+                mkdir build && \
+                cd build && \
+                cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local -DRTAGS_NO_ELISP_FILES=1 -DFORCE_BASH_COMPLETION_INSTALLATION=False && \
+                make -j {{ansible_processor_vcpus - 1}} && \
+                make install && \
+                cd .. && \
+                rm -r build
+              when: rtags_source is changed or not rtags_installation.stat.exists
+      tags:
+        - rtags
+
+  when: ansible_distribution == 'Ubuntu'
+  tags:
+    - c
+    - lang
+    - never

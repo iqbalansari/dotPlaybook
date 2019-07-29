@@ -62,3 +62,7 @@ jq_version: "1.5"
 # Factor
 factor_version: '0.98'
 factor_sha256sum: e60e4c77cc4e133d1324aa11c2549c99bc91e92b9c19b41ed57c79fdd4ca009c
+
+# C
+rtags_version: '2.33'
+rtags_sha256sum: 8cc4e1a713275510cbe1f5f413d3e6a3d943e12b01ede573d1dba9b3be649a75
