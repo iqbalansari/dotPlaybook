@@ -167,8 +167,8 @@ myKeys = [
   ]
   ++
   [
-    ((myModMask, xK_v),                       windows copyToAll), -- Toggle window state back
-    ((myModMask .|. shiftMask, xK_v ),       killAllOtherCopies)  -- Make focused window always visible
+    ((myModMask, xK_y),                       windows copyToAll), -- Toggle window state back
+    ((myModMask .|. shiftMask, xK_y),         killAllOtherCopies) -- Make focused window always visible
   ]
 
 myMouseBindings = [
