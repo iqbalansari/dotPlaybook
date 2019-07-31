@@ -1,0 +1,11 @@
+resolver: lts-7.19
+
+packages:
+  - ./
+
+extra-deps:
+  - X11-1.8
+  - X11-xft-0.3.1
+  - xmonad-0.15
+  - xmonad-contrib-0.15
+  - xmonad-wallpaper-0.0.1.4

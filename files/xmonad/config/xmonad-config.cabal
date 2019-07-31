@@ -1,0 +1,33 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 5525e1b0ff707fa33d20f457bb143d7f47bd038233f1b78ca49d86a60c22ec5f
+
+name:           xmonad-config
+version:        0.1
+description:    My XMonad configuration
+homepage:       https://github.com/iqbalansari/dotPlaybook
+author:         Iqbal Ansari
+maintainer:     iqbalansari02@yahoo.com
+license:        GPL-3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/iqbalansari/dotPlaybook
+
+executable xmonad
+  main-is: xmonad.hs
+  hs-source-dirs: .
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , containers
+    , X11
+    , xmonad
+    , xmonad-contrib
+    , xmonad-wallpaper
+  default-language: Haskell2010
