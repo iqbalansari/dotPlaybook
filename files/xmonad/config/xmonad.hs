@@ -34,6 +34,7 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Magnifier
 import XMonad.Layout.Spacing
 import XMonad.Layout.DwmStyle
+import XMonad.Layout.Drawer
 
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -65,7 +66,7 @@ myScratchpads = [
 -- run htop in xterm, find it by title, use default floating window placement
     NS "terminal" "st -t scratch-terminal -e tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "scratch-terminal") doCenterFloat,
     NS "htop" "st -t scratch-htop -e htop" (name =? "scratch-htop") doCenterFloat,
-    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") doCenterFloat,
+    NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") nonFloating,
     NS "zeal" "zeal" (className =? "Zeal") doCenterFloat
     ]
   where
@@ -178,10 +179,12 @@ myMouseBindings = [
 
 myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ standardLayout
   where
-    standardLayout = tiled ||| Mirror tiled ||| Full
+    standardLayout = drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
 
     -- default tiling algorithm partitions the screen into two panes
     tiled   = smartSpacing 5 $ ResizableTall nmaster delta ratio []
+
+    drawer  = simpleDrawer 0.0 0.3 (Title "*Notes*")
 
     -- The default number of windows in the master pane
     nmaster = 1
