@@ -168,8 +168,8 @@ myKeys = [
   ]
   ++
   [
-    ((myModMask, xK_y),                       windows copyToAll), -- Toggle window state back
-    ((myModMask .|. shiftMask, xK_y),         killAllOtherCopies) -- Make focused window always visible
+    ((myModMask, xK_y),                       windows copyToAll), -- Make focused window always visible
+    ((myModMask .|. shiftMask, xK_y),         killAllOtherCopies) -- Toggle window state back
   ]
 
 myMouseBindings = [
@@ -225,6 +225,7 @@ myManagementHooks = composeOne [
   className                =? "Zenity"                                            -?> doCenterFloat,
   className                =? "pritunl"                                           -?> doCenterFloat,
   className                =? "Gnome-calculator"                                  -?> doCenterFloat,
+  className                =? "Qalculate-gtk"                                     -?> doCenterFloat,
   isNotification                                                                  -?> doIgnore
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
