@@ -96,8 +96,6 @@
 
     startup_notification = false
 
-    verbosity = debug
-
     corner_radius = 5
 
     ### Legacy
