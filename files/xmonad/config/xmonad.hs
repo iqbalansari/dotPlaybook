@@ -36,6 +36,7 @@ import XMonad.Layout.Magnifier
 import XMonad.Layout.Spacing
 import XMonad.Layout.DwmStyle
 import XMonad.Layout.Drawer
+import XMonad.Layout.ToggleLayouts
 
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -98,6 +99,7 @@ myKeys = [
   ((myModMask,                               xK_p), moveTo Prev nonScratchPad),
   ((myModMask .|. shiftMask,                 xK_n), shiftTo Next nonScratchPad),
   ((myModMask .|. shiftMask,                 xK_p), shiftTo Prev nonScratchPad),
+  ((myModMask .|. shiftMask,                 xK_f), sendMessage (XMonad.Layout.ToggleLayouts.Toggle "Full")),
   ((myModMask,                               xK_o), windows W.focusDown),
   ((myModMask .|. shiftMask,                 xK_o), windows W.swapDown),
   ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
@@ -172,7 +174,7 @@ myKeys = [
   ]
   ++
   [
-    ((myModMask .|. controlMask, xK_m ), sendMessage Toggle)
+    ((myModMask .|. controlMask, xK_m ), sendMessage XMonad.Layout.Magnifier.Toggle)
   ]
   ++
   [
@@ -185,8 +187,10 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ standardLayout
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ layoutWithFullscreen
   where
+    layoutWithFullscreen = toggleLayouts Full standardLayout
+
     standardLayout = drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
 
     -- default tiling algorithm partitions the screen into two panes
