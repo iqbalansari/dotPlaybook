@@ -222,6 +222,7 @@ myManagementHooks = composeOne [
   resource                 =? "file_properties"                                   -?> doCenterFloat,
   resource                 =? "Dialog"                                            -?> doFloat,
   resource                 =? "update-manager"                                    -?> doFloat,
+  resource                 =? "Gimp"                                              -?> doFloat,
   className                =? "gnome-font-viewer"                                 -?> doCenterFloat,
   className                =? "Gcr-prompter"                                      -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
