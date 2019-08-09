@@ -6,16 +6,17 @@ import Control.Monad
 
 import Data.Foldable
 import Data.List
+import Data.Ratio
 import qualified Data.Map as M
 
 import Graphics.X11.ExtraTypes.XF86
 
 import XMonad
-import qualified XMonad.StackSet as W
 import XMonad.ManageHook
 import XMonad.Prompt
 import XMonad.Wallpaper
 import XMonad.Util.EZConfig
+import qualified XMonad.StackSet as W
 
 import XMonad.Config.Gnome
 
@@ -85,6 +86,12 @@ switchOtherWindow direction = do
   name <- getCurrentClassName
   nextMatch direction (className =? name)
 
+centerWindow = do
+  rect <- fmap (screenRect . W.screenDetail . W.current) (gets windowset)
+  withFocused (keysMoveWindowTo (centerPosition (rect_width rect), centerPosition (rect_height rect)) (1%2, 1%2))
+  where
+    centerPosition dimension = fromIntegral (dimension `div` 2)
+
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,                               xK_n), moveTo Next nonScratchPad),
@@ -138,6 +145,7 @@ myKeys = [
     ((myModMask .|. shiftMask,               xK_Right), withFocused (keysMoveWindow (150, 0))),
     ((myModMask .|. shiftMask,               xK_Up), withFocused (keysMoveWindow (0, -150))),
     ((myModMask .|. shiftMask,               xK_Down), withFocused (keysMoveWindow (0, 150))),
+    ((myModMask .|. shiftMask,               xK_x), centerWindow),
     ((myModMask,                             xK_equal), withFocused (keysResizeWindow (10, 10) (0.5, 0.5))),
     ((myModMask,                             xK_minus), withFocused (keysResizeWindow (-10, -10) (0.5, 0.5)))
   ]
