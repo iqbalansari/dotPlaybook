@@ -140,7 +140,7 @@ myKeys = [
   ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
   ((myModMask .|. controlMask .|. shiftMask, xK_p), shiftTo Prev nonScratchPad >> moveTo Prev nonScratchPad),
   ((myModMask,                               xK_b), toggleWS' [scratchPadName]),
-  ((myModMask,                               xK_f), sendMessage ToggleStruts),
+  ((myModMask,                               xK_d), sendMessage ToggleStruts),
   ((myModMask,                               xK_c), spawn "~/.xmonad/org-capture"),
   ((myModMask,                               xK_s), spawn "rofi -show window"),
   ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
@@ -174,6 +174,8 @@ myKeys = [
   ++
   [
     -- Bindings for working with floating windows
+    -- Float a window
+    ((myModMask,                                xK_f), withFocused $ keysResizeWindow (0, 0) (1%2, 1%2)),
     -- Move the window to the center
     ((myModMask .|. shiftMask,                  xK_x), centerWindow),
     -- Moving floating windows
