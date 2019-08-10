@@ -99,9 +99,7 @@ fullScreenWindow :: X ()
 fullScreenWindow = do
   windowSet <- gets windowset
   let
-    rect = (screenRect . W.screenDetail . W.current) windowSet
-
-    fullScreenWindowInner windowSet window =
+    fullScreenWindow' windowSet window =
       do
         if M.member window $ W.floating windowSet
           then windows (W.sink window)
@@ -112,7 +110,7 @@ fullScreenWindow = do
     centerPosition dimension = fromIntegral (dimension `div` 2) in
 
     case W.peek windowSet of
-      Just window -> fullScreenWindowInner windowSet window
+      Just window -> fullScreenWindow' windowSet window
       Nothing -> return ()
 
 resizeWindowUniformly :: Int -> G -> X ()
@@ -314,9 +312,23 @@ instance UrgencyHook LibNotifyUrgencyHook where
         safeSpawn "notify-send" [show name, "workspace " ++ idx]
 
 myFadeHook :: X ()
-myFadeHook = fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.8
+myFadeHook =
+  fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.8
+  where
+    shouldNotFade = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION" <||> className =? "zoom"
 
-shouldNotFade = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION" <||> className =? "zoom"
+myFocusHook :: X ()
+myFocusHook = do
+  windowSet <- gets windowset
+  let
+    raiseWindowMaybe windowSet window =
+      if M.member window $ W.floating windowSet
+      then withDisplay $ \display -> io $ raiseWindow display window
+      else return ()
+    in
+    case W.peek windowSet of
+      Just window -> raiseWindowMaybe windowSet window
+      Nothing -> return ()
 
 wallpaperBackgroundTask :: IO ()
 wallpaperBackgroundTask = do
@@ -341,7 +353,7 @@ main = do
          workspaces  = myWorkspaces,
          borderWidth = 0,
          layoutHook  = myLayoutHook,
-         logHook     = historyHook <+> myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
+         logHook     = historyHook <+> myFocusHook <+> myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
          manageHook  = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
