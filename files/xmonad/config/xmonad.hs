@@ -114,6 +114,20 @@ fullScreenWindow = do
     case W.peek windowSet of
       Just window -> fullScreenWindowInner windowSet window
       Nothing -> return ()
+
+resizeWindowUniformly :: Int -> G -> X ()
+resizeWindowUniformly widthChange position =
+  withDisplay $ \display -> do
+    withFocused $ \window -> do
+      win_attrs <- io $ getWindowAttributes display window
+      let width  = wa_width win_attrs
+          height = wa_height win_attrs
+          aspectRatio = (fromIntegral height) / (fromIntegral width)
+          heightChange = floor $ aspectRatio * (fromIntegral widthChange)
+        in
+        keysResizeWindow (fromIntegral widthChange, fromIntegral heightChange) position window
+
+
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,                               xK_n), moveTo Next nonScratchPad),
@@ -151,26 +165,40 @@ myKeys = [
   ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
 
     -- Use alt + ctrl + l to lock screen
-  ((mod1Mask .|. controlMask, xK_l), spawn "gnome-screensaver-command -l"),
+  ((mod1Mask .|. controlMask,                xK_l), spawn "gnome-screensaver-command -l"),
 
   -- Display a message using notify-send after reloading XMonad
-  ((myModMask,                 xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
-  ((myModMask .|. shiftMask,   xK_q), spawn "gnome-session-quit")
+  ((myModMask,                               xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
+  ((myModMask .|. shiftMask,                 xK_q), spawn "gnome-session-quit")
   ]
   ++
   [
     -- Bindings for working with floating windows
-    ((myModMask,                             xK_Left), withFocused (keysMoveWindow (-15, 0))),
-    ((myModMask,                             xK_Right), withFocused (keysMoveWindow (15, 0))),
-    ((myModMask,                             xK_Up), withFocused (keysMoveWindow (0, -15))),
-    ((myModMask,                             xK_Down), withFocused (keysMoveWindow (0, 15))),
-    ((myModMask .|. shiftMask,               xK_Left), withFocused (keysMoveWindow (-150, 0))),
-    ((myModMask .|. shiftMask,               xK_Right), withFocused (keysMoveWindow (150, 0))),
-    ((myModMask .|. shiftMask,               xK_Up), withFocused (keysMoveWindow (0, -150))),
-    ((myModMask .|. shiftMask,               xK_Down), withFocused (keysMoveWindow (0, 150))),
-    ((myModMask .|. shiftMask,               xK_x), centerWindow),
-    ((myModMask,                             xK_equal), withFocused (keysResizeWindow (10, 10) (0.5, 0.5))),
-    ((myModMask,                             xK_minus), withFocused (keysResizeWindow (-10, -10) (0.5, 0.5)))
+    -- Move the window to the center
+    ((myModMask .|. shiftMask,                  xK_x), centerWindow),
+    -- Moving floating windows
+    ((myModMask,                                xK_Left), withFocused (keysMoveWindow (-15, 0))),
+    ((myModMask,                                xK_Right), withFocused (keysMoveWindow (15, 0))),
+    ((myModMask,                                xK_Up), withFocused (keysMoveWindow (0, -15))),
+    ((myModMask,                                xK_Down), withFocused (keysMoveWindow (0, 15))),
+    ((myModMask .|. shiftMask,                  xK_Left), withFocused (keysMoveWindow (-150, 0))),
+    ((myModMask .|. shiftMask,                  xK_Right), withFocused (keysMoveWindow (150, 0))),
+    ((myModMask .|. shiftMask,                  xK_Up), withFocused (keysMoveWindow (0, -150))),
+    ((myModMask .|. shiftMask,                  xK_Down), withFocused (keysMoveWindow (0, 150))),
+    -- Resizing floating windows in one axis
+    ((myModMask .|. controlMask,                xK_Left), withFocused (keysResizeWindow (-10, 0) (0.5, 0.5))),
+    ((myModMask .|. controlMask,                xK_Right), withFocused (keysResizeWindow (10, 0) (0.5, 0.5))),
+    ((myModMask .|. controlMask,                xK_Up), withFocused (keysResizeWindow (0, 10) (0.5, 0.5))),
+    ((myModMask .|. controlMask,                xK_Down), withFocused (keysResizeWindow (0, -10) (0.5, 0.5))),
+    ((myModMask .|. controlMask .|. shiftMask,  xK_Left), withFocused (keysResizeWindow (-150, 0) (0.5, 0.5))),
+    ((myModMask .|. controlMask .|. shiftMask,  xK_Right), withFocused (keysResizeWindow (150, 0) (0.5, 0.5))),
+    ((myModMask .|. controlMask .|. shiftMask,  xK_Up), withFocused (keysResizeWindow (0, 150) (0.5, 0.5))),
+    ((myModMask .|. controlMask .|. shiftMask,  xK_Down), withFocused (keysResizeWindow (0, -150) (0.5, 0.5))),
+    -- Resize respecting the current aspect ratio
+    ((myModMask,                                xK_equal), resizeWindowUniformly 10 (0.5, 0.5)),
+    ((myModMask,                                xK_minus), resizeWindowUniformly (-10) (0.5, 0.5)),
+    ((myModMask .|. shiftMask,                  xK_equal), resizeWindowUniformly 150 (0.5, 0.5)),
+    ((myModMask .|. shiftMask,                  xK_minus), resizeWindowUniformly (-150) (0.5, 0.5))
   ]
   ++
   [
