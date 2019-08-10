@@ -83,23 +83,44 @@ getCurrentClassName = withWindowSet $ \set -> case  W.peek set of
   Just window -> runQuery className window
   Nothing -> return ""
 
+switchOtherWindow :: Direction -> X ()
 switchOtherWindow direction = do
   name <- getCurrentClassName
   nextMatch direction (className =? name)
 
+centerWindow :: X ()
 centerWindow = do
   rect <- fmap (screenRect . W.screenDetail . W.current) (gets windowset)
   withFocused (keysMoveWindowTo (centerPosition (rect_width rect), centerPosition (rect_height rect)) (1%2, 1%2))
   where
     centerPosition dimension = fromIntegral (dimension `div` 2)
 
+fullScreenWindow :: X ()
+fullScreenWindow = do
+  windowSet <- gets windowset
+  let
+    rect = (screenRect . W.screenDetail . W.current) windowSet
+
+    fullScreenWindowInner windowSet window =
+      do
+        if M.member window $ W.floating windowSet
+          then windows (W.sink window)
+          else return ()
+
+        sendMessage (XMonad.Layout.ToggleLayouts.Toggle "Full")
+
+    centerPosition dimension = fromIntegral (dimension `div` 2) in
+
+    case W.peek windowSet of
+      Just window -> fullScreenWindowInner windowSet window
+      Nothing -> return ()
 myKeys = [
   -- Switching / moving windows to workspace
   ((myModMask,                               xK_n), moveTo Next nonScratchPad),
   ((myModMask,                               xK_p), moveTo Prev nonScratchPad),
   ((myModMask .|. shiftMask,                 xK_n), shiftTo Next nonScratchPad),
   ((myModMask .|. shiftMask,                 xK_p), shiftTo Prev nonScratchPad),
-  ((myModMask .|. shiftMask,                 xK_f), sendMessage (XMonad.Layout.ToggleLayouts.Toggle "Full")),
+  ((myModMask .|. shiftMask,                 xK_f), fullScreenWindow),
   ((myModMask,                               xK_o), windows W.focusDown),
   ((myModMask .|. shiftMask,                 xK_o), windows W.swapDown),
   ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
