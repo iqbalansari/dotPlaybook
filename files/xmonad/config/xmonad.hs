@@ -187,11 +187,11 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ avoidStruts $ layoutWithFullscreen
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ layoutWithFullscreen
   where
     layoutWithFullscreen = toggleLayouts Full standardLayout
 
-    standardLayout = drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
+    standardLayout = avoidStruts $ drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
 
     -- default tiling algorithm partitions the screen into two panes
     tiled   = smartSpacing 5 $ ResizableTall nmaster delta ratio []
