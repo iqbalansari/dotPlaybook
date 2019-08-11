@@ -23,7 +23,6 @@ import XMonad.Config.Gnome
 import XMonad.Actions.CycleWS
 import XMonad.Actions.GroupNavigation
 import XMonad.Actions.WithAll
-import XMonad.Actions.GroupNavigation
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.SwapWorkspaces
@@ -257,6 +256,8 @@ myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ layoutWithFulls
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
 
+isNotification = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION"
+
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
   isDialog                                                                        -?> doFloat,
@@ -289,7 +290,7 @@ myManagementHooks = composeOne [
   className                =? "pritunl"                                           -?> doCenterFloat,
   className                =? "Gnome-calculator"                                  -?> doCenterFloat,
   className                =? "Qalculate-gtk"                                     -?> doCenterFloat,
-  isNotification                                                                  -?> doIgnore
+  isNotification                                                                  -?> doFloat
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
@@ -299,7 +300,6 @@ myManagementHooks = composeOne [
   ]
   where
     name       = stringProperty "WM_NAME"
-    isNotification = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION"
 
 -- Notify about activity in a window using notify send
 -- Credits: [https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/]
@@ -316,7 +316,7 @@ myFadeHook :: X ()
 myFadeHook =
   fadeOutLogHook $ fadeIf (isUnfocused <&&> liftM not shouldNotFade) 0.8
   where
-    shouldNotFade = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION" <||> className =? "zoom"
+    shouldNotFade = isNotification <||> className =? "zoom"
 
 myFocusHook :: X ()
 myFocusHook = do
@@ -349,14 +349,15 @@ main = do
   forkIO wallpaperBackgroundTask
   xmonad $ withUrgencyHook LibNotifyUrgencyHook $ (
      gnomeConfig {
-         modMask     = myModMask,
-         terminal    = myTerminal,
-         workspaces  = myWorkspaces,
-         borderWidth = 0,
-         layoutHook  = myLayoutHook,
-         logHook     = historyHook <+> myFocusHook <+> myFadeHook <+> (ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace),
-         manageHook  = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
-         startupHook = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
+         modMask         = myModMask,
+         terminal        = myTerminal,
+         workspaces      = myWorkspaces,
+         borderWidth     = 0,
+         handleEventHook = handleEventHook gnomeConfig <+> fullscreenEventHook,
+         layoutHook      = myLayoutHook,
+         logHook         = historyHook <+> myFocusHook <+> myFadeHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
+         manageHook      = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
+         startupHook     = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
      `additionalMouseBindings` myMouseBindings
