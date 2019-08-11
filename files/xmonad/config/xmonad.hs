@@ -126,48 +126,70 @@ resizeWindowUniformly widthChange position =
         keysResizeWindow (fromIntegral widthChange, fromIntegral heightChange) position window
 
 
-myKeys = [
-  -- Switching / moving windows to workspace
-  ((myModMask,                               xK_n), moveTo Next nonScratchPad),
-  ((myModMask,                               xK_p), moveTo Prev nonScratchPad),
-  ((myModMask .|. shiftMask,                 xK_n), shiftTo Next nonScratchPad),
-  ((myModMask .|. shiftMask,                 xK_p), shiftTo Prev nonScratchPad),
-  ((myModMask .|. shiftMask,                 xK_f), fullScreenWindow),
-  ((myModMask,                               xK_o), windows W.focusDown),
-  ((myModMask .|. shiftMask,                 xK_o), windows W.swapDown),
-  ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
-  ((myModMask .|. controlMask .|. shiftMask, xK_p), shiftTo Prev nonScratchPad >> moveTo Prev nonScratchPad),
-  ((myModMask,                               xK_b), toggleWS' [scratchPadName]),
-  ((myModMask,                               xK_d), sendMessage ToggleStruts),
-  ((myModMask,                               xK_c), spawn "~/.xmonad/org-capture"),
-  ((myModMask,                               xK_s), spawn "rofi -show window"),
-  ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
-  ((myModMask,                               xK_u), focusUrgent),
-  ((myModMask .|. shiftMask,                 xK_t), sinkAll),
+myKeys =
+  [
+    -- Switching / moving windows to workspace
+    ((myModMask,                               xK_n), moveTo Next nonScratchPad),
+    ((myModMask,                               xK_p), moveTo Prev nonScratchPad),
+    ((myModMask .|. shiftMask,                 xK_n), shiftTo Next nonScratchPad),
+    ((myModMask .|. shiftMask,                 xK_p), shiftTo Prev nonScratchPad),
+    ((myModMask .|. controlMask .|. shiftMask, xK_n), shiftTo Next nonScratchPad >> moveTo Next nonScratchPad),
+    ((myModMask .|. controlMask .|. shiftMask, xK_p), shiftTo Prev nonScratchPad >> moveTo Prev nonScratchPad),
+    ((myModMask,                               xK_b), toggleWS' [scratchPadName]),
+    ((myModMask,                               xK_u), focusUrgent),
 
-  -- Spawn a terminal in the current workspace
-  ((myModMask .|. shiftMask,                 xK_Return), spawnHere myTerminal),
+    -- Moving between windows and swapping them
+    ((myModMask,                               xK_o), windows W.focusDown),
+    ((myModMask .|. shiftMask,                 xK_o), windows W.swapDown),
 
-  -- Quickly switch to another window of the same application
-  ((myModMask,                               xK_grave), switchOtherWindow Forward),
-  ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
-  ((myModMask,                               xK_Tab), nextMatch Backward (return True)),
-  ((myModMask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
+    -- Make copy of the current window on all workspaces
+    ((myModMask, xK_y),                       windows copyToAll), -- Make focused window always visible
+    ((myModMask .|. shiftMask, xK_y),         killAllOtherCopies), -- Toggle window state back
 
-  ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
-  ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
-  ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
-  ((myModMask .|. controlMask,               xK_z), namedScratchpadAction myScratchpads "zeal"),
+    -- Manipulating the layouts
+    ((myModMask,                               xK_d), sendMessage ToggleStruts),
+    ((myModMask .|. shiftMask,                 xK_f), fullScreenWindow),
+    ((myModMask .|. shiftMask,                 xK_m ), sendMessage XMonad.Layout.Magnifier.Toggle),
+    ((myModMask .|. shiftMask,                 xK_t), sinkAll),
 
-  -- Use alt + ctrl + t to launch terminal
-  ((mod1Mask .|. controlMask,                xK_t), spawn myTerminal),
+    -- Spawn a terminal in the current workspace
+    ((mod1Mask  .|. controlMask,               xK_t), spawnHere myTerminal),
+    ((myModMask .|. shiftMask,                 xK_Return), spawnHere myTerminal),
 
-    -- Use alt + ctrl + l to lock screen
-  ((mod1Mask .|. controlMask,                xK_l), spawn "gnome-screensaver-command -l"),
+    -- Quickly switch to another window of the same application
+    ((myModMask,                               xK_grave), switchOtherWindow Forward),
+    ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
+    ((myModMask,                               xK_Tab), nextMatch Backward (return True)),
+    ((myModMask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
 
-  -- Display a message using notify-send after reloading XMonad
-  ((myModMask,                               xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
-  ((myModMask .|. shiftMask,                 xK_q), spawn "gnome-session-quit")
+    -- Applications
+    ((myModMask .|. controlMask,               xK_c), spawn "~/.xmonad/org-capture"),
+    ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
+    ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
+    ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
+    ((myModMask .|. controlMask,               xK_z), namedScratchpadAction myScratchpads "zeal"),
+
+    -- Rofi
+    ((myModMask,                               xK_s), spawn "rofi -show window"),
+    ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
+
+    -- Locking screen
+    ((mod1Mask .|. controlMask,                xK_l), spawn "gnome-screensaver-command -l"),
+
+    -- Reload XMonad
+    ((myModMask,                               xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
+    ((myModMask .|. shiftMask,                 xK_q), spawn "gnome-session-quit")
+  ]
+  ++
+  [
+    -- Bind windows + shift + ctrl + number shift window to nth workspace and
+    -- switch to workspace, similar to windows + shift + ctrl + right/left
+    ((myModMask .|. controlMask .|. shiftMask, k), (windows $ W.greedyView i . W.shift i)) | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
+  ]
+  ++
+  [
+    -- Swapping workspaces
+    ((myModMask .|. controlMask, k), (windows $ swapWithCurrent i)) | (i, k) <- zip myWorkspaces [xK_1 ..]
   ]
   ++
   [
@@ -175,7 +197,7 @@ myKeys = [
     -- Float a window
     ((myModMask,                                xK_f), withFocused $ keysResizeWindow (0, 0) (1%2, 1%2)),
     -- Move the window to the center
-    ((myModMask .|. shiftMask,                  xK_x), centerWindow),
+    ((myModMask,                                xK_c), centerWindow),
     -- Moving floating windows
     ((myModMask,                                xK_Left), withFocused (keysMoveWindow (-15, 0))),
     ((myModMask,                                xK_Right), withFocused (keysMoveWindow (15, 0))),
@@ -194,7 +216,7 @@ myKeys = [
     ((myModMask .|. controlMask .|. shiftMask,  xK_Right), withFocused (keysResizeWindow (150, 0) (0.5, 0.5))),
     ((myModMask .|. controlMask .|. shiftMask,  xK_Up), withFocused (keysResizeWindow (0, 150) (0.5, 0.5))),
     ((myModMask .|. controlMask .|. shiftMask,  xK_Down), withFocused (keysResizeWindow (0, -150) (0.5, 0.5))),
-    -- Resize respecting the current aspect ratio
+    -- Resize respecting the current aspect ratio (as much as possible)
     ((myModMask,                                xK_equal), resizeWindowUniformly 10 (0.5, 0.5)),
     ((myModMask,                                xK_minus), resizeWindowUniformly (-10) (0.5, 0.5)),
     ((myModMask .|. shiftMask,                  xK_equal), resizeWindowUniformly 150 (0.5, 0.5)),
@@ -202,33 +224,12 @@ myKeys = [
   ]
   ++
   [
+    -- Making numpad keys behavior similar to normal number keys
     -- Bind windows + numpad keys to move to a workspace, windows + shift + numpad keys to shift
-    -- windows to workspace
-    ((myModMask .|. m, k), windows $ f i) | (i, k) <- zip myWorkspaces numPadKeys, (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
-  ]
-  ++
-  [
-    -- Bind windows + shift + ctrl + number shift window to workspace numberth workspace and
-    -- switch to workspace, similar to windows + shift + ctrl + right/left
-    ((myModMask .|. controlMask .|. shiftMask, k), (windows $ W.shift i) >> (windows $ W.greedyView i)) | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
-  ]
-  ++
-  [
-    -- Bind windows + shift + ctrl + numpad keys to move window to a workspace and switch to it
-    ((myModMask .|. shiftMask .|. controlMask, k), (windows $ W.shift i) >> (windows $ W.greedyView i)) | (i, k) <- zip myWorkspaces numPadKeys
-  ]
-  ++
-  [
-    ((myModMask .|. controlMask, k), (windows $ swapWithCurrent i)) | (i, k) <- zip myWorkspaces [xK_1 ..]
-  ]
-  ++
-  [
-    ((myModMask .|. controlMask, xK_m ), sendMessage XMonad.Layout.Magnifier.Toggle)
-  ]
-  ++
-  [
-    ((myModMask, xK_y),                       windows copyToAll), -- Make focused window always visible
-    ((myModMask .|. shiftMask, xK_y),         killAllOtherCopies) -- Toggle window state back
+    -- windows to workspace, windows + shift + control + numpad keys to shift and move to a workspace
+    ((myModMask .|. mask, key), windows $ func index) |
+       (index, key) <- zip myWorkspaces numPadKeys,
+       (mask, func) <- [(0, W.greedyView), (shiftMask, W.shift), (shiftMask .|. controlMask, \i -> W.greedyView i . W.shift i)]
   ]
 
 myMouseBindings = [
