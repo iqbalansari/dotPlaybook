@@ -59,6 +59,10 @@ element selected normal {
     text-color: @blue;
 }
 
+element selected active {
+    text-color: @blue;
+}
+
 element active {
     text-color: @green;
 }
