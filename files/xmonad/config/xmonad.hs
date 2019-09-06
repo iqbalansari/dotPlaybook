@@ -301,7 +301,7 @@ myManagementHooks = composeOne [
   className =? "qemu-system-x86_64" --> doCenterFloat
   ] <+> composeAll [
   className =? "zoom" --> doShift "zoom",
-  className =? "zoom" --> doCenterFloat
+  className =? "zoom" --> doFloat
   ]
   where
     name       = stringProperty "WM_NAME"
