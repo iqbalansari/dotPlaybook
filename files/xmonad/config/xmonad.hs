@@ -35,7 +35,9 @@ import XMonad.Layout.Magnifier
 import XMonad.Layout.Spacing
 import XMonad.Layout.DwmStyle
 import XMonad.Layout.Drawer
+import XMonad.Layout.Tabbed
 import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.PerWorkspace
 
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -54,7 +56,7 @@ myModMask = mod4Mask
 
 myTerminal = "st"
 
-myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ map show [7..9]
+myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ map show [7..8] ++ ["reading"]
 
 numPadKeys =
   [
@@ -237,8 +239,10 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ layoutWithFullscreen
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ readingTabbed
   where
+    readingTabbed = onWorkspace "reading" simpleTabbed $ layoutWithFullscreen
+
     layoutWithFullscreen = toggleLayouts Full standardLayout
 
     standardLayout = avoidStruts $ drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
