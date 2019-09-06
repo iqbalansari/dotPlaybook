@@ -10,8 +10,8 @@
           apt_repository: repo="deb https://download.virtualbox.org/virtualbox/debian {{ansible_distribution_release}} contrib" state=present update_cache=yes
           become: yes
 
-        - name: Install virtualbox 5.1
-          apt: pkg=virtualbox-5.1 update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+        - name: Install virtualbox 6.0
+          apt: pkg=virtualbox-6.0 update_cache=yes cache_valid_time=604800 state=present install_recommends=no
           become: yes
 
         - name: Install dkms
