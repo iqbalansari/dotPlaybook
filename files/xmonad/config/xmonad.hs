@@ -64,10 +64,10 @@ numPadKeys =
   ]
 
 myScratchpads = [
--- run htop in xterm, find it by title, use default floating window placement
-    NS "terminal" "st -t scratch-terminal -e tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "scratch-terminal") doCenterFloat,
+    NS "files" "nautilus --class scratch-files" (className =? "scratch-files") nonFloating,
     NS "htop" "st -t scratch-htop -e htop" (name =? "scratch-htop") doCenterFloat,
     NS "notes" "emacsclient -ne '(progn (select-frame (make-frame (list (cons (quote name) \"*Notes*\") (cons (quote desktop-dont-save) t)))) (deft))'" (name =? "*Notes*") nonFloating,
+    NS "terminal" "st -t scratch-terminal -e tmux set-option -g set-titles off \\; new-session -A -s scratch" (name =? "scratch-terminal") doCenterFloat,
     NS "zeal" "zeal" (className =? "Zeal") doCenterFloat
     ]
   where
@@ -163,6 +163,7 @@ myKeys =
 
     -- Applications
     ((myModMask .|. controlMask,               xK_c), spawn "~/.xmonad/org-capture"),
+    ((myModMask .|. controlMask,               xK_f), namedScratchpadAction myScratchpads "files"),
     ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
     ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
     ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
