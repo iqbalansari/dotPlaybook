@@ -239,13 +239,11 @@ myMouseBindings = [
   ((myModMask .|. shiftMask, button1), (\w -> focus w >> Flex.mouseResizeWindow w))
   ]
 
-myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ readingTabbed
+myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ layoutWithFullscreen
   where
-    readingTabbed = onWorkspace "reading" simpleTabbed $ layoutWithFullscreen
+    layoutWithFullscreen = drawer `onLeft` (toggleLayouts Full (avoidStruts $ standardLayout))
 
-    layoutWithFullscreen = toggleLayouts Full standardLayout
-
-    standardLayout = avoidStruts $ drawer `onLeft` (tiled ||| Mirror tiled ||| Full)
+    standardLayout = onWorkspace "reading" simpleTabbed $ (tiled ||| Mirror tiled ||| Full)
 
     -- default tiling algorithm partitions the screen into two panes
     tiled   = smartSpacing 5 $ ResizableTall nmaster delta ratio []
@@ -360,7 +358,7 @@ main = do
          borderWidth     = 0,
          handleEventHook = handleEventHook gnomeConfig <+> fullscreenEventHook,
          layoutHook      = myLayoutHook,
-         logHook         = historyHook <+> myFocusHook <+> myFadeHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
+         logHook         = historyHook <+> myFadeHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
          manageHook      = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook     = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
