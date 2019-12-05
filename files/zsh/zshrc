@@ -152,3 +152,8 @@ bindkey '^T' transpose-chars
 if [[ -f ~/.zshrc.local ]] ; then
     source ~/.zshrc.local
 fi
+
+mcd () {
+    mkdir -p "$1"
+    cd "$1"
+}
