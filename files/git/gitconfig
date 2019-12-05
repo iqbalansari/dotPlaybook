@@ -3,9 +3,11 @@
 
 [core]
 	pager = tig
+	attributesfile = ~/.gitattributes
 
 [color]
 	pager = false
+	ui = auto
 
 [tig]
     diff-highlight = true
@@ -18,6 +20,9 @@
 
 [rebase]
 	autoStash = true
+
+[diff "gpg"]
+	textconv = gpg --no-tty --decrypt
 
 [include]
     path = ~/.gitconfig.local

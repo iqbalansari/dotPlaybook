@@ -90,8 +90,14 @@
     - tig
     - provision
 
-- name: Symlink Git config file
-  install_dot: src=files/git/gitconfig dest=~/.gitconfig
+- name: Symlink Git config files
+  block:
+    - name: Symlink gitattributes file
+      install_dot: src=files/git/gitattributes dest=~/.gitattributes
+
+    - name: Symlink gitconfig file
+      install_dot: src=files/git/gitconfig dest=~/.gitconfig
+
   tags:
     - git
     - configuration
