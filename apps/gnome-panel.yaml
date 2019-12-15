@@ -4,12 +4,12 @@
       apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
       with_items:
         - gnome-panel
-        - gnome-applets
-        - gnome-applets-data
         - indicator-applet
         - indicator-datetime
         - indicator-power
+        - indicator-sound
         - indicator-session
+        - indicator-application
         - indicator-applet-session
         - indicator-applet-complete
 
