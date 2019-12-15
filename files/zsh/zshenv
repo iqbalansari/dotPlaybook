@@ -37,7 +37,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 # Maildir location
-export MAILDIR="$HOME/Maildir/"
+export MAILDIR="$HOME/maildir/"
 
 # Make the shell aware of locally installed packages
 prepend_directories PATH "$HOME/.local/bin/" "$HOME/.local/sbin/"
