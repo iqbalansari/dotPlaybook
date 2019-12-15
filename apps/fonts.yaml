@@ -26,15 +26,6 @@
         - ~/software/source-code-pro-2.010R-ro-1.030R-it/OTF/*
       when: ansible_distribution == "Ubuntu"
 
-    - name: Get Symbola font
-      block:
-        - name: Get Symbola font
-          get_url: url=http://users.teilar.gr/~g1951d/Symbola.zip sha256sum=8101ae2282e0ee788dceabed7d9a49be189ad0196028b2c29d06b45821611f05 dest=~/compressed/Symbola.zip
-
-        - name: Extract Symbola font
-          unarchive: src=~/compressed/Symbola.zip creates=~/.fonts/Symbola.ttf dest=~/.fonts/
-      when: ansible_distribution == "Ubuntu"
-
     - name: Update font cache
       command: fc-cache -f -v
       changed_when: no
