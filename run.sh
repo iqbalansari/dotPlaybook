@@ -252,6 +252,17 @@ pull_playbook () {
     fi
 }
 
+get_python3_path() {
+    local system=$(determine_system)
+
+    if (test "$system" = "macos")
+    then 
+        echo "$(brew --prefix python3)/bin/python3"
+    else
+        echo "$(which python3)"
+    fi
+}
+
 install_ansible () {
     log "Checking ansible ... " info high
     if (test -f .venv/bin/pip3) && (.venv/bin/pip3 freeze | grep -q ansible=="$ANSIBLE_VERSION") ; then
@@ -272,8 +283,8 @@ install_ansible () {
 
     # Create a virtualenv for installing the required version of ansible
     log "Creating virtualenv ... " info high
-    if ! (test -f .venv/bin/pip3)  ; then
-        virtualenv -p $(which python3) --system-site-packages .venv
+    if ! (test -f .venv/bin/pip3) ; then
+        virtualenv -p "$(get_python3_path)" --system-site-packages .venv
         log "virtualenv created" change high
     else
         log "virtualenv already created, skipping ... " normal low
