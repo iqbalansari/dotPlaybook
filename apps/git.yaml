@@ -48,7 +48,7 @@
       register: diff_higlight_installation
       changed_when: no
 
-    - name: Compile and install Git
+    - name: Install diff-highlight
       shell: cd ~/software/git-{{git_version}}/contrib/diff-highlight && make && cp diff-highlight ~/.local/bin/diff-highlight
       when: git_source is changed or not diff_higlight_installation.stat.exists
 
