@@ -1,6 +1,13 @@
 - name: Install Alfred
-  homebrew_cask: name=alfred
+  block:
+    - name: Tap homebrew versions repository
+      homebrew_tap: name=homebrew/cask-versions state=present
+
+    - name: Install Alfred
+      homebrew_cask: name=alfred3
+
   when: ansible_distribution == "MacOSX"
+
   tags:
     - alfred
     - provision
