@@ -53,6 +53,8 @@
       tags:
         - configuration
 
+  when: ansible_distribution == "Ubuntu"
+
   tags:
     - st
     - xmonad
