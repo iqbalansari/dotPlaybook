@@ -41,6 +41,8 @@
 
     - name: Compile and install Git
       shell: cd ~/software/git-{{git_version}} && ./configure --prefix=$HOME/.local/ && make install && cd Documentation && make install
+      environment:
+        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
       when: git_source is changed or not git_installation.stat.exists
 
     - name: Check if diff-highlight is installed
