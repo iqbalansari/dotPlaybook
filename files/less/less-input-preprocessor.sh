@@ -1,5 +1,4 @@
 #!/bin/sh
-
 exists () {
     which "$1" 1>/dev/null 2>&1 ;
 }
@@ -28,7 +27,15 @@ resolve_symlink () {
         realpath "$1"
 
     elif test "$(uname)" = "Darwin" ; then
-        stat -f '%Y' "$1"
+        symlink="$(stat -f '%Y' $1)"
+
+        if test -z $symlink ; then
+            echo "$1"
+
+        else
+            echo "$symlink"
+
+        fi
 
     else
         echo "$1"
