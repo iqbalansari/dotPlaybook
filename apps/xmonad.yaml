@@ -71,9 +71,6 @@
         - name: Symlink XMonad personal config
           install_dot: src=files/xmonad/config/xmonad.hs dest=~/.xmonad/xmonad.hs
 
-        - name: Symlink XMonad startup hook
-          install_dot: src=files/xmonad/startup-hook dest=~/.xmonad/startup-hook
-
         - name: Symlink script to invoke org-capture
           install_dot: src=files/xmonad/org-capture dest=~/.xmonad/org-capture
 
