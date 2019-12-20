@@ -24,7 +24,7 @@
 
     - name: Extract the Factor binary package
       unarchive:
-        src: ~/compressed/factor-linux-{{ansible_architecture | regex_replace('_', '-')}}-{{factor_version}}.tar.gz
+        src: ~/compressed/factor-linux-{{ansible_architecture}}-{{factor_version}}.tar.gz
         dest: ~/languages/factor-{{factor_version}}
         creates: ~/software/factor-{{factor_version}}/factor
 
