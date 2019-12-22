@@ -38,3 +38,4 @@
       # Tasks to setup language environments
     - import_tasks: langs/factor.yaml
     - import_tasks: langs/c.yaml
+    - import_tasks: langs/idris.yaml

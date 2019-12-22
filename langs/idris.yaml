@@ -1,0 +1,43 @@
+- name: Install Idris on Ubuntu
+  block:
+    - name: Install cabal-install
+      apt: pkg=cabal-install state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      become: yes
+
+    - name: Fetch Idris source code
+      get_url: url=https://github.com/idris-lang/Idris-dev/archive/v{{ idris_version }}.tar.gz dest=~/compressed/idris-{{ idris_version }}.tar.gz
+
+    - name: Extract Idris package
+      unarchive:
+        src: ~/compressed/idris-{{ idris_version }}.tar.gz
+        dest: ~/languages/
+        creates: ~/languages/Idris-dev-{{ idris_version }}
+      register: idris_source
+
+    - name: Update cabal package cache
+      block:
+        - name: Record modification time of cabal package cache
+          stat: path="~/.cabal/packages/hackage.haskell.org/00-index.cache"
+          register: cabal_package_cache_mod
+
+        - name: Update cabal package cache if needed
+          shell: cabal update
+          when: idris_source is changed or not cabal_package_cache_mod.stat.exists
+
+    - name: Compile and install Idris
+      block:
+        - name: Check if Idris is installed
+          stat: path=~/.local/bin/idris
+          register: idris_installation
+          changed_when: no
+
+        - name: Compile and install Idris
+          shell: cd ~/languages/Idris-dev-{{ idris_version }} && cabal install --bindir=$HOME/.local/bin
+          when: idris_source is changed or not idris_installation.stat.exists
+
+  when: ansible_distribution == 'Ubuntu'
+
+  tags:
+    - idris
+    - lang
+    - never
