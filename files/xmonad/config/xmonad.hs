@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 import System.Directory
 import System.Environment
 
@@ -7,6 +8,8 @@ import Control.Monad
 import Data.Foldable
 import Data.List
 import Data.Ratio
+import Data.Monoid
+import Data.Set as S
 import qualified Data.Map as M
 
 import Graphics.X11.ExtraTypes.XF86
@@ -52,11 +55,84 @@ import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Types
 
+import qualified XMonad.Util.ExtensibleState as XS
+
+-- The following code ensures that floating windows that are at currently
+-- focused are at the top, it treats notification windows especially in that
+-- they are always at top
+
+-- Extension to store the notification windows
+data NotificationWindows = NotificationWindows (S.Set Window) deriving (Read, Show, Typeable)
+instance ExtensionClass NotificationWindows where
+  initialValue = NotificationWindows (S.empty)
+  extensionType = PersistentExtension
+
+-- Check if window has the given property of type Atom
+hasAtomProperty :: Window -> String -> String -> X Bool
+hasAtomProperty window property value = do
+  valueAtom <- getAtom value
+  property <- getProp32s property window
+  return $ case property of
+    Just values -> fromIntegral valueAtom `elem` values
+    _ -> False
+
+-- Keep track of notification windows
+trackNotificationWindowsHook :: Event -> X All
+trackNotificationWindowsHook (MapNotifyEvent {ev_window = window}) = do
+  NotificationWindows windows <- XS.get
+  isNotification <- hasAtomProperty window "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
+
+  if isNotification
+    -- If this is a notification window remember it
+    then XS.put (NotificationWindows (S.insert window windows))
+    else return ()
+
+  return $ All True
+
+trackNotificationWindowsHook (UnmapEvent {ev_window = window}) = do
+  NotificationWindows windows <- XS.get
+
+  -- Window unmapped forget it
+  XS.put (NotificationWindows (S.delete window windows))
+
+  return $ All True
+
+trackNotificationWindowsHook _ = return $ All True
+
+-- Run as part of logHook, this moves the currently selected float window to the
+-- top, the only exception notification windows which will always stay at top
+keepFloatsOnTopHook :: X ()
+keepFloatsOnTopHook = do
+  windowSet <- gets windowset
+  notificationWindows <- XS.get :: X NotificationWindows
+
+  let
+    raiseWindowMaybe windowSet window =
+      if M.member window $ W.floating windowSet
+      then withDisplay $ \display -> io $ raiseWindow display window
+      else return ()
+
+    raiseWindows [] = return ()
+
+    raiseWindows (window:windows) = withDisplay $ \display -> do
+      io $ raiseWindow display window
+      raiseWindows windows
+    in
+
+    do
+      case W.peek windowSet of
+        Just window -> raiseWindowMaybe windowSet window
+        Nothing -> return ()
+
+      case notificationWindows of
+        NotificationWindows set -> raiseWindows (S.toList set)
+        _ -> return ()
+
 myModMask = mod4Mask
 
 myTerminal = "st"
 
-myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ map show [7..8] ++ ["reading"]
+myWorkspaces = ["terminal", "emacs", "web", "chat", "zoom", "vm"] ++ Data.List.map show [7..8] ++ ["reading"]
 
 numPadKeys =
   [
@@ -259,7 +335,7 @@ myLayoutHook = magnifierOff $ dwmStyle shrinkText defaultTheme $ layoutWithFulls
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
 
-isNotification = stringProperty "_NET_WM_WINDOW_TYPE" =? "_NET_WM_WINDOW_TYPE_NOTIFICATION"
+isNotification = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DIALOG"
 
 myManagementHooks :: ManageHook
 myManagementHooks = composeOne [
@@ -293,7 +369,7 @@ myManagementHooks = composeOne [
   className                =? "pritunl"                                           -?> doCenterFloat,
   className                =? "Gnome-calculator"                                  -?> doCenterFloat,
   className                =? "Qalculate-gtk"                                     -?> doCenterFloat,
-  isNotification                                                                  -?> doFloat
+  isNotification                                                                  -?> doIgnore
   ] <+> composeAll [
   className =? "qemu-system-x86_64" --> doShift "vm",
   className =? "qemu-system-x86_64" --> doCenterFloat
@@ -321,19 +397,6 @@ myFadeHook =
   where
     shouldNotFade = isNotification <||> className =? "zoom"
 
-myFocusHook :: X ()
-myFocusHook = do
-  windowSet <- gets windowset
-  let
-    raiseWindowMaybe windowSet window =
-      if M.member window $ W.floating windowSet
-      then withDisplay $ \display -> io $ raiseWindow display window
-      else return ()
-    in
-    case W.peek windowSet of
-      Just window -> raiseWindowMaybe windowSet window
-      Nothing -> return ()
-
 wallpaperBackgroundTask :: IO ()
 wallpaperBackgroundTask = do
   setRandomWallpaper ["/usr/share/backgrounds/", "$HOME/.backgrounds"]
@@ -344,7 +407,6 @@ main = do
   path       <- getEnv "PATH"
   home       <- getEnv "HOME"
   setEnv "PATH" (home ++ "/.local/bin/" ++ ":" ++ path)
-
   -- Merge Xresources file, need to this since LightDM merges
   -- Xresources using -nocpp option [https://bugs.launchpad.net/lightdm/+bug/1084885]
   -- thus any preprocessor statements are ignored
@@ -356,9 +418,9 @@ main = do
          terminal        = myTerminal,
          workspaces      = myWorkspaces,
          borderWidth     = 0,
-         handleEventHook = handleEventHook gnomeConfig <+> fullscreenEventHook,
+         handleEventHook = handleEventHook gnomeConfig <+> fullscreenEventHook <+> trackNotificationWindowsHook,
          layoutHook      = myLayoutHook,
-         logHook         = historyHook <+> myFadeHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
+         logHook         = historyHook <+> myFadeHook <+> keepFloatsOnTopHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
          manageHook      = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
          startupHook     = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
