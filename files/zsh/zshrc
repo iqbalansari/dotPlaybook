@@ -149,11 +149,12 @@ bindkey '\ec' capitalize-word
 bindkey '\el' down-case-word
 bindkey '^T' transpose-chars
 
-if [[ -f ~/.zshrc.local ]] ; then
-    source ~/.zshrc.local
-fi
-
 mcd () {
     mkdir -p "$1"
     cd "$1"
 }
+compdef mcd=mkdir
+
+if [[ -f ~/.zshrc.local ]] ; then
+    source ~/.zshrc.local
+fi
