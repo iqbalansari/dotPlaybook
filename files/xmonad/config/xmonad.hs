@@ -81,9 +81,8 @@ trackNotificationWindowsHook :: Event -> X All
 trackNotificationWindowsHook (MapNotifyEvent {ev_window = window}) = do
   NotificationWindows windows <- XS.get
   isNotification <- hasAtomProperty window "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
-  isDock <- hasAtomProperty window "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
 
-  if isNotification || isDock
+  if isNotification
     -- If this is a notification window remember it
     then XS.put (NotificationWindows (S.insert window windows))
     else return ()
@@ -423,7 +422,7 @@ main = do
          layoutHook      = myLayoutHook,
          logHook         = historyHook <+> myFadeHook <+> keepFloatsOnTopHook <+> ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace,
          manageHook      = manageSpawn <+> namedScratchpadManageHook myScratchpads <+> placeHook placementPreferCenter <+> myManagementHooks <+> manageHook gnomeConfig <+> manageDocks,
-         startupHook     = setWMName "LG3D" >> startupHook gnomeConfig >> spawn "~/.xmonad/startup-hook"
+         startupHook     = spawn "~/.xmonad/startup-hook" >> setWMName "LG3D" >> startupHook gnomeConfig
          }
      `additionalKeys` myKeys
      `additionalMouseBindings` myMouseBindings
