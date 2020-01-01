@@ -3,7 +3,7 @@
     - name: Install XMonad
       block:
         - name: Add signing key for Joonas Javanainen XMonad backports PPA
-          apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x62F9B6120B20AE72 state=present
+          apt_key: url=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x62f9b6120b20ae72 state=present
           become: yes
 
         - name: Add PPA for Joonas Javanainen XMonad backports

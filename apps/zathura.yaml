@@ -3,7 +3,7 @@
     - name: Install latest version of Zathura
       block:
         - name: Add signing key for Pavel's Zathura PPA
-          apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xAEC82AC78B65E182 state=present
+          apt_key: url=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xaec82ac78b65e182 state=present
           become: yes
 
         - name: Add Pavel's PPA for Zathura
