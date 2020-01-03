@@ -34,6 +34,7 @@
     - import_tasks: apps/vagrant.yaml
     - import_tasks: apps/virtualbox.yaml
     - import_tasks: apps/artha.yaml
+    - import_tasks: apps/tarsnap.yaml
     - import_tasks: apps/misc.yaml
       # Tasks to setup language environments
     - import_tasks: langs/factor.yaml
