@@ -47,17 +47,15 @@
             trash-icon-visible: 'false'
 
         - name: Check if unity-greeter folder exists
-          stat: path=/usr/share/unity-greeter
-          register: unity_greeter_dir
+          file: path=/usr/share/unity-greeter state=directory
+          become: yes
 
         - name: Add xmonad icons for unity greeter
-          copy: src=files/xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
-          when: unity_greeter_dir.stat.exists
+          copy: src=files/xmonad/xmonad-icon.png dest=/usr/share/unity-greeter/custom_xmonad_badge.png
           become: yes
 
         - name: Add gnome-xmonad icons for unity greeter
-          copy: src=files/xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
-          when: unity_greeter_dir.stat.exists
+          copy: src=files/xmonad/xmonad-icon.png dest=/usr/share/unity-greeter/custom_gnome-xmonad_badge.png
           become: yes
 
         - name: Configure the applications to autostart
