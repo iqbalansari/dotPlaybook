@@ -1,0 +1,29 @@
+- name: Install Tarsnap
+  block:
+    - name: Install LightDM
+      apt: pkg=lightdm update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+      become: yes
+      tags:
+        - provision
+
+    - name: Set LightDM as the default display manager
+      block:
+        - name: Set the path for lightdm in /etc/X11/default-display-manager
+          copy: content='/usr/sbin/lightdm' dest=/etc/X11/default-display-manager
+          register: display_mananger
+          become: yes
+
+        - name: Run dpkg-reconfigure
+          shell: dpkg-reconfigure lightdm
+          environment:
+            DEBIAN_FRONTEND: noninteractive
+            DEBCONF_NONINTERACTIVE_SEEN: true
+          when: display_mananger is changed
+          become: yes
+
+      tags:
+        - configuration
+
+  tags:
+    - lightdm
+    - never

@@ -23,6 +23,7 @@
     - import_tasks: apps/terminal-notifier.yaml
     - import_tasks: apps/gnome-panel.yaml
     - import_tasks: apps/kde-connect.yaml
+    - import_tasks: apps/lightdm.yaml
     - import_tasks: apps/xmonad.yaml
     - import_tasks: apps/ledger.yaml
     - import_tasks: apps/zathura.yaml
