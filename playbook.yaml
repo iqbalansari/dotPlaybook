@@ -36,6 +36,7 @@
     - import_tasks: apps/virtualbox.yaml
     - import_tasks: apps/artha.yaml
     - import_tasks: apps/tarsnap.yaml
+    - import_tasks: apps/nordvpn.yaml
     - import_tasks: apps/syncthing.yaml
     - import_tasks: apps/misc.yaml
       # Tasks to setup language environments

@@ -1,0 +1,19 @@
+- name: Install NordVPN
+  block:
+    - name: Add NordVPN's signing key
+      apt_key: url=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xbc5480efec5c081ce5bcfbe26b219e535c964ca1 state=present
+      become: yes
+
+    - name: Add NordVPN PPA
+      apt_repository: repo="deb https://repo.nordvpn.com/deb/nordvpn/debian stable main" state=present update_cache=yes
+      become: yes
+
+    - name: Install NordVPN
+      apt: pkg=nordvpn update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+      become: yes
+
+  when: ansible_distribution == "Ubuntu"
+
+  tags:
+    - nordvpn
+    - provision
