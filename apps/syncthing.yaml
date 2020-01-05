@@ -1,0 +1,22 @@
+- name: Install Syncthing
+  block:
+    - name: Add Syncthing's signing key
+      apt_key: url=https://syncthing.net/release-key.txt state=present
+      become: yes
+
+    - name: Add Syncthing PPA
+      apt_repository: repo="deb https://apt.syncthing.net/ syncthing stable" state=present update_cache=yes
+      become: yes
+
+    - name: Install Syncthing
+      apt: pkg=syncthing update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+      become: yes
+
+    - name: Automatically run Syncthing on startup
+      file: src=/usr/share/applications/syncthing-start.desktop path=~/.config/autostart/syncthing-start.desktop state=link
+
+  when: ansible_distribution == "Ubuntu"
+
+  tags:
+    - syncthing
+    - provision
