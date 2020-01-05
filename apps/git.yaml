@@ -92,6 +92,42 @@
     - tig
     - provision
 
+- name: Install git-crypt
+  block:
+    - name: Install system dependencies for git-crypt on Ubuntu
+      apt: pkg={{ item }} state=present update_cache=yes install_recommends=no cache_valid_time=604800
+      with_items:
+        - g++
+        - libssl-dev
+      become: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install system dependencies for git-crypt on macOS
+      homebrew: name={{ item }}
+      with_items:
+        - openssl
+      when: ansible_distribution == 'MacOSX'
+
+    - name: Get sources for git-crypt
+      git: repo=https://github.com/AGWA/git-crypt accept_hostkey=yes dest=~/software/git-crypt version={{git_crypt_version}}
+      register: git_crypt_checkout
+
+    - name: Check if git-crypt is installed
+      shell: which git-crypt
+      register: git_crypt_installed
+      ignore_errors: yes
+      failed_when: no
+      changed_when: no
+
+    - name: Install git-crypt
+      shell: cd ~/software/git-crypt && make clean && make ENABLE_MAN=yes PREFIX=$HOME/.local/ install
+      when: git_crypt_checkout is changed or git_crypt_installed.rc == 1
+
+  tags:
+    - git
+    - git-crypt
+    - provision
+
 - name: Symlink Git config files
   block:
     - name: Symlink gitattributes file

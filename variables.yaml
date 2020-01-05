@@ -28,6 +28,7 @@ firefox_version: "60.0.2"
 git_version: "2.22.0"
 git_src_sha256sum: 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f
 tig_version: "tig-2.2.1"
+git_crypt_version: "af846389e5c6500ff538f39e2f141bb6d4514c1f"
 
 # St
 st_version: 4a9b405ab00c478683de4dc3316a2fd7772393a5
