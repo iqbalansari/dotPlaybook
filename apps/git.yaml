@@ -121,6 +121,9 @@
 
     - name: Install git-crypt
       shell: cd ~/software/git-crypt && make clean && make ENABLE_MAN=yes PREFIX=$HOME/.local/ install
+      environment:
+          LDFLAGS: "-L/usr/local/opt/openssl/lib"
+          CPPFLAGS: "-I/usr/local/opt/openssl/include"
       when: git_crypt_checkout is changed or git_crypt_installed.rc == 1
 
   tags:
