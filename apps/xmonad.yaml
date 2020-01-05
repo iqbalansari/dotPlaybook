@@ -14,11 +14,10 @@
           apt: pkg=xmonad update_cache=yes cache_valid_time=604800 install_recommends=no state=present
           become: yes
 
-        - name: Install gnome-session-xmonad, gnome-screensaver, amixer and compton
+        - name: Install gnome-session-xmonad, amixer and compton
           apt: pkg={{ item }} update_cache=yes cache_valid_time=604800 install_recommends=no
           with_items:
             - gnome-session-xmonad
-            - gnome-screensaver
             - alsa-utils
             - compton
           become: yes

@@ -252,7 +252,7 @@ myKeys =
     ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
 
     -- Locking screen
-    ((mod1Mask .|. controlMask,                xK_l), spawn "gnome-screensaver-command -l"),
+    ((mod1Mask .|. controlMask,                xK_l), spawn "dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock"),
 
     -- Reload XMonad
     ((myModMask,                               xK_q), spawn "if type xmonad; then xmonad --recompile && xmonad --restart && notify-send 'XMonad reloaded'; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
