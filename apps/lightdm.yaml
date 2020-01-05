@@ -1,4 +1,4 @@
-- name: Install Tarsnap
+- name: Install LightDM
   block:
     - name: Install LightDM
       apt: pkg=lightdm update_cache=yes cache_valid_time=604800 state=present install_recommends=no
@@ -23,6 +23,23 @@
 
       tags:
         - configuration
+
+    - name: Install and configure light-locker
+      block:
+        - name: Install light-locker
+          apt: pkg=light-locker update_cache=yes cache_valid_time=604800 state=present install_recommends=no
+          become: yes
+          tags:
+            - provision
+
+        - name: Autostart light-locker
+          copy: src=files/lightdm/light-locker.desktop dest=/etc/xdg/autostart/light-locker.desktop
+          become: yes
+          tags:
+            - configuration
+
+      tags:
+        - light-locker
 
   when: ansible_distribution == "Ubuntu"
 

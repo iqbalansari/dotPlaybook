@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Light Locker
+Exec=/usr/bin/light-locker
+Terminal=false
+Type=Application
+StartupNotify=true
+Keywords=Configuration;Screensaver;
+Icon=preferences-desktop-screensaver
