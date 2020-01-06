@@ -1,5 +1,5 @@
 #!/bin/zsh
-fpath=(~/.zsh $fpath)
+fpath=(~/.zsh $fpath /usr/share/zsh/vendor-completions)
 
 function exists { which $1 &> /dev/null }
 
