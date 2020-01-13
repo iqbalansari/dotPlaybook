@@ -9,9 +9,12 @@
             - libncurses5-dev
             - libncursesw5-dev
 
-        - name: Install xdotool required by zsh-notify plugin
-          apt: pkg=xdotool update_cache=yes cache_valid_time=604800 install_recommends=no
+        - name: Install packges  required by zsh-notify plugin
+          apt: pkg="{{item}}" update_cache=yes cache_valid_time=604800 install_recommends=no
           become: yes
+          with_items:
+            - xdotool
+            - wmctrl
 
       when: ansible_distribution == 'Ubuntu'
 
