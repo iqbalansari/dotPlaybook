@@ -9,6 +9,7 @@ import Data.Foldable
 import Data.List
 import Data.Ratio
 import Data.Monoid
+import Data.Maybe (listToMaybe)
 import Data.Set as S
 import qualified Data.Map as M
 
@@ -141,6 +142,11 @@ numPadKeys =
     xK_KP_Home, xK_KP_Up, xK_KP_Page_Up
   ]
 
+scratchPadName = "NSP"
+
+nonScratchPad :: WSType
+nonScratchPad = WSIs $ return ((scratchPadName /=) . W.tag)
+
 myScratchpads = [
     NS "files" "nautilus --class scratch-files" (className =? "scratch-files") nonFloating,
     NS "htop" "st -t scratch-htop -e htop" (name =? "scratch-htop") doCenterFloat,
@@ -151,10 +157,31 @@ myScratchpads = [
   where
     name = stringProperty "WM_NAME"
 
-scratchPadName = "NSP"
+focusScratchpadOrBringToWorkspace :: NamedScratchpads -- ^ Named scratchpads configuration
+                                  -> String           -- ^ Scratchpad name
+                                  -> X ()
 
-nonScratchPad :: WSType
-nonScratchPad = WSIs $ return ((scratchPadName /=) . W.tag)
+findByName :: NamedScratchpads -> String -> Maybe NamedScratchpad
+findByName c s = listToMaybe $ Data.List.filter ((s==) . name) c
+
+focusScratchpadOrBringToWorkspace confs name =
+  let conf = findByName confs name in
+    case conf of
+      Just conf -> do
+          windowSet <- gets windowset
+          case W.peek windowSet of
+            Just window -> do
+              matches <- runQuery (query conf) window
+              filterCurrent <- filterM (runQuery (query conf))
+                                        ((maybe [] W.integrate . W.stack . W.workspace . W.current) windowSet)
+              if matches
+                then namedScratchpadAction confs name
+                else case listToMaybe filterCurrent of
+                       Just window -> windows (W.focusWindow window)
+                       Nothing -> namedScratchpadAction confs name
+            Nothing -> return ()
+      Nothing -> return ()
+
 
 getCurrentClassName = withWindowSet $ \set -> case  W.peek set of
   Just window -> runQuery className window
@@ -243,7 +270,7 @@ myKeys =
     ((myModMask .|. controlMask,               xK_c), spawn "~/.xmonad/org-capture"),
     ((myModMask .|. controlMask,               xK_f), namedScratchpadAction myScratchpads "files"),
     ((myModMask .|. controlMask,               xK_h), namedScratchpadAction myScratchpads "htop"),
-    ((myModMask .|. controlMask,               xK_n), namedScratchpadAction myScratchpads "notes"),
+    ((myModMask .|. controlMask,               xK_n), focusScratchpadOrBringToWorkspace myScratchpads "notes"),
     ((myModMask .|. controlMask,               xK_t), namedScratchpadAction myScratchpads "terminal"),
     ((myModMask .|. controlMask,               xK_z), namedScratchpadAction myScratchpads "zeal"),
 
