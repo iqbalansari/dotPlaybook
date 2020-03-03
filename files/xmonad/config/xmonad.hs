@@ -390,6 +390,7 @@ myManagementHooks = composeOne [
   className                =? "Emacs"                                             -?> doShift "emacs",
   className                =? "Firefox"                                           -?> doShift "web",
   className                =? "Slack"                                             -?> doShift "chat",
+  className                =? "Zathura"                                           -?> doShift "reading",
   className                =? "Eog"                                               -?> doCenterFloat,
   className                =? "Zenity"                                            -?> doCenterFloat,
   className                =? "pritunl"                                           -?> doCenterFloat,
