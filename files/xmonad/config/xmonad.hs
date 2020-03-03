@@ -165,23 +165,21 @@ findByName :: NamedScratchpads -> String -> Maybe NamedScratchpad
 findByName c s = listToMaybe $ Data.List.filter ((s==) . name) c
 
 focusScratchpadOrBringToWorkspace confs name =
-  let conf = findByName confs name in
-    case conf of
-      Just conf -> do
-          windowSet <- gets windowset
-          case W.peek windowSet of
-            Just window -> do
-              matches <- runQuery (query conf) window
-              filterCurrent <- filterM (runQuery (query conf))
-                                        ((maybe [] W.integrate . W.stack . W.workspace . W.current) windowSet)
-              if matches
-                then namedScratchpadAction confs name
-                else case listToMaybe filterCurrent of
-                       Just window -> windows (W.focusWindow window)
-                       Nothing -> namedScratchpadAction confs name
-            Nothing -> return ()
-      Nothing -> return ()
-
+  case findByName confs name of
+    Just conf -> do
+      windowSet <- gets windowset
+      case W.peek windowSet of
+        Just activeWindow -> do
+          matches <- runQuery (query conf) activeWindow
+          filterCurrent <- filterM (runQuery (query conf))
+                           ((maybe [] W.integrate . W.stack . W.workspace . W.current) windowSet)
+          if matches
+            then namedScratchpadAction confs name
+            else case listToMaybe filterCurrent of
+                   Just window -> windows (W.focusWindow window)
+                   Nothing -> namedScratchpadAction confs name
+        Nothing -> return ()
+    Nothing -> return ()
 
 getCurrentClassName = withWindowSet $ \set -> case  W.peek set of
   Just window -> runQuery className window
