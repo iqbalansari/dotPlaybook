@@ -263,8 +263,8 @@ myKeys =
     -- Quickly switch to another window of the same application
     ((myModMask,                               xK_grave), switchOtherWindow Forward),
     ((myModMask,                               xK_asciitilde), switchOtherWindow Backward),
-    ((myModMask,                               xK_Tab), nextMatch Backward (return True)),
-    ((myModMask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
+    ((mod1Mask,                               xK_Tab), nextMatch Backward (return True)),
+    ((mod1Mask .|. shiftMask,                 xK_Tab), nextMatch Forward (return True)),
 
     -- Applications
     ((myModMask .|. controlMask,               xK_c), spawn "~/.xmonad/org-capture"),
@@ -276,7 +276,6 @@ myKeys =
 
     -- Rofi
     ((myModMask,                               xK_s), spawn "rofi -show window"),
-    ((mod1Mask,                                xK_Tab), spawn "rofi -show window -modi window -no-sidebar-mode"),
 
     -- Locking screen
     ((mod1Mask .|. controlMask,                xK_l), spawn "dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock"),
