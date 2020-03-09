@@ -54,6 +54,15 @@
       shell: cd ~/software/git-{{git_version}}/contrib/diff-highlight && make && cp diff-highlight ~/.local/bin/diff-highlight
       when: git_source is changed or not diff_higlight_installation.stat.exists
 
+    - name: Check if git subtree is installed
+      stat: path=~/.local/libexec/git-core/git-subtree
+      register: git_subtree_installation
+      changed_when: no
+
+    - name: Install git-subtree
+      shell: cp ~/software/git-{{git_version}}/contrib/subtree/git-subtree.sh ~/.local/libexec/git-core/git-subtree
+      when: git_source is changed or not git_subtree_installation.stat.exists
+
     - name: Install credential-osxkeychain on macOS
       block:
         - name: Check if credential-osxkeychain is installed
