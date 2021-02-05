@@ -150,15 +150,10 @@ install_system_dependencies_ubuntu () {
     apt_install python3-pip
     apt_install python3-setuptools
     apt_install python3-apt
-
-    if (test "$(lsb_release -c | awk '{print $2}')" = "bionic")
-    then
-        apt_install software-properties-common
-    else
-        apt_install python-software-properties
-    fi
-
     apt_install python3-dev
+
+    apt_install software-properties-common
+
     apt_install git
 }
 
